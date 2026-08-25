@@ -1,0 +1,14 @@
+Employee Leave Policy
+
+Annual Leave:
+Employees receive 20 days of annual leave per year.
+Employees become eligible for annual leave after completing 6 months of employment.
+
+Maternity Leave:
+Employees receive 12 weeks of maternity leave.
+
+Sick Leave:
+Employees receive 10 days of sick leave per year.
+
+Work From Home:
+Employees can work from home twice per week.
