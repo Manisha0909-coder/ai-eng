@@ -1,0 +1,19 @@
+IT & Security Policy
+
+Password Requirements:
+Employees must use a password manager and enable multi-factor authentication on all company accounts.
+Passwords must be at least 12 characters and rotated every 180 days.
+
+Device Policy:
+Company laptops must have full-disk encryption enabled before first use.
+Personal devices used for work email must be enrolled in mobile device management (MDM).
+
+VPN Access:
+Employees accessing internal systems from outside the office must connect through the company VPN.
+
+Software Installation:
+Only software approved by the IT team may be installed on company devices.
+Requests for new software should be submitted through the IT helpdesk.
+
+Incident Reporting:
+Any suspected security incident, phishing email, or lost device must be reported to security@company.com within 24 hours.

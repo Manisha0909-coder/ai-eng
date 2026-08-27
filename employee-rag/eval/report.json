@@ -1,0 +1,401 @@
+{
+  "n_examples": 19,
+  "retrieval_hit_rate": 1.0,
+  "answer_accuracy": 1.0,
+  "abstention_accuracy": 1.0,
+  "overall_accuracy": 1.0,
+  "avg_latency_ms": 4420.8,
+  "p95_latency_ms": 13362.2,
+  "category_accuracy": {
+    "annual_leave": 1.0,
+    "maternity_leave": 1.0,
+    "sick_leave": 1.0,
+    "wfh": 1.0,
+    "it_security": 1.0,
+    "expenses": 1.0,
+    "code_of_conduct": 1.0,
+    "out_of_scope": 1.0
+  },
+  "results": [
+    {
+      "id": "leave-01",
+      "question": "How many days of annual leave do I get per year?",
+      "category": "annual_leave",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "Employees receive 20 days of annual leave per year.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 491.7,
+        "rerank": 4759.6,
+        "generation": 2905.1,
+        "total": 8156.5
+      }
+    },
+    {
+      "id": "leave-02",
+      "question": "When do I become eligible to take annual leave?",
+      "category": "annual_leave",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "employee_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "You become eligible for annual leave after completing 6 months of employment.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 25.0,
+        "rerank": 107.5,
+        "generation": 2367.0,
+        "total": 2499.5
+      }
+    },
+    {
+      "id": "leave-03",
+      "question": "time off for a new baby",
+      "category": "maternity_leave",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "employee_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "Employees receive 12 weeks of maternity leave.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 26.2,
+        "rerank": 103.1,
+        "generation": 3321.9,
+        "total": 3451.2
+      }
+    },
+    {
+      "id": "leave-04",
+      "question": "How long is maternity leave?",
+      "category": "maternity_leave",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "12 weeks of maternity leave.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 22.3,
+        "rerank": 89.8,
+        "generation": 13250.1,
+        "total": 13362.2
+      }
+    },
+    {
+      "id": "leave-05",
+      "question": "I'm feeling unwell, how many sick days can I take this year?",
+      "category": "sick_leave",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "employee_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "You can take 10 sick days this year.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 32.1,
+        "rerank": 110.5,
+        "generation": 5870.1,
+        "total": 6012.8
+      }
+    },
+    {
+      "id": "leave-06",
+      "question": "Can I work remotely, and how often?",
+      "category": "wfh",
+      "answerable": true,
+      "expected_source": "employee_policy.txt",
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "code_of_conduct.txt",
+        "employee_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "Yes. You can work from home, and you may do so up to twice per week.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 21.4,
+        "rerank": 159.6,
+        "generation": 2739.0,
+        "total": 2920.1
+      }
+    },
+    {
+      "id": "it-01",
+      "question": "How often do I need to change my password?",
+      "category": "it_security",
+      "answerable": true,
+      "expected_source": "it_security_policy.txt",
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "it_security_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "\n\nBased on the provided context, you need to rotate (change) your password every 180 days.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 19.8,
+        "rerank": 93.9,
+        "generation": 3874.2,
+        "total": 3987.9
+      }
+    },
+    {
+      "id": "it-02",
+      "question": "What should I do if I lose my work laptop?",
+      "category": "it_security",
+      "answerable": true,
+      "expected_source": "it_security_policy.txt",
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "it_security_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "If you lose your work laptop, you must report it to **security@company.com** within 24 hours, as outlined in the Incident Reporting policy. This applies to any lost device, including company laptops.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 21.9,
+        "rerank": 103.3,
+        "generation": 1705.1,
+        "total": 1830.4
+      }
+    },
+    {
+      "id": "it-03",
+      "question": "Do I need a VPN to access internal systems from home?",
+      "category": "it_security",
+      "answerable": true,
+      "expected_source": "it_security_policy.txt",
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "Yes. You need to connect through the company VPN to access internal systems from home.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 23.5,
+        "rerank": 104.1,
+        "generation": 2030.9,
+        "total": 2158.5
+      }
+    },
+    {
+      "id": "expense-01",
+      "question": "What's the daily meal allowance when traveling for work?",
+      "category": "expenses",
+      "answerable": true,
+      "expected_source": "expense_policy.txt",
+      "retrieved_sources": [
+        "expense_policy.txt",
+        "expense_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "\n\nBased on the provided context, the daily meal allowance for employees on approved business travel is **1500 rupees**.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 27.6,
+        "rerank": 89.1,
+        "generation": 2427.6,
+        "total": 2544.3
+      }
+    },
+    {
+      "id": "expense-02",
+      "question": "Above what amount do I need a receipt for an expense?",
+      "category": "expenses",
+      "answerable": true,
+      "expected_source": "expense_policy.txt",
+      "retrieved_sources": [
+        "expense_policy.txt",
+        "expense_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "Based on the context provided, you need a receipt for any expense **over 500 rupees**.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 23.9,
+        "rerank": 94.4,
+        "generation": 8986.1,
+        "total": 9104.4
+      }
+    },
+    {
+      "id": "expense-03",
+      "question": "How many days do I have to submit an expense report?",
+      "category": "expenses",
+      "answerable": true,
+      "expected_source": "expense_policy.txt",
+      "retrieved_sources": [
+        "expense_policy.txt",
+        "it_security_policy.txt",
+        "employee_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "You have 30 days to submit an expense report after the expense was incurred.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 23.7,
+        "rerank": 108.8,
+        "generation": 1106.4,
+        "total": 1238.9
+      }
+    },
+    {
+      "id": "conduct-01",
+      "question": "Who do I report a workplace harassment concern to?",
+      "category": "code_of_conduct",
+      "answerable": true,
+      "expected_source": "code_of_conduct.txt",
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "code_of_conduct.txt",
+        "code_of_conduct.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "You can report a workplace harassment concern to HR or through the anonymous ethics hotline.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 26.5,
+        "rerank": 82.2,
+        "generation": 9467.6,
+        "total": 9576.2
+      }
+    },
+    {
+      "id": "conduct-02",
+      "question": "What hours am I expected to be reachable when working remotely?",
+      "category": "code_of_conduct",
+      "answerable": true,
+      "expected_source": "code_of_conduct.txt",
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "code_of_conduct.txt",
+        "it_security_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "You are expected to be reachable during core hours, which are 10\u202fAM to 4\u202fPM in your local time zone.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 38.4,
+        "rerank": 92.4,
+        "generation": 5352.5,
+        "total": 5483.2
+      }
+    },
+    {
+      "id": "unanswerable-01",
+      "question": "What is the company's stock price?",
+      "category": "out_of_scope",
+      "answerable": false,
+      "expected_source": null,
+      "retrieved_sources": [],
+      "retrieval_hit": null,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 20.6,
+        "rerank": 93.1,
+        "generation": 0.0,
+        "total": 113.8
+      }
+    },
+    {
+      "id": "unanswerable-02",
+      "question": "Does the company offer health insurance?",
+      "category": "out_of_scope",
+      "answerable": false,
+      "expected_source": null,
+      "retrieved_sources": [
+        "it_security_policy.txt"
+      ],
+      "retrieval_hit": null,
+      "answer": "I don't have enough information to answer that. The provided context only covers IT & Security Policy, not health insurance benefits.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 16.3,
+        "rerank": 124.1,
+        "generation": 4046.7,
+        "total": 4187.0
+      }
+    },
+    {
+      "id": "unanswerable-03",
+      "question": "What is the notice period for resigning?",
+      "category": "out_of_scope",
+      "answerable": false,
+      "expected_source": null,
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": null,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 21.5,
+        "rerank": 90.3,
+        "generation": 502.9,
+        "total": 614.7
+      }
+    },
+    {
+      "id": "unanswerable-04",
+      "question": "Who is the CEO of the company?",
+      "category": "out_of_scope",
+      "answerable": false,
+      "expected_source": null,
+      "retrieved_sources": [],
+      "retrieval_hit": null,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 19.9,
+        "rerank": 82.8,
+        "generation": 0.0,
+        "total": 102.7
+      }
+    },
+    {
+      "id": "unanswerable-05",
+      "question": "What is the parking policy for the office?",
+      "category": "out_of_scope",
+      "answerable": false,
+      "expected_source": null,
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "expense_policy.txt"
+      ],
+      "retrieval_hit": null,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "timings_ms": {
+        "retrieval": 16.6,
+        "rerank": 82.6,
+        "generation": 6550.9,
+        "total": 6650.1
+      }
+    }
+  ]
+}

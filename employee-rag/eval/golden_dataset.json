@@ -1,0 +1,154 @@
+[
+  {
+    "id": "leave-01",
+    "question": "How many days of annual leave do I get per year?",
+    "category": "annual_leave",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["20"]
+  },
+  {
+    "id": "leave-02",
+    "question": "When do I become eligible to take annual leave?",
+    "category": "annual_leave",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["6", "month"]
+  },
+  {
+    "id": "leave-03",
+    "question": "time off for a new baby",
+    "category": "maternity_leave",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["12", "week"]
+  },
+  {
+    "id": "leave-04",
+    "question": "How long is maternity leave?",
+    "category": "maternity_leave",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["12"]
+  },
+  {
+    "id": "leave-05",
+    "question": "I'm feeling unwell, how many sick days can I take this year?",
+    "category": "sick_leave",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["10"]
+  },
+  {
+    "id": "leave-06",
+    "question": "Can I work remotely, and how often?",
+    "category": "wfh",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": ["twice", "week"]
+  },
+  {
+    "id": "it-01",
+    "question": "How often do I need to change my password?",
+    "category": "it_security",
+    "answerable": true,
+    "expected_source": "it_security_policy.txt",
+    "answer_must_contain": ["180"]
+  },
+  {
+    "id": "it-02",
+    "question": "What should I do if I lose my work laptop?",
+    "category": "it_security",
+    "answerable": true,
+    "expected_source": "it_security_policy.txt",
+    "answer_must_contain": ["24"]
+  },
+  {
+    "id": "it-03",
+    "question": "Do I need a VPN to access internal systems from home?",
+    "category": "it_security",
+    "answerable": true,
+    "expected_source": "it_security_policy.txt",
+    "answer_must_contain": ["VPN"]
+  },
+  {
+    "id": "expense-01",
+    "question": "What's the daily meal allowance when traveling for work?",
+    "category": "expenses",
+    "answerable": true,
+    "expected_source": "expense_policy.txt",
+    "answer_must_contain": ["1500"]
+  },
+  {
+    "id": "expense-02",
+    "question": "Above what amount do I need a receipt for an expense?",
+    "category": "expenses",
+    "answerable": true,
+    "expected_source": "expense_policy.txt",
+    "answer_must_contain": ["500"]
+  },
+  {
+    "id": "expense-03",
+    "question": "How many days do I have to submit an expense report?",
+    "category": "expenses",
+    "answerable": true,
+    "expected_source": "expense_policy.txt",
+    "answer_must_contain": ["30"]
+  },
+  {
+    "id": "conduct-01",
+    "question": "Who do I report a workplace harassment concern to?",
+    "category": "code_of_conduct",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": ["HR"]
+  },
+  {
+    "id": "conduct-02",
+    "question": "What hours am I expected to be reachable when working remotely?",
+    "category": "code_of_conduct",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": ["10", "4"]
+  },
+  {
+    "id": "unanswerable-01",
+    "question": "What is the company's stock price?",
+    "category": "out_of_scope",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": []
+  },
+  {
+    "id": "unanswerable-02",
+    "question": "Does the company offer health insurance?",
+    "category": "out_of_scope",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": []
+  },
+  {
+    "id": "unanswerable-03",
+    "question": "What is the notice period for resigning?",
+    "category": "out_of_scope",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": []
+  },
+  {
+    "id": "unanswerable-04",
+    "question": "Who is the CEO of the company?",
+    "category": "out_of_scope",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": []
+  },
+  {
+    "id": "unanswerable-05",
+    "question": "What is the parking policy for the office?",
+    "category": "out_of_scope",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": []
+  }
+]

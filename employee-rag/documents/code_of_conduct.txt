@@ -1,0 +1,16 @@
+Code of Conduct
+
+Workplace Behavior:
+Employees are expected to treat colleagues, clients, and vendors with respect. Harassment or discrimination of any kind will not be tolerated.
+
+Conflicts of Interest:
+Employees must disclose any outside employment, financial interest, or personal relationship that could conflict with their role at the company.
+
+Confidentiality:
+Employees must not share confidential company information, including source code, customer data, or unreleased product plans, outside the company.
+
+Reporting Violations:
+Concerns about workplace conduct should be reported to HR or through the anonymous ethics hotline. Retaliation against anyone who reports a concern in good faith is strictly prohibited.
+
+Remote Work Conduct:
+Employees working remotely are expected to be reachable during core hours (10 AM - 4 PM local time) and to attend scheduled meetings on camera unless otherwise agreed with their manager.
