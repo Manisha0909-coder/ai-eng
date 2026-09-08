@@ -1,0 +1,36 @@
+meta {
+  name: Detach Tool Server
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-servers/detach
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const serverName = bru.getEnvVar("ts_server_name") || "TEST_SERVER";
+  req.setBody({ name: serverName });
+}
+
+body:json {
+  {
+    "name": "TEST_SERVER"
+  }
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

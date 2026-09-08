@@ -1,0 +1,29 @@
+meta {
+  name: Get Persona Datasources
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/datasources
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data contains datasources array", function() {
+    expect(res.getBody().data.datasources).to.be.an('array');
+  });
+}

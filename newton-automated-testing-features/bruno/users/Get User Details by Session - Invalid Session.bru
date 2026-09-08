@@ -1,0 +1,50 @@
+meta {
+  name: Get User Details by Session - Invalid Session
+  type: http
+  seq: 25
+}
+
+post {
+  url: {{base_url}}/api/mid/users/user_details
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  X-API-Key: {{api_key}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Get User Details by Session - Invalid Session] Running negative test: nonexistent session_id");
+}
+
+body:json {
+  {
+    "session_id": "00000000-0000-0000-0000-000000000000",
+    "agent_id": null,
+    "connection": null
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 404];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Get User Details by Session - Invalid Session] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Get User Details by Session - Invalid Session] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 404", function() {
+    expect([400, 404]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

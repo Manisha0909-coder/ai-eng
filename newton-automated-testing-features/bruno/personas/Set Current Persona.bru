@@ -1,0 +1,29 @@
+meta {
+  name: Set Current Persona
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/{{version_id}}/set_current
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Set Current Persona] setting version_id: ${bru.getEnvVar("version_id")} as current`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

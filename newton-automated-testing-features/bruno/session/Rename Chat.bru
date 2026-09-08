@@ -1,0 +1,97 @@
+meta {
+  name: Rename Chat
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/session/rename_chat
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}",
+    "chat_title": "Bruno Test Title"
+  }
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  // Get a valid persona_id
+  let personaId = null;
+  try {
+    const personasRes = await bru.sendRequest({
+      url: `${baseUrl}/api/mid/personas/list`,
+      method: "POST",
+      headers: {
+        "Cookie": `access_token=${token}`,
+        "Content-Type": "application/json"
+      },
+      data: { limit: 1, offset: 0 }
+    });
+    const personas = personasRes.data?.data?.personas || [];
+    personaId = personas.length > 0 ? personas[0].id : null;
+  } catch (e) {}
+
+  // Create a fresh test session
+  if (personaId) {
+    try {
+      await bru.sendRequest({
+        url: `${baseUrl}/api/mid/chat/create`,
+        method: "POST",
+        headers: {
+          "Cookie": `access_token=${token}`,
+          "Content-Type": "application/json",
+          "x-title": "Bruno Session Test"
+        },
+        data: {
+          timezone: "Asia/Kolkata",
+          session_id: null,
+          query: "hi",
+          persona_id: personaId,
+          language: "EN"
+        }
+      });
+    } catch (e) {
+      // SSE stream — error expected, session is still created
+    }
+  }
+
+  // Fetch the most recently created session
+  const listRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/session/list_chat_sessions?limit=1`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+
+  const sessions = listRes.data?.data?.sessions || [];
+  const sessionId = sessions.length > 0 ? sessions[0].session_id : null;
+
+  if (!sessionId) {
+    console.warn("[Rename Chat] ⚠️ No session available — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+
+  bru.setEnvVar("session_id", sessionId);
+  console.log(`[Rename Chat] ✅ session_id saved: ${sessionId}`);
+  req.setBody({ session_id: sessionId, chat_title: "Bruno Test Title" });
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

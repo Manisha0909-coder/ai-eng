@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Connections — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.4); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  .skeleton { background: linear-gradient(90deg, rgb(var(--c-surface-2)) 25%, rgb(var(--c-border) / 0.5) 50%, rgb(var(--c-surface-2)) 75%); background-size: 200% 100%; animation: shimmer 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+<!-- END shared-head -->
+<style>
+  .scroll-quiet::-webkit-scrollbar { width: 5px; height: 5px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  .kicker { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; line-height: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(var(--c-text-muted)); font-weight: 500; }
+  .field { width: 100%; height: 2.25rem; border-radius: 0.625rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); padding: 0 0.75rem; font-size: 0.875rem; color: rgb(var(--c-text-main)); }
+  .field::placeholder { color: rgb(var(--c-text-muted) / 0.8); }
+  .field-mono { font-family: "Spline Sans Mono", monospace; font-size: 0.8125rem; }
+</style>
+</head>
+<body class="bg-background text-text-main antialiased">
+
+<div class="spectrum-rule"></div>
+
+<!-- Page header (settings-level page; in production this lives inside the Settings surface) -->
+<header class="border-b border-border-main bg-surface/80 backdrop-blur-md">
+  <div class="max-w-4xl mx-auto px-6 h-14 flex items-center gap-2.5">
+    <svg width="20" height="20" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-sm">Newton</span>
+    <span class="text-border-main text-sm">·</span>
+    <span class="text-xs text-text-muted font-medium">Settings</span>
+    <span class="text-border-main text-sm">/</span>
+    <span class="text-xs text-text-main font-medium">Connections</span>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-6 py-8 space-y-8">
+
+  <!-- Title row -->
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h1 class="font-display font-semibold text-xl tracking-tight">Connections</h1>
+      <p class="text-sm text-text-muted mt-0.5">Connect Newton to the services you use. Your agents can then act on your behalf inside them.</p>
+    </div>
+    <button class="shrink-0 flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- Callback landing banners — GET /connections/oauth/callback     -->
+  <!-- ============================================================= -->
+  <div class="anno p-3 space-y-3">
+    <span class="anno-tag">state · oauth callback landing (?status=…&amp;connection_id=…)</span>
+
+    <!-- success -->
+    <div class="flex items-start gap-3 rounded-xl border border-status-success/30 bg-status-success/5 px-4 py-3">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-success shrink-0 mt-0.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium">Microsoft connected</div>
+        <p class="text-xs text-text-muted mt-0.5">You can close this tab or keep configuring your other connections.</p>
+      </div>
+      <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors shrink-0" aria-label="Dismiss">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- error, connection known → offer retry on that connection -->
+    <div class="flex items-start gap-3 rounded-xl border border-status-error/30 bg-status-error/5 px-4 py-3">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium">Couldn't finish connecting Noah</div>
+        <p class="text-xs text-text-muted mt-0.5">
+          The provider rejected the token exchange
+          (<code class="font-mono text-2xs text-text-main">exchange_failed</code>). Nothing was saved.
+        </p>
+      </div>
+      <button class="shrink-0 h-7 px-3 rounded-lg text-xs font-medium border border-border-main bg-surface hover:bg-surface-2 transition-colors">Try again</button>
+    </div>
+
+    <!-- error, no connection_id (state missing/expired, or user cancelled at provider) -->
+    <div class="flex items-start gap-3 rounded-xl border border-border-main bg-surface-2 px-4 py-3">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium">Connection cancelled</div>
+        <p class="text-xs text-text-muted mt-0.5">
+          The sign-in window was closed or the request expired
+          (<code class="font-mono text-2xs text-text-main">missing_code_or_state</code>). Start again from the list below.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================= -->
+  <!-- Your connections — GET /connections                            -->
+  <!-- ============================================================= -->
+  <section>
+    <div class="flex items-baseline justify-between mb-3">
+      <span class="kicker">Your connections</span>
+      <span class="text-2xs text-text-muted tabular-nums">4 connected</span>
+    </div>
+
+    <div class="rounded-xl border border-border-main overflow-hidden divide-y divide-border-main bg-surface">
+
+      <!-- active / oauth2 -->
+      <div class="flex items-center gap-3.5 px-4 py-3.5">
+        <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-white">
+          <svg width="17" height="17" viewBox="0 0 24 24" aria-label="Microsoft"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium">Microsoft 365</span>
+            <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+          </div>
+          <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-status-success shrink-0"></span>
+            <span class="text-2xs text-status-success">Active</span>
+            <span class="text-2xs text-text-muted truncate">· token refreshes automatically · connected Jul 2, 2026</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          <button class="h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Test</button>
+          <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-status-error/5 hover:text-status-error transition-colors" aria-label="Disconnect Microsoft 365">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- active / api_key + test result inline -->
+      <div class="px-4 py-3.5">
+        <div class="flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+            <span class="font-display font-bold text-xs text-text-muted">CS</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">ConnectSecure</span>
+              <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">api_key</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-status-success shrink-0"></span>
+              <span class="text-2xs text-status-success">Active</span>
+              <span class="text-2xs text-text-muted truncate">· Prod tenant key</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button class="h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Test</button>
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-status-error/5 hover:text-status-error transition-colors" aria-label="Disconnect ConnectSecure">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- POST /connections/{id}/test → data.success === true -->
+        <div class="anno mt-3 p-2.5">
+          <span class="anno-tag">state · test passed (data.success = true)</span>
+          <div class="mt-2 flex items-center gap-2 rounded-lg bg-status-success/5 border border-status-success/25 px-3 py-2">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-xs text-text-main">Connection test succeeded</span>
+            <span class="text-2xs text-text-muted ml-auto tabular-nums">just now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- needs_reauth -->
+      <div class="px-4 py-3.5 bg-accent/[0.04]">
+        <div class="flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-white">
+            <svg width="17" height="17" viewBox="0 0 24 24" aria-label="Google"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">Google Workspace</span>
+              <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent shrink-0"></span>
+              <span class="text-2xs text-accent">Needs re-authorisation</span>
+              <span class="text-2xs text-text-muted truncate">· access was revoked at Google</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button class="h-8 px-3 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity">Reconnect</button>
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-status-error/5 hover:text-status-error transition-colors" aria-label="Disconnect Google Workspace">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+        <p class="mt-2.5 ml-[3.125rem] text-2xs text-text-muted">
+          Newton stopped being able to refresh this connection. Reconnecting takes you back through Google's consent screen; nothing else changes.
+        </p>
+      </div>
+
+      <!-- error + last_error -->
+      <div class="px-4 py-3.5">
+        <div class="flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+            <span class="font-display font-bold text-sm text-text-main">N</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">Noah</span>
+              <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-status-error shrink-0"></span>
+              <span class="text-2xs text-status-error">Error</span>
+              <span class="text-2xs text-text-muted truncate">· last checked 12 min ago</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button class="h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Test</button>
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-status-error/5 hover:text-status-error transition-colors" aria-label="Disconnect Noah">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- last_error surfaced verbatim but visually quarantined -->
+        <div class="mt-2.5 ml-[3.125rem] rounded-lg border border-status-error/25 bg-status-error/5 px-3 py-2">
+          <div class="kicker !text-status-error">last error</div>
+          <code class="block mt-1 font-mono text-2xs text-text-main break-all">upstream_error: 503 Service Unavailable from https://api.noah.co/v1/me</code>
+        </div>
+      </div>
+
+      <!-- pending — oauth2 row created, awaiting authorize round trip -->
+      <div class="anno m-3 p-3">
+        <span class="anno-tag">state · pending (created, awaiting authorize round trip)</span>
+        <div class="mt-3 flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+            <span class="font-display font-bold text-xs text-text-muted">IL</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">IBM Loyalty</span>
+              <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-text-muted shrink-0"></span>
+              <span class="text-2xs text-text-muted">Pending — waiting for sign-in</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button class="h-8 px-3 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity">Continue</button>
+            <button class="h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 transition-colors">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- loading skeleton row -->
+      <div class="anno m-3 p-3">
+        <span class="anno-tag">state · loading row</span>
+        <div class="mt-3 flex items-center gap-3.5">
+          <div class="w-9 h-9 rounded-lg skeleton shrink-0"></div>
+          <div class="flex-1 space-y-1.5">
+            <div class="h-3.5 w-32 rounded skeleton"></div>
+            <div class="h-3 w-48 rounded skeleton"></div>
+          </div>
+          <div class="h-8 w-24 rounded-lg skeleton shrink-0"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- Available providers — catalog minus already-connected          -->
+  <!-- ============================================================= -->
+  <section>
+    <div class="flex items-baseline justify-between mb-3">
+      <span class="kicker">Available</span>
+      <span class="text-2xs text-text-muted">One connection per provider</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+      <!-- connectable, oauth2 -->
+      <div class="rounded-xl border border-border-main bg-surface p-4 flex items-start gap-3 shadow-lift">
+        <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+          <span class="font-display font-bold text-xs text-text-muted">SF</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium">Salesforce</div>
+          <p class="text-xs text-text-muted mt-0.5 leading-snug">Read accounts, opportunities and contacts.</p>
+          <div class="flex items-center gap-1.5 mt-2.5">
+            <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+            <button class="ml-auto flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border border-primary/40 text-primary hover:bg-primary/5 transition-colors">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Connect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- connectable, api_key -->
+      <div class="rounded-xl border border-border-main bg-surface p-4 flex items-start gap-3 shadow-lift">
+        <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium">Example API</div>
+          <p class="text-xs text-text-muted mt-0.5 leading-snug">Paste an API key to enable this integration.</p>
+          <div class="flex items-center gap-1.5 mt-2.5">
+            <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">api_key</span>
+            <button class="ml-auto flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border border-primary/40 text-primary hover:bg-primary/5 transition-colors">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add key
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- provider not configured by admin → connect disabled -->
+      <div class="rounded-xl border border-border-main bg-surface p-4 flex items-start gap-3 opacity-70">
+        <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+          <span class="font-display font-bold text-xs text-text-muted">ZD</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sm font-medium">Zendesk</span>
+          </div>
+          <p class="text-xs text-text-muted mt-0.5 leading-snug">Not yet configured by your administrator.</p>
+          <div class="flex items-center gap-1.5 mt-2.5">
+            <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+            <button disabled class="ml-auto h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted cursor-not-allowed">
+              Unavailable
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- basic auth -->
+      <div class="rounded-xl border border-border-main bg-surface p-4 flex items-start gap-3 shadow-lift">
+        <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium">Legacy Reporting</div>
+          <p class="text-xs text-text-muted mt-0.5 leading-snug">Username and password, stored encrypted.</p>
+          <div class="flex items-center gap-1.5 mt-2.5">
+            <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">basic</span>
+            <button class="ml-auto h-8 px-3 rounded-lg text-xs font-medium border border-primary/40 text-primary hover:bg-primary/5 transition-colors">Sign in</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- empty state -->
+  <div class="anno p-3">
+    <span class="anno-tag">state · nothing connected yet</span>
+    <div class="mt-3 rounded-xl border border-border-main bg-surface px-6 py-10 text-center">
+      <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center mx-auto">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </div>
+      <h3 class="font-display font-semibold text-base mt-3">No connections yet</h3>
+      <p class="text-sm text-text-muted mt-1 max-w-sm mx-auto">Connect a service to let your agents read and act on your data there. You can disconnect at any time.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================= -->
+<!-- Dialog A — credential connect (POST /connections, api_key)      -->
+<!-- ============================================================= -->
+<div class="max-w-4xl mx-auto px-6 pb-8">
+  <div class="anno p-3">
+    <span class="anno-tag">dialog · add credential (api_key / basic)</span>
+    <div class="mt-3 mx-auto w-full max-w-[26rem] bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+      <div class="spectrum-rule"></div>
+      <div class="px-6 pt-5 pb-4 border-b border-border-main flex items-start justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+            <span class="font-display font-bold text-xs text-text-muted">EX</span>
+          </div>
+          <div>
+            <h2 class="font-display font-semibold text-base">Connect Example API</h2>
+            <p class="text-xs text-text-muted mt-0.5">Your key is encrypted and never shown again.</p>
+          </div>
+        </div>
+        <button class="w-8 h-8 -mr-1 -mt-1 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors shrink-0" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="px-6 py-5 space-y-4">
+        <div>
+          <label class="block text-xs font-medium mb-1.5" for="conn-key">API key <span class="text-status-error">*</span></label>
+          <input id="conn-key" class="field field-mono" type="password" value="sk-live-8f21a09c44de" aria-describedby="conn-key-help">
+          <p id="conn-key-help" class="text-2xs text-text-muted mt-1.5">Found under Settings → Developers in Example API.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-medium mb-1.5" for="conn-name">Display name</label>
+          <input id="conn-name" class="field" type="text" placeholder="My Example connection">
+          <p class="text-2xs text-text-muted mt-1.5">Optional — helps you tell connections apart.</p>
+        </div>
+
+        <!-- provider-specific connection_config -->
+        <div>
+          <div class="kicker mb-1.5">Provider settings</div>
+          <label class="block text-xs font-medium mb-1.5" for="conn-sub">Subdomain</label>
+          <input id="conn-sub" class="field field-mono" type="text" value="acme">
+        </div>
+
+        <!-- 400 / 409 error -->
+        <div class="anno p-2.5">
+          <span class="anno-tag">state · 409 duplicate</span>
+          <div class="mt-2 flex items-start gap-2 rounded-lg border border-status-error/25 bg-status-error/5 px-3 py-2">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="text-xs text-text-main">You already have a connection for this provider. Disconnect it first to add a different key.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-border-main flex items-center justify-end gap-2 bg-surface-2">
+        <button class="h-8 px-3.5 rounded-lg text-xs font-medium border border-border-main bg-surface hover:bg-background transition-colors">Cancel</button>
+        <button class="h-8 px-3.5 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity">Connect</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================= -->
+<!-- Dialog B — OAuth2 handoff + disconnect confirm                  -->
+<!-- ============================================================= -->
+<div class="max-w-4xl mx-auto px-6 pb-16 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+  <div class="anno p-3">
+    <span class="anno-tag">dialog · oauth handoff (GET /{id}/authorize)</span>
+    <div class="mt-3 bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+      <div class="spectrum-rule"></div>
+      <div class="px-6 py-6 text-center">
+        <div class="w-12 h-12 rounded-xl border border-border-main bg-white flex items-center justify-center mx-auto">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-label="Microsoft"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+        </div>
+        <h2 class="font-display font-semibold text-base mt-3">Continue at Microsoft</h2>
+        <p class="text-sm text-text-muted mt-1.5">You'll be taken to Microsoft to approve access, then returned here automatically.</p>
+
+        <div class="mt-4 rounded-xl border border-border-main bg-surface-2 px-4 py-3 text-left">
+          <div class="kicker mb-2">Newton will be able to</div>
+          <ul class="space-y-1.5 text-xs">
+            <li class="flex items-start gap-2"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-primary shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span>Read your mail and calendar</span></li>
+            <li class="flex items-start gap-2"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-primary shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span>Send mail on your behalf</span></li>
+            <li class="flex items-start gap-2"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-primary shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span>Read files you share with it</span></li>
+          </ul>
+        </div>
+
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <button class="h-9 px-4 rounded-lg text-xs font-medium border border-border-main hover:bg-surface-2 transition-colors">Cancel</button>
+          <button class="h-9 px-4 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity flex items-center gap-1.5">
+            Continue
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- waiting-for-callback variant -->
+      <div class="anno m-3 p-3">
+        <span class="anno-tag">state · waiting for callback</span>
+        <div class="mt-2 flex items-center gap-2.5 rounded-lg bg-surface-2 border border-border-main px-3 py-2.5">
+          <span class="w-3.5 h-3.5 rounded-full border-2 border-primary border-t-transparent animate-spin shrink-0" aria-hidden="true"></span>
+          <span class="text-xs text-text-muted">Waiting for Microsoft to confirm… you can finish in the other tab.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anno p-3">
+    <span class="anno-tag">dialog · disconnect confirm (DELETE /connections/{id})</span>
+    <div class="mt-3 bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+      <div class="spectrum-rule"></div>
+      <div class="px-6 py-5">
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-lg bg-status-error/10 flex items-center justify-center shrink-0">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="min-w-0">
+            <h2 class="font-display font-semibold text-base">Disconnect Noah?</h2>
+            <p class="text-sm text-text-muted mt-1">The stored credential is deleted immediately. Agents that rely on Noah will stop working until you reconnect.</p>
+          </div>
+        </div>
+        <div class="mt-5 flex items-center justify-end gap-2">
+          <button class="h-8 px-3.5 rounded-lg text-xs font-medium border border-border-main hover:bg-surface-2 transition-colors">Keep it</button>
+          <button class="h-8 px-3.5 rounded-lg text-xs font-medium bg-status-error text-white hover:opacity-90 transition-opacity">Disconnect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle light and dark mode">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

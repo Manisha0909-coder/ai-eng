@@ -1,0 +1,33 @@
+meta {
+  name: Get Role
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/roles/{{role_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Get Role] role_id: ${bru.getEnvVar("role_id")}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains role id", function() {
+    expect(res.getBody().data.role.id).to.be.a('number');
+  });
+}

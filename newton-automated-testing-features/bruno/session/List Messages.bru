@@ -1,0 +1,41 @@
+meta {
+  name: List Messages
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/api/mid/session/list_message
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+script:pre-request {
+  const sid = bru.getEnvVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+    return;
+  }
+  req.setBody({ session_id: sid });
+}
+
+script:post-response {
+  const body = res.getBody();
+  const messages = (body && body.data && body.data.messages) || [];
+  if (messages.length > 0) {
+    const mid = messages[0].message_id;
+    bru.setVar("message_id", mid);
+    console.log("message_id captured:", mid);
+  }
+}

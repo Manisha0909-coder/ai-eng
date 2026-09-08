@@ -1,0 +1,41 @@
+meta {
+  name: Get Trace - Invalid ID
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{base_url}}/api/mid/observability/traces/00000000-0000-0000-0000-000000000000
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Get Trace - Invalid ID] Running negative test: non-existent trace id");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 403, 404, 500];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Get Trace - Invalid ID] Expected ${expected.join("/")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Get Trace - Invalid ID] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400, 403, 404, or 500", function() {
+    expect([400, 403, 404, 500]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

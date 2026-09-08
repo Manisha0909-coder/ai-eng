@@ -1,0 +1,47 @@
+meta {
+  name: Query Data Source - No Token
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{base_url}}/api/core/api/data-sources/00000000-0000-0000-0000-000000000000/query
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "query": "SELECT * FROM data LIMIT 10"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Query Data Source - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Query Data Source - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Query Data Source - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

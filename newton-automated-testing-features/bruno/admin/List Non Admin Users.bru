@@ -1,0 +1,41 @@
+meta {
+  name: List Non Admin Users
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/mid/admin/users/non-admins
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit: 
+  ~offset: 
+  ~search: 
+  ~roles: 
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has users array", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("users");
+    expect(body.data.users).to.be.an("array");
+  });
+
+  test("Response has pagination fields", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("total");
+    expect(body.data).to.have.property("limit");
+    expect(body.data).to.have.property("offset");
+  });
+}

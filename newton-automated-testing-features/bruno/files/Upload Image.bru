@@ -1,0 +1,49 @@
+meta {
+  name: Upload Image
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/files/images/upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  file: @file(../test-data/test.jpg)
+}
+
+script:post-response {
+  const body = res.getBody();
+  console.log("Upload Image response:", JSON.stringify(body));
+  const files = body && body.data && body.data.files;
+  if (files && files.length > 0) {
+    bru.setVar("file_name", files[0].file_name);
+    console.log("file_name captured:", files[0].file_name);
+  } else {
+    console.log("WARNING: file_name not found in response");
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains uploaded file", function() {
+    expect(res.getBody().data.files).to.be.an('array').with.lengthOf(1);
+  });
+
+  test("Response contains file_name", function() {
+    expect(res.getBody().data.files[0].file_name).to.be.a('string');
+  });
+}

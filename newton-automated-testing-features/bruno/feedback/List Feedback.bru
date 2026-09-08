@@ -1,0 +1,39 @@
+meta {
+  name: List Feedback
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/mid/feedback/all
+  body: none
+  auth: none
+}
+
+params:query {
+  ~limit: 10
+  ~offset: 0
+  ~search:
+  ~feedback_type:
+  ~status:
+  ~sort_by:
+  ~sort_order:
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains data", function() {
+    expect(res.getBody().data).to.exist;
+  });
+}

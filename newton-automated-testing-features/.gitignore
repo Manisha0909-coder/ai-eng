@@ -1,0 +1,44 @@
+# Screenshots
+*.png
+screenshots/
+
+# Python cache
+__pycache__/
+*.egg-info/
+build/
+dist/
+
+# Test result files
+*.xlsx
+*.json
+!regression/personas_config.json
+
+*.html
+!test_files/*.html
+
+# Temp/generated files
+selenium-screenshot-*.png
+tc04-*.png
+tc09-*.png
+tc10-*.png
+tc12-*.png
+test-data/large_file.pdf
+test-data/large_file.txt
+
+# Playwright outputs
+playwright_automation/auth/
+playwright_automation/results/
+playwright_automation/.pytest_cache/
+playwright_automation/__pycache__/
+
+.env
+.env.example
+.env.*
+!.env.example
+browser_profile/
+ms_chrome_profile/
+
+regression/create_sample_sessions.py
+regression/create_persistent_replicas.py
+bruno/test_persona_temperature_context.py
+playwright_automation/.env.sentinel

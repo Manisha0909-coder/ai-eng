@@ -1,0 +1,34 @@
+meta {
+  name: Get My Data Sources
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/core/api/data-sources/me
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const pid = bru.getEnvVar("persona_id") || "105";
+  req.setUrl(req.getUrl() + "?persona_id=" + encodeURIComponent(pid));
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains data", function() {
+    expect(res.getBody().data).to.not.equal(null);
+  });
+}

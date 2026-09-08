@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Persona Wizard — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); display: block; margin-bottom: 0.75rem; }
+  .field-label { font-size: 0.8rem; font-weight: 500; color: rgb(var(--c-text-main)); margin-bottom: 0.35rem; display: block; }
+  .field-input { width: 100%; height: 2.2rem; padding: 0 0.75rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.85rem; color: rgb(var(--c-text-main)); outline: none; }
+  .field-input:focus { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .field-textarea { width: 100%; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.85rem; color: rgb(var(--c-text-main)); outline: none; resize: none; font-family: inherit; }
+  .btn-primary { height: 2.25rem; padding: 0 1rem; border-radius: 0.6rem; background: linear-gradient(135deg, rgb(var(--c-primary)), rgb(var(--c-primary) / 0.85)); color: white; font-size: 0.8rem; font-weight: 600; border: none; cursor: pointer; }
+  .dark .btn-primary { color: #0d1411; }
+  .btn-ghost { height: 2.25rem; padding: 0 1rem; border-radius: 0.6rem; border: 1px solid rgb(var(--c-border)); background: transparent; color: rgb(var(--c-text-muted)); font-size: 0.8rem; cursor: pointer; }
+  .btn-primary-lg { height: 2.5rem; padding: 0 1.25rem; border-radius: 0.7rem; background: linear-gradient(135deg, rgb(var(--c-primary)), rgb(var(--c-primary) / 0.85)); color: white; font-size: 0.875rem; font-weight: 600; border: none; cursor: pointer; }
+  .dark .btn-primary-lg { color: #0d1411; }
+  .toggle { width: 2.25rem; height: 1.25rem; border-radius: 9999px; background: rgb(var(--c-border)); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+  .toggle.on { background: rgb(var(--c-primary)); }
+  .toggle::after { content: ''; width: 1rem; height: 1rem; border-radius: 50%; background: white; position: absolute; top: 0.125rem; left: 0.125rem; transition: transform 0.2s; }
+  .toggle.on::after { transform: translateX(1rem); }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  /* Wizard-specific */
+  .wizard-dialog { background: rgb(var(--c-surface)); border: 1px solid rgb(var(--c-border)); border-radius: 1.25rem; box-shadow: 0 24px 64px -16px rgb(8 14 11 / 0.35); overflow: hidden; max-width: 56rem; width: 100%; }
+  .step-dot { width: 1.5rem; height: 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; flex-shrink: 0; }
+  .step-dot.done { background: rgb(var(--c-primary)); color: white; }
+  .dark .step-dot.done { color: #0d1411; }
+  .step-dot.active { background: rgb(var(--c-primary)); color: white; box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.2); }
+  .dark .step-dot.active { color: #0d1411; }
+  .step-dot.pending { background: rgb(var(--c-surface-2)); color: rgb(var(--c-text-muted)); border: 1px solid rgb(var(--c-border)); }
+  .step-line { flex: 1; height: 2px; }
+  .step-line.done { background: rgb(var(--c-primary)); }
+  .step-line.pending { background: rgb(var(--c-border)); }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+<!-- Top bar -->
+<div class="spectrum-rule"></div>
+<div class="h-12 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 shrink-0">
+  <div class="flex items-center gap-2.5">
+    <svg width="20" height="20" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-sm">Newton</span>
+    <span class="text-border-main">·</span>
+    <span class="text-xs text-text-muted font-medium">Persona Creation Wizard</span>
+  </div>
+  <div class="flex-1"></div>
+  <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+</div>
+
+<div class="max-w-5xl mx-auto px-6 py-10 space-y-14">
+
+  <!-- STEP PROGRESS BAR — reference -->
+  <div>
+    <span class="anno-tag">Progress stepper — shown inside the dialog header. Steps fill left-to-right as completed.</span>
+    <div class="bg-surface border border-border-main rounded-2xl px-6 py-5">
+      <div class="flex items-center">
+        <!-- Step 1 done -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot done">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="text-2xs text-text-muted whitespace-nowrap">Basics</span>
+        </div>
+        <div class="step-line done mx-1"></div>
+        <!-- Step 2 done -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot done">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span class="text-2xs text-text-muted whitespace-nowrap">Identity</span>
+        </div>
+        <div class="step-line done mx-1"></div>
+        <!-- Step 3 active -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot active font-mono">3</div>
+          <span class="text-2xs text-primary font-medium whitespace-nowrap">Intelligence</span>
+        </div>
+        <div class="step-line pending mx-1"></div>
+        <!-- Step 4 pending -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot pending font-mono">4</div>
+          <span class="text-2xs text-text-muted whitespace-nowrap">Capabilities</span>
+        </div>
+        <div class="step-line pending mx-1"></div>
+        <!-- Step 5 pending -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot pending font-mono">5</div>
+          <span class="text-2xs text-text-muted whitespace-nowrap">Review</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 1: BASICS ── -->
+  <div>
+    <span class="anno-tag">Step 1 · Basics — type cards (Chat / Dashboard, locked after create) + name + greeting</span>
+    <div class="wizard-dialog mx-auto">
+      <!-- Dialog header -->
+      <div class="border-b border-border-main px-6 pt-5 pb-0">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display font-semibold text-base">Create Persona</h2>
+          <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <!-- Stepper (step 1 active) -->
+        <div class="flex items-center pb-4">
+          <div class="flex flex-col items-center gap-1"><div class="step-dot active font-mono">1</div><span class="text-2xs text-primary font-medium">Basics</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">2</div><span class="text-2xs text-text-muted">Identity</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">3</div><span class="text-2xs text-text-muted">Intelligence</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">4</div><span class="text-2xs text-text-muted">Capabilities</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">5</div><span class="text-2xs text-text-muted">Review</span></div>
+        </div>
+      </div>
+      <!-- Two-column body -->
+      <div class="flex">
+        <!-- Form column -->
+        <div class="flex-1 px-6 py-5 space-y-5 min-w-0">
+          <!-- Type cards -->
+          <div>
+            <label class="field-label">Persona type <span class="text-status-error">*</span> <span class="text-2xs text-text-muted font-normal ml-1">Cannot be changed after creation</span></label>
+            <div class="grid grid-cols-2 gap-3">
+              <!-- Chat selected -->
+              <label class="flex flex-col gap-3 p-4 rounded-xl border-2 border-primary bg-primary/4 cursor-pointer">
+                <div class="flex items-center justify-between">
+                  <div class="w-9 h-9 rounded-xl bg-primary/15 flex items-center justify-center">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-primary"></div></div>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold">Chat</p>
+                  <p class="text-2xs text-text-muted mt-0.5">Conversational AI assistant. Users interact via message threads.</p>
+                </div>
+              </label>
+              <!-- Dashboard unselected -->
+              <label class="flex flex-col gap-3 p-4 rounded-xl border border-border-main hover:border-primary/40 cursor-pointer transition-colors">
+                <div class="flex items-center justify-between">
+                  <div class="w-9 h-9 rounded-xl bg-surface-2 flex items-center justify-center">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-text-muted"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                  </div>
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main"></div>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold">Dashboard</p>
+                  <p class="text-2xs text-text-muted mt-0.5">Data-analysis mode. Returns structured tool outputs and charts.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+          <!-- Name -->
+          <div>
+            <label class="field-label">Name <span class="text-status-error">*</span></label>
+            <input class="field-input" type="text" value="Research Scout" />
+          </div>
+          <!-- Greeting -->
+          <div>
+            <label class="field-label">Greeting message</label>
+            <textarea class="field-textarea" rows="3" placeholder="Hi! I'm here to help you research and summarise information…"></textarea>
+            <p class="text-2xs text-text-muted mt-1">Shown to users when they open a new conversation with this persona.</p>
+          </div>
+        </div>
+        <!-- Right rail -->
+        <div class="w-56 shrink-0 border-l border-border-main bg-surface-2/40 px-4 py-5 flex flex-col gap-4">
+          <p class="text-2xs font-semibold text-text-muted uppercase tracking-wider">Live preview</p>
+          <div class="rounded-xl border border-border-main bg-surface p-3 flex flex-col gap-2 shadow-lift">
+            <div class="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <p class="text-sm font-semibold font-display leading-tight">Research Scout</p>
+            <span class="inline-flex w-fit px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-2xs font-medium">Chat</span>
+            <p class="text-2xs text-text-muted leading-relaxed">Hi! I'm here to help…</p>
+          </div>
+          <!-- Tips -->
+          <div class="rounded-xl border border-border-main bg-surface p-3">
+            <p class="text-2xs font-semibold mb-1.5">Tips</p>
+            <ul class="space-y-1">
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Choose <strong>Chat</strong> for open-ended Q&amp;A.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Pick <strong>Dashboard</strong> when your persona returns structured data, charts, or tool results.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Type cannot be changed after the persona is created.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="border-t border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+        <span class="text-2xs text-text-muted">Esc to close</span>
+        <div class="flex-1"></div>
+        <button class="btn-ghost opacity-50 cursor-not-allowed">Back</button>
+        <button class="btn-primary-lg">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: IDENTITY ── -->
+  <div>
+    <span class="anno-tag">Step 2 · Identity — persona prompt textarea, char counter, tone-starter chips</span>
+    <div class="wizard-dialog mx-auto">
+      <div class="border-b border-border-main px-6 pt-5 pb-0">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display font-semibold text-base">Create Persona</h2>
+          <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="flex items-center pb-4">
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Basics</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot active font-mono">2</div><span class="text-2xs text-primary font-medium">Identity</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">3</div><span class="text-2xs text-text-muted">Intelligence</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">4</div><span class="text-2xs text-text-muted">Capabilities</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">5</div><span class="text-2xs text-text-muted">Review</span></div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-1 px-6 py-5 space-y-5 min-w-0">
+          <!-- Tone chips -->
+          <div>
+            <label class="field-label">Tone starter <span class="text-2xs text-text-muted font-normal">— click to insert into prompt</span></label>
+            <div class="flex flex-wrap gap-2">
+              <button class="h-7 px-3 rounded-full border border-primary bg-primary/8 text-primary text-xs font-medium">Concise &amp; direct</button>
+              <button class="h-7 px-3 rounded-full border border-border-main hover:border-primary/40 text-text-muted text-xs transition-colors">Friendly &amp; casual</button>
+              <button class="h-7 px-3 rounded-full border border-border-main hover:border-primary/40 text-text-muted text-xs transition-colors">Formal &amp; precise</button>
+              <button class="h-7 px-3 rounded-full border border-border-main hover:border-primary/40 text-text-muted text-xs transition-colors">Curious &amp; exploratory</button>
+              <button class="h-7 px-3 rounded-full border border-border-main hover:border-primary/40 text-text-muted text-xs transition-colors">Step-by-step</button>
+            </div>
+          </div>
+          <!-- Persona prompt -->
+          <div>
+            <div class="flex items-baseline justify-between mb-1">
+              <label class="field-label mb-0">Persona prompt</label>
+              <span class="text-2xs text-text-muted font-mono">1 240 / 10 000</span>
+            </div>
+            <textarea class="field-textarea" rows="9" style="resize: vertical;">You are Research Scout, a concise and direct AI research assistant. Your role is to help users discover, summarise, and synthesise information from multiple sources.
+
+When a user asks a research question:
+1. Identify the 2–3 most relevant angles.
+2. Summarise each clearly in plain language.
+3. Highlight conflicting viewpoints when they exist.
+4. Cite sources inline where possible.
+
+Tone: professional but approachable. Avoid jargon unless the user is clearly an expert. Never speculate beyond available data — say "I'm not certain" when needed.</textarea>
+            <!-- Progress bar under textarea -->
+            <div class="mt-1.5 h-1 rounded-full bg-border-main overflow-hidden">
+              <div class="h-full rounded-full bg-primary" style="width: 12.4%"></div>
+            </div>
+            <p class="text-2xs text-text-muted mt-1">This prompt defines the persona's core behaviour. It is prepended to every conversation.</p>
+          </div>
+        </div>
+        <!-- Right rail -->
+        <div class="w-56 shrink-0 border-l border-border-main bg-surface-2/40 px-4 py-5 flex flex-col gap-4">
+          <p class="text-2xs font-semibold text-text-muted uppercase tracking-wider">Live preview</p>
+          <div class="rounded-xl border border-border-main bg-surface p-3 flex flex-col gap-2 shadow-lift">
+            <div class="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <p class="text-sm font-semibold font-display leading-tight">Research Scout</p>
+            <span class="inline-flex w-fit px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-2xs font-medium">Chat · Concise &amp; direct</span>
+            <p class="text-2xs text-text-muted leading-relaxed">Research, summarise, and synthesise from multiple sources…</p>
+          </div>
+          <div class="rounded-xl border border-border-main bg-surface p-3">
+            <p class="text-2xs font-semibold mb-1.5">Tips</p>
+            <ul class="space-y-1">
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Be explicit about format — "respond in bullet points" is more reliable than "be concise."</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Avoid writing the persona's name inside the prompt; it's prepended automatically.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Limit to ~2 000 chars for best results. Leave room for step 3's system prompt.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+        <span class="text-2xs text-text-muted">Esc to close</span>
+        <div class="flex-1"></div>
+        <button class="btn-ghost">Back</button>
+        <button class="btn-primary-lg">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: INTELLIGENCE ── -->
+  <div>
+    <span class="anno-tag">Step 3 · Intelligence — model combobox (loading + populated states), temperature, context limit, optional system prompt</span>
+    <div class="wizard-dialog mx-auto">
+      <div class="border-b border-border-main px-6 pt-5 pb-0">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display font-semibold text-base">Create Persona</h2>
+          <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="flex items-center pb-4">
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Basics</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Identity</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot active font-mono">3</div><span class="text-2xs text-primary font-medium">Intelligence</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">4</div><span class="text-2xs text-text-muted">Capabilities</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">5</div><span class="text-2xs text-text-muted">Review</span></div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-1 px-6 py-5 space-y-5 min-w-0">
+          <!-- Model combobox — two states side by side -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Loading state -->
+            <div>
+              <span class="anno-tag">Model combobox — loading state</span>
+              <label class="field-label">Model <span class="text-status-error">*</span></label>
+              <div class="field-input flex items-center gap-2 h-9 cursor-not-allowed opacity-70">
+                <svg class="w-4 h-4 text-text-muted animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="31.4 31.4" stroke-linecap="round"/></svg>
+                <span class="text-sm text-text-muted">Loading models…</span>
+              </div>
+            </div>
+            <!-- Populated state with dropdown open -->
+            <div>
+              <span class="anno-tag">Model combobox — open + option focused</span>
+              <label class="field-label">Model <span class="text-status-error">*</span></label>
+              <div class="field-input flex items-center justify-between h-9 cursor-pointer" style="border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08);">
+                <span class="text-sm">claude-sonnet-4-6</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted"><polyline points="18 15 12 9 6 15"/></svg>
+              </div>
+              <div class="mt-1 bg-surface border border-border-main rounded-xl shadow-lift overflow-hidden">
+                <div class="px-2 pt-2 pb-1">
+                  <input class="field-input h-7 text-xs" type="text" placeholder="Search models…" />
+                </div>
+                <div class="divide-y divide-border-main max-h-36 overflow-y-auto scroll-quiet">
+                  <div class="flex items-center gap-2 px-3 py-2 bg-primary/5 border-l-2 border-primary cursor-pointer">
+                    <div class="flex-1"><p class="text-sm font-medium">claude-sonnet-4-6</p><p class="text-2xs text-text-muted">Balanced · 200k ctx</p></div>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-primary"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex items-center gap-2 px-3 py-2 hover:bg-surface-2 cursor-pointer">
+                    <div class="flex-1"><p class="text-sm font-medium">claude-opus-4-8</p><p class="text-2xs text-text-muted">Most capable · 200k ctx</p></div>
+                  </div>
+                  <div class="flex items-center gap-2 px-3 py-2 hover:bg-surface-2 cursor-pointer">
+                    <div class="flex-1"><p class="text-sm font-medium">claude-haiku-4-5</p><p class="text-2xs text-text-muted">Fast &amp; lightweight · 200k ctx</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Temperature + Context limit -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="field-label">Temperature <span class="text-2xs text-text-muted font-normal">0 – 2</span></label>
+              <input class="field-input" type="number" min="0" max="2" step="0.1" value="0.7" />
+              <p class="text-2xs text-text-muted mt-1">Lower = more focused. Higher = more creative.</p>
+            </div>
+            <div>
+              <label class="field-label">Context window limit <span class="text-2xs text-text-muted font-normal">tokens</span></label>
+              <input class="field-input" type="number" min="1024" max="200000" step="1024" value="32768" />
+              <p class="text-2xs text-text-muted mt-1">Max tokens per conversation before truncation.</p>
+            </div>
+          </div>
+          <!-- System prompt -->
+          <div>
+            <label class="field-label">System prompt <span class="text-2xs text-text-muted font-normal">optional — inherits default if empty</span></label>
+            <textarea class="field-textarea text-text-muted italic" rows="4" placeholder="Leave empty to use the organisation's default system prompt. Override here only if this persona needs different runtime instructions (e.g. date injection, tool-use constraints)."></textarea>
+          </div>
+        </div>
+        <!-- Right rail -->
+        <div class="w-56 shrink-0 border-l border-border-main bg-surface-2/40 px-4 py-5 flex flex-col gap-4">
+          <p class="text-2xs font-semibold text-text-muted uppercase tracking-wider">Live preview</p>
+          <div class="rounded-xl border border-border-main bg-surface p-3 flex flex-col gap-2 shadow-lift">
+            <div class="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <p class="text-sm font-semibold font-display leading-tight">Research Scout</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-2xs font-medium">Chat</span>
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs font-mono">sonnet-4-6</span>
+            </div>
+            <p class="text-2xs text-text-muted">Temp 0.7 · 32k ctx</p>
+          </div>
+          <div class="rounded-xl border border-border-main bg-surface p-3">
+            <p class="text-2xs font-semibold mb-1.5">Tips</p>
+            <ul class="space-y-1">
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Sonnet is the best default for most use cases.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Use Opus for complex reasoning-heavy tasks.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Only override system prompt if you need to change runtime injection order.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+        <span class="text-2xs text-text-muted">Esc to close</span>
+        <div class="flex-1"></div>
+        <button class="btn-ghost">Back</button>
+        <button class="btn-primary-lg">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: CAPABILITIES ── -->
+  <div>
+    <span class="anno-tag">Step 4 · Capabilities — supports-documents toggle card, tool tags combobox, document tags combobox, dashboard-conditional data sources section, auto-summary tile</span>
+    <div class="wizard-dialog mx-auto">
+      <div class="border-b border-border-main px-6 pt-5 pb-0">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display font-semibold text-base">Create Persona</h2>
+          <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="flex items-center pb-4">
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Basics</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Identity</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Intelligence</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot active font-mono">4</div><span class="text-2xs text-primary font-medium">Capabilities</span></div>
+          <div class="step-line pending mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot pending font-mono">5</div><span class="text-2xs text-text-muted">Review</span></div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-1 px-6 py-5 space-y-5 min-w-0">
+          <!-- Supports documents toggle card -->
+          <div class="flex items-center gap-4 p-4 rounded-xl border border-border-main bg-surface-2/40">
+            <div class="flex-1">
+              <p class="text-sm font-semibold">Supports Documents</p>
+              <p class="text-xs text-text-muted mt-0.5">Allow users to upload and attach documents to conversations with this persona.</p>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <!-- Tool tags combobox -->
+          <div>
+            <label class="field-label">Tool tags</label>
+            <div class="field-input flex items-center gap-1.5 flex-wrap h-auto py-1.5 cursor-text" style="min-height: 2.2rem;">
+              <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-primary/10 border border-primary/25 text-2xs text-primary">Search<button class="ml-0.5 text-primary/70 hover:text-primary">✕</button></span>
+              <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-primary/10 border border-primary/25 text-2xs text-primary">Web<button class="ml-0.5 text-primary/70 hover:text-primary">✕</button></span>
+              <input type="text" placeholder="Add tag…" class="flex-1 min-w-16 text-xs bg-transparent outline-none placeholder:text-text-muted" />
+            </div>
+            <p class="text-2xs text-text-muted mt-1">Only tools with these tags will be available to this persona.</p>
+          </div>
+          <!-- Document tags combobox -->
+          <div>
+            <label class="field-label">Document tags</label>
+            <div class="field-input flex items-center gap-1.5 flex-wrap h-auto py-1.5 cursor-text" style="min-height: 2.2rem;">
+              <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-accent/10 border border-accent/25 text-2xs text-accent">Finance<button class="ml-0.5 text-accent/70 hover:text-accent">✕</button></span>
+              <input type="text" placeholder="Add tag…" class="flex-1 min-w-16 text-xs bg-transparent outline-none placeholder:text-text-muted" />
+            </div>
+            <p class="text-2xs text-text-muted mt-1">Restricts the document index visible to this persona during search.</p>
+          </div>
+          <!-- Dashboard-only: Data sources (conditional — shown only when type = Dashboard) -->
+          <div class="rounded-xl border border-border-main overflow-hidden">
+            <div class="flex items-center gap-2 px-4 py-2.5 bg-surface-2/60 border-b border-border-main">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-accent"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span class="text-xs font-semibold">Dashboard only</span>
+              <span class="ml-auto text-2xs text-text-muted">Visible because type = Dashboard</span>
+            </div>
+            <div class="px-4 py-4">
+              <label class="field-label">Data sources</label>
+              <div class="field-input flex items-center gap-1.5 flex-wrap h-auto py-1.5 cursor-text" style="min-height: 2.2rem;">
+                <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-surface-2 border border-border-main text-2xs text-text-main">Salesforce CRM<button class="ml-0.5 text-text-muted hover:text-text-main">✕</button></span>
+                <input type="text" placeholder="Add data source…" class="flex-1 min-w-16 text-xs bg-transparent outline-none placeholder:text-text-muted" />
+              </div>
+              <p class="text-2xs text-text-muted mt-1">Data sources the dashboard persona can query for structured output.</p>
+            </div>
+          </div>
+          <!-- Auto-summary tile -->
+          <div class="rounded-xl border border-primary/25 bg-primary/4 p-3.5 flex gap-3">
+            <svg width="16" height="16" class="text-primary shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <div>
+              <p class="text-sm font-semibold text-primary mb-1">Capabilities summary</p>
+              <ul class="space-y-0.5">
+                <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-status-success">✓</span> Document attachments enabled</li>
+                <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-status-success">✓</span> Tools: Search, Web (2 tags)</li>
+                <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-status-success">✓</span> Documents restricted to: Finance</li>
+                <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-status-success">✓</span> Data source: Salesforce CRM</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Right rail -->
+        <div class="w-56 shrink-0 border-l border-border-main bg-surface-2/40 px-4 py-5 flex flex-col gap-4">
+          <p class="text-2xs font-semibold text-text-muted uppercase tracking-wider">Live preview</p>
+          <div class="rounded-xl border border-border-main bg-surface p-3 flex flex-col gap-2 shadow-lift">
+            <div class="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <p class="text-sm font-semibold font-display leading-tight">Research Scout</p>
+            <div class="flex flex-wrap gap-1">
+              <span class="px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-2xs font-medium">Chat</span>
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs">📎 Docs</span>
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs">🔍 2 tools</span>
+            </div>
+          </div>
+          <div class="rounded-xl border border-border-main bg-surface p-3">
+            <p class="text-2xs font-semibold mb-1.5">Tips</p>
+            <ul class="space-y-1">
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Leave tool/doc tags empty to give access to everything.</li>
+              <li class="text-2xs text-text-muted flex gap-1.5"><span class="text-primary mt-0.5">·</span>Data sources only appear for Dashboard personas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+        <span class="text-2xs text-text-muted">Esc to close</span>
+        <div class="flex-1"></div>
+        <button class="btn-ghost">Back</button>
+        <button class="btn-primary-lg">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: REVIEW ── -->
+  <div>
+    <span class="anno-tag">Step 5 · Review — persona preview card, validation checklist (pass/fail per step), section summaries with Edit shortcuts</span>
+    <div class="wizard-dialog mx-auto">
+      <div class="border-b border-border-main px-6 pt-5 pb-0">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-display font-semibold text-base">Create Persona</h2>
+          <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="flex items-center pb-4">
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Basics</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Identity</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Intelligence</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="text-2xs text-text-muted">Capabilities</span></div>
+          <div class="step-line done mx-1"></div>
+          <div class="flex flex-col items-center gap-1"><div class="step-dot active font-mono">5</div><span class="text-2xs text-primary font-medium">Review</span></div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="flex-1 px-6 py-5 space-y-5 min-w-0">
+          <!-- Validation checklist -->
+          <div>
+            <p class="text-sm font-semibold mb-2">Validation</p>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-text-muted">Basics — type, name, and greeting set</span><button class="ml-auto text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="flex items-center gap-2.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-text-muted">Identity — persona prompt written</span><button class="ml-auto text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="flex items-center gap-2.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-text-muted">Intelligence — model selected</span><button class="ml-auto text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="flex items-center gap-2.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-text-muted">Capabilities — configured</span><button class="ml-auto text-2xs text-primary hover:underline">Edit</button></div>
+            </div>
+          </div>
+          <!-- Section summaries -->
+          <div class="space-y-3">
+            <div class="rounded-xl border border-border-main px-4 py-3">
+              <div class="flex items-center justify-between mb-2"><p class="text-xs font-semibold text-text-muted uppercase tracking-wide">Basics</p><button class="text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                <div><span class="text-2xs text-text-muted">Name</span><p class="text-sm font-medium">Research Scout</p></div>
+                <div><span class="text-2xs text-text-muted">Type</span><p class="text-sm font-medium">Chat</p></div>
+                <div class="col-span-2"><span class="text-2xs text-text-muted">Greeting</span><p class="text-sm text-text-muted truncate">Hi! I'm here to help you research…</p></div>
+              </div>
+            </div>
+            <div class="rounded-xl border border-border-main px-4 py-3">
+              <div class="flex items-center justify-between mb-2"><p class="text-xs font-semibold text-text-muted uppercase tracking-wide">Intelligence</p><button class="text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="grid grid-cols-3 gap-x-4 gap-y-1">
+                <div><span class="text-2xs text-text-muted">Model</span><p class="text-sm font-mono">sonnet-4-6</p></div>
+                <div><span class="text-2xs text-text-muted">Temperature</span><p class="text-sm font-mono">0.7</p></div>
+                <div><span class="text-2xs text-text-muted">Context</span><p class="text-sm font-mono">32k</p></div>
+              </div>
+            </div>
+            <div class="rounded-xl border border-border-main px-4 py-3">
+              <div class="flex items-center justify-between mb-2"><p class="text-xs font-semibold text-text-muted uppercase tracking-wide">Capabilities</p><button class="text-2xs text-primary hover:underline">Edit</button></div>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-2xs">📎 Docs</span>
+                <span class="px-2 py-0.5 rounded-full bg-surface-2 border border-border-main text-text-muted text-2xs">Tools: Search, Web</span>
+                <span class="px-2 py-0.5 rounded-full bg-surface-2 border border-border-main text-text-muted text-2xs">Docs: Finance</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right rail — preview card -->
+        <div class="w-56 shrink-0 border-l border-border-main bg-surface-2/40 px-4 py-5 flex flex-col gap-4">
+          <p class="text-2xs font-semibold text-text-muted uppercase tracking-wider">Persona preview</p>
+          <div class="rounded-xl border-2 border-primary/30 bg-surface p-4 flex flex-col gap-3 shadow-lift">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-primary/15 flex items-center justify-center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-primary"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <div>
+                <p class="font-display font-semibold text-sm">Research Scout</p>
+                <span class="px-1.5 py-0.5 rounded-md bg-primary/10 text-primary text-2xs font-medium">Chat</span>
+              </div>
+            </div>
+            <p class="text-2xs text-text-muted leading-relaxed border-t border-border-main pt-2.5">Hi! I'm here to help you research and summarise information…</p>
+            <div class="flex flex-wrap gap-1 border-t border-border-main pt-2.5">
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs">sonnet-4-6</span>
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs">📎</span>
+              <span class="px-1.5 py-0.5 rounded-md bg-surface-2 text-text-muted text-2xs">🔍×2</span>
+            </div>
+          </div>
+          <p class="text-2xs text-text-muted text-center">Ready to create.</p>
+        </div>
+      </div>
+      <div class="border-t border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+        <span class="text-2xs text-text-muted">Esc to close</span>
+        <div class="flex-1"></div>
+        <button class="btn-ghost">Back</button>
+        <button class="btn-primary-lg" style="background: linear-gradient(135deg, rgb(var(--c-primary)), rgb(var(--c-accent) / 0.85));">Create persona ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS FLASH OVERLAY ── -->
+  <div>
+    <span class="anno-tag">Success flash overlay — full-dialog fade after "Create persona" is clicked. Dismisses after ~1.5 s, dialog closes.</span>
+    <div class="wizard-dialog mx-auto overflow-hidden relative" style="min-height: 20rem;">
+      <!-- Dimmed form content (blurred behind) -->
+      <div class="absolute inset-0 blur-sm opacity-30">
+        <div class="flex h-full">
+          <div class="flex-1 px-6 py-5 space-y-4">
+            <div class="h-4 w-40 rounded bg-border-main"></div>
+            <div class="h-24 rounded-xl bg-surface-2"></div>
+            <div class="h-4 w-56 rounded bg-border-main"></div>
+          </div>
+          <div class="w-56 border-l border-border-main bg-surface-2/40"></div>
+        </div>
+      </div>
+      <!-- Success overlay -->
+      <div class="absolute inset-0 flex flex-col items-center justify-center gap-5" style="background: rgb(var(--c-surface) / 0.92);">
+        <!-- Animated check circle -->
+        <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background: rgb(var(--c-success) / 0.12); border: 2px solid rgb(var(--c-success) / 0.35);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(var(--c-success))"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="text-center">
+          <p class="font-display font-semibold text-xl mb-1">Persona created!</p>
+          <p class="text-sm text-text-muted">Research Scout is ready to use.</p>
+        </div>
+        <button class="btn-primary">Open Research Scout →</button>
+        <p class="text-2xs text-text-muted">This dialog closes automatically…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DISABLED FOOTER STATES ── -->
+  <div>
+    <span class="anno-tag">Footer nav states — Back disabled on step 1; Continue disabled when current step invalid (required field empty)</span>
+    <div class="grid grid-cols-2 gap-6">
+      <!-- Step 1 footer: Back disabled -->
+      <div>
+        <span class="anno-tag mb-1">Step 1 — no Back</span>
+        <div class="rounded-xl border border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+          <span class="text-2xs text-text-muted">Esc to close</span>
+          <div class="flex-1"></div>
+          <button class="btn-ghost opacity-40 cursor-not-allowed">Back</button>
+          <button class="btn-primary-lg">Continue →</button>
+        </div>
+      </div>
+      <!-- Invalid step: Continue disabled -->
+      <div>
+        <span class="anno-tag mb-1">Invalid step — Continue disabled (e.g. Name is empty)</span>
+        <div class="rounded-xl border border-border-main px-6 py-3.5 flex items-center gap-3 bg-surface-2/30">
+          <span class="text-2xs text-text-muted">Esc to close</span>
+          <div class="flex-1"></div>
+          <button class="btn-ghost">Back</button>
+          <button class="btn-primary-lg opacity-40 cursor-not-allowed">Continue →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /max-w -->
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

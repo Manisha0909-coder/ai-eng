@@ -1,0 +1,35 @@
+meta {
+  name: Update User
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{base_url}}/api/mid/users/{{user_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "roles": null
+  }
+}
+
+vars:pre-request {
+  user_id: {{test_email}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

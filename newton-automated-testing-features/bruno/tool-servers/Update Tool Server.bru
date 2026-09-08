@@ -1,0 +1,47 @@
+meta {
+  name: Update Tool Server
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-servers/update
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const serverName = bru.getEnvVar("ts_server_name") || "TEST_SERVER";
+  // Re-apply the same URL and envs to keep the update idempotent — TEST_SERVER is not modified
+  req.setBody({
+    current_name: serverName,
+    new_name: null,
+    url: "http://localhost:9005",
+    envs: { "TEST_TOOL_SERVER_BASE_URL": "http://localhost:9005" },
+    type: "custom"
+  });
+}
+
+body:json {
+  {
+    "current_name": "TEST_SERVER",
+    "new_name": null,
+    "url": "http://localhost:9005",
+    "envs": { "TEST_TOOL_SERVER_BASE_URL": "http://localhost:9005" },
+    "type": "custom"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

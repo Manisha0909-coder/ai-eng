@@ -1,0 +1,39 @@
+meta {
+  name: List Document Tags
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/mid/document-tag/list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit:
+  ~offset:
+  ~search:
+  ~created_from:
+  ~created_to:
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data contains tags array", function() {
+    const data = res.getBody().data;
+    const tags = data?.document_tags ?? data?.tags ?? data?.items ?? data?.results;
+    expect(tags).to.be.an("array");
+  });
+}

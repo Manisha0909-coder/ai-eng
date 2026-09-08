@@ -1,0 +1,49 @@
+meta {
+  name: Create Data Source
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/core/api/data-sources
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "datasource_name": "Bruno Test PG {{$timestamp}}",
+    "kind": "postgresql",
+    "db_user": "postgres",
+    "db_password": "JCc66c7TKIP8q7",
+    "db_host": "127.0.0.1",
+    "db_port": "5433",
+    "db_name": "postgres"
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  if (body && body.data && body.data.source && body.data.source.id) {
+    bru.setVar("pg_source_id", body.data.source.id);
+    console.log("pg_source_id captured:", body.data.source.id);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains source id", function() {
+    expect(res.getBody().data.source.id).to.be.a('string');
+  });
+}

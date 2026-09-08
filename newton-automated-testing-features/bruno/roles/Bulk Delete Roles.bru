@@ -1,0 +1,58 @@
+meta {
+  name: Bulk Delete Roles
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  let bulkRoleId = null;
+  try {
+    console.log("[Bulk Delete Roles] Creating temp role for bulk delete test...");
+    const createRes = await bru.sendRequest({
+      url: `${baseUrl}/api/mid/roles/`,
+      method: "POST",
+      headers: { "Cookie": `access_token=${token}`, "Content-Type": "application/json" },
+      data: { name: `Bulk Delete Test Role ${Date.now()}`, description: null, persona_ids: null, document_tag_ids: null }
+    });
+    bulkRoleId = createRes.data?.data?.role?.id ?? createRes.data?.data?.id;
+  } catch (e) {
+    console.log(`[Bulk Delete Roles] ⚠️ Temp role creation failed: ${e.message}`);
+  }
+
+  if (!bulkRoleId) {
+    console.log("[Bulk Delete Roles] ⚠️ Skipping — no temp role ID to delete");
+    bru.runner.skipRequest();
+    return;
+  }
+  console.log(`[Bulk Delete Roles] ✅ Temp role created: ${bulkRoleId} — only this role will be deleted`);
+  req.setBody({ role_ids: [bulkRoleId] });
+}
+
+body:json {
+  {
+    "role_ids": []
+  }
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

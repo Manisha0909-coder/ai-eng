@@ -1,0 +1,40 @@
+meta {
+  name: Update Persona Tool Rules
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/api/mid/tool-rules/personas/{{persona_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "tool_rules": [
+      {
+        "type": "run_first",
+        "tool_name": "web_search"
+      }
+    ]
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response confirms 1 tool rule updated", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+    expect(body.data.tool_rules).to.be.an("array").with.length(1);
+    expect(body.data.tool_rules[0].type).to.equal("run_first");
+    expect(body.data.tool_rules[0].tool_name).to.equal("web_search");
+  });
+}

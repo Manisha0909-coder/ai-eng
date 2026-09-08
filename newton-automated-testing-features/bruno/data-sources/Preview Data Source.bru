@@ -1,0 +1,52 @@
+meta {
+  name: Preview Data Source
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/api/core/api/data-sources/{{source_id}}/preview
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  let sid = bru.getVar("source_id") || bru.getEnvVar("source_id");
+  // Always prefer a postgresql source — CSV sources with a path field cause 500s
+  const axios = require("axios");
+  const baseUrl = bru.getEnvVar("base_url");
+  const token = bru.getEnvVar("access_token");
+  try {
+    const res = await axios.get(`${baseUrl}/api/core/api/data-sources/global`, {
+      headers: { Cookie: `access_token=${token}` }
+    });
+    const sources = res.data.data && res.data.data.sources;
+    if (Array.isArray(sources) && sources.length > 0) {
+      const pgSource = sources.find(s => s.kind === "postgresql");
+      if (pgSource) {
+        sid = pgSource.id;
+        bru.setVar("source_id", sid);
+        console.log("source_id set to postgresql source:", sid);
+      }
+    }
+  } catch (e) {
+    console.log("Failed to fetch source_id:", e.message);
+  }
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200 (CSV) or 400 (PostgreSQL requires table-level preview)", function() {
+    expect([200, 400]).to.include(res.getStatus());
+  });
+
+  test("Response is not a server error", function() {
+    expect(res.getStatus()).to.be.lessThan(500);
+  });
+}

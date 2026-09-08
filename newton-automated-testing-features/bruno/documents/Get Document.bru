@@ -1,0 +1,44 @@
+meta {
+  name: Get Document
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/core/documents/{{document_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  document_id:
+}
+
+script:pre-request {
+  const did = bru.getVar("document_id");
+  if (!did || did.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains document_id", function() {
+    expect(res.getBody().data.document_id).to.be.a('number');
+  });
+
+  test("Response contains document name", function() {
+    expect(res.getBody().data.name).to.be.a('string');
+  });
+}

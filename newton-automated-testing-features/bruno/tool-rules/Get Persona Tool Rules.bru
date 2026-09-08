@@ -1,0 +1,28 @@
+meta {
+  name: Get Persona Tool Rules
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/mid/tool-rules/personas/{{persona_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has tool_rules array", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+    expect(body.data).to.have.property("tool_rules");
+    expect(body.data.tool_rules).to.be.an("array");
+  });
+}

@@ -1,0 +1,61 @@
+meta {
+  name: Get Persona Tools - Invalid ID
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{base_url}}/api/mid/tool-rules/personas/999999999/tools
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Get Persona Tools - Invalid ID] Running negative test: nonexistent persona_id 999999999");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  const tools = body?.data?.tools;
+  if (status === 200 && Array.isArray(tools) && tools.length === 0) {
+    console.log(`✅ [Get Persona Tools - Invalid ID] Got 200 with empty tools for unknown persona`);
+  } else {
+    console.error(`❌ [Get Persona Tools - Invalid ID] Unexpected response — status: ${status}, body: ${JSON.stringify(body)}`);
+  }
+
+  // Cleanup: delete the test persona created in List Rule Types (seq 1)
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+  const personaId = bru.getEnvVar("persona_id");
+  if (personaId) {
+    try {
+      await bru.sendRequest({
+        url: `${baseUrl}/api/mid/personas/${personaId}`,
+        method: "DELETE",
+        headers: { "Cookie": `access_token=${token}` }
+      });
+      console.log(`[Get Persona Tools - Invalid ID] ✅ Cleaned up test persona ID: ${personaId}`);
+      bru.setEnvVar("persona_id", "");
+    } catch (e) {
+      console.warn(`[Get Persona Tools - Invalid ID] ⚠️ Cleanup failed for persona ${personaId}: ${e.message}`);
+    }
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Returns empty tools array for unknown persona", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("tools");
+    expect(body.data.tools).to.be.an("array").that.is.empty;
+  });
+}

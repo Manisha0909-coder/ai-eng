@@ -1,0 +1,47 @@
+meta {
+  name: Update Document Tag - Missing Name
+  type: http
+  seq: 15
+}
+
+put {
+  url: {{base_url}}/api/mid/document-tag/999999999
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "description": "Update with no name"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Update Document Tag - Missing Name] Running negative test: body has no name field");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 404, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Update Document Tag - Missing Name] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Update Document Tag - Missing Name] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400, 404, or 422", function() {
+    expect([400, 404, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

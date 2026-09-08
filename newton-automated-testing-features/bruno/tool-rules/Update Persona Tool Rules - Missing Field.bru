@@ -1,0 +1,47 @@
+meta {
+  name: Update Persona Tool Rules - Missing Field
+  type: http
+  seq: 11
+}
+
+put {
+  url: {{base_url}}/api/mid/tool-rules/personas/{{persona_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Update Persona Tool Rules - Missing Field] Running edge case test: body missing tool_rules field");
+}
+
+body:json {
+  {
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  if (status === 200) {
+    console.log(`✅ [Update Persona Tool Rules - Missing Field] API accepted empty body with 200 — treated as empty tool_rules`);
+  } else {
+    console.error(`❌ [Update Persona Tool Rules - Missing Field] Unexpected status: ${status}, body: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 (API accepts empty body as empty tool_rules)", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has tool_rules array", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("tool_rules");
+    expect(body.data.tool_rules).to.be.an("array");
+  });
+}

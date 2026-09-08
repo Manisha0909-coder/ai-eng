@@ -1,0 +1,60 @@
+meta {
+  name: Bulk Attach Users
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/{{role_id}}/bulk_attach_users
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  const listRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/users/list`,
+    method: "POST",
+    headers: { "Cookie": `access_token=${token}`, "Content-Type": "application/json" },
+    data: { limit: 1, offset: 0, search: null, include_admins: true }
+  });
+
+  const users = listRes.data?.data?.users ?? listRes.data?.data?.items ?? [];
+  const userId = users.length > 0 ? (users[0].id ?? users[0].user_id ?? users[0].email) : null;
+  console.log(`[Bulk Attach Users] role_id: ${bru.getEnvVar("role_id")}, user_id: ${userId}`);
+  req.setBody({ user_ids: userId ? [userId] : [] });
+}
+
+body:json {
+  {
+    "user_ids": []
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response body is not null", function() {
+    expect(res.getBody()).to.not.be.null;
+  });
+
+  test("Response does not contain an error field", function() {
+    expect(res.getBody()).to.not.have.property("error");
+  });
+
+  test("success field is a boolean", function() {
+    expect(res.getBody().success).to.be.a("boolean");
+  });
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Update Role
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/api/mid/roles/{{role_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": "rename-bruno",
+    "description": null,
+    "persona_ids": null,
+    "document_tag_ids": null
+  }
+}
+
+script:pre-request {
+  console.log(`[Update Role] role_id: ${bru.getEnvVar("role_id")}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

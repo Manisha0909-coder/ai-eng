@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Admin — Provider Catalog — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.4); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  .skeleton { background: linear-gradient(90deg, rgb(var(--c-surface-2)) 25%, rgb(var(--c-border) / 0.5) 50%, rgb(var(--c-surface-2)) 75%); background-size: 200% 100%; animation: shimmer 1.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+<!-- END shared-head -->
+<style>
+  .scroll-quiet::-webkit-scrollbar { width: 5px; height: 5px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  /* Canonical admin column header — see admin-tables.html */
+  .th-col {
+    font-family: "Spline Sans Mono", ui-monospace, monospace;
+    font-size: 0.625rem;
+    line-height: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgb(var(--c-text-muted));
+    font-weight: 500;
+  }
+  .kicker { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; line-height: 0.875rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(var(--c-text-muted)); font-weight: 500; }
+  .field { width: 100%; height: 2.25rem; border-radius: 0.625rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); padding: 0 0.75rem; font-size: 0.875rem; color: rgb(var(--c-text-main)); }
+  .field::placeholder { color: rgb(var(--c-text-muted) / 0.8); }
+  .field-mono { font-family: "Spline Sans Mono", monospace; font-size: 0.8125rem; }
+  textarea.field { height: auto; padding: 0.5rem 0.75rem; line-height: 1.5; }
+</style>
+</head>
+<body class="bg-background text-text-main antialiased overflow-hidden h-screen flex flex-col">
+
+<div class="spectrum-rule"></div>
+
+<!-- Admin top bar (canonical copy from admin-dashboard.html) -->
+<div class="h-12 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 shrink-0 z-20">
+  <div class="flex items-center gap-2.5">
+    <svg width="20" height="20" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-sm">Newton</span>
+    <span class="text-border-main text-sm">·</span>
+    <span class="text-xs text-text-muted font-medium">Admin Console</span>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex items-center gap-1">
+    <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Toggle theme"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+    <button class="flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs border border-border-main text-text-muted hover:bg-surface-2 transition-colors">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Go to chat
+    </button>
+    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Log out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  </div>
+</div>
+
+<div class="flex flex-1 overflow-hidden">
+
+  <!-- Admin nav sidebar (trimmed; Connections is the active item) -->
+  <nav class="w-52 border-r border-border-main bg-surface shrink-0 overflow-y-auto scroll-quiet py-3 space-y-0.5 px-2">
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      Overview
+    </a>
+
+    <div class="pt-3 pb-1 px-3"><span class="kicker">Tools &amp; Servers</span></div>
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Tools
+    </a>
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      Servers
+    </a>
+    <!-- active -->
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Connections
+    </a>
+
+    <div class="pt-3 pb-1 px-3"><span class="kicker">Access</span></div>
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+      Roles
+    </a>
+    <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Users
+    </a>
+  </nav>
+
+  <!-- Main content -->
+  <main class="flex-1 overflow-y-auto scroll-quiet px-6 py-6 space-y-8">
+
+    <!-- Page title row -->
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="font-display font-semibold text-xl tracking-tight">Provider Catalog</h1>
+        <p class="text-sm text-text-muted mt-0.5">Providers are declared in YAML and synced into the database. Admins supply the client credentials and per-tenant config.</p>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button class="flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Sync catalog
+        </button>
+      </div>
+    </div>
+
+    <!-- Sync result toast-style banner -->
+    <div class="anno p-3">
+      <span class="anno-tag">state · after POST /connections/providers/sync</span>
+      <div class="mt-2 flex items-center gap-2.5 rounded-xl border border-status-success/30 bg-status-success/5 px-4 py-2.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-success shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+        <span class="text-xs text-text-main">Synced <span class="tabular-nums font-medium">6</span> provider(s) from YAML.</span>
+      </div>
+    </div>
+
+    <!-- Table card -->
+    <div class="rounded-2xl border border-border-main bg-surface shadow-lift overflow-hidden">
+      <!-- Card header + filters -->
+      <div class="px-4 py-3 border-b border-border-main flex items-center gap-3 flex-wrap">
+        <h2 class="font-display font-semibold text-sm">Providers</h2>
+        <span class="text-2xs text-text-muted tabular-nums">6 total</span>
+        <div class="flex-1"></div>
+        <div class="relative">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="field !h-8 !pl-8 !w-56 text-xs" type="search" placeholder="Search providers">
+        </div>
+        <div class="flex gap-0.5 bg-surface-2 p-0.5 rounded-xl border border-border-main">
+          <button class="px-3 h-7 rounded-lg bg-surface border border-border-main text-xs font-medium shadow-lift">All</button>
+          <button class="px-3 h-7 rounded-lg text-xs text-text-muted hover:text-text-main transition-colors">Configured</button>
+          <button class="px-3 h-7 rounded-lg text-xs text-text-muted hover:text-text-main transition-colors">Needs setup</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto scroll-quiet">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-border-main bg-surface-2/60">
+              <th class="th-col text-left pl-4 pr-3 py-2.5 whitespace-nowrap" scope="col">PROVIDER</th>
+              <th class="th-col text-left px-3 py-2.5 whitespace-nowrap" scope="col">KEY</th>
+              <th class="th-col text-left px-3 py-2.5 whitespace-nowrap" scope="col">AUTH MODE</th>
+              <th class="th-col text-left px-3 py-2.5 whitespace-nowrap" scope="col">CREDENTIALS</th>
+              <th class="th-col text-left px-3 py-2.5 whitespace-nowrap" scope="col">STATUS</th>
+              <th class="th-col text-right px-4 py-2.5" scope="col">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-main">
+
+            <!-- fully configured -->
+            <tr class="hover:bg-surface-2/50 transition-colors">
+              <td class="pl-4 pr-3 py-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-white">
+                    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+                  </div>
+                  <span class="text-sm font-medium">Microsoft 365</span>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="font-mono text-xs text-text-muted">microsoft</code></td>
+              <td class="px-3 py-3"><span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span></td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 text-2xs text-status-success">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Set
+                </span>
+              </td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs bg-status-success/10 text-status-success border border-status-success/25">
+                  <span class="w-1.5 h-1.5 rounded-full bg-status-success"></span> Enabled
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <button class="h-7 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Configure</button>
+              </td>
+            </tr>
+
+            <!-- needs credentials -->
+            <tr class="hover:bg-surface-2/50 transition-colors">
+              <td class="pl-4 pr-3 py-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+                    <span class="font-display font-bold text-2xs text-text-muted">N</span>
+                  </div>
+                  <span class="text-sm font-medium">Noah</span>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="font-mono text-xs text-text-muted">noah</code></td>
+              <td class="px-3 py-3"><span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span></td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 text-2xs text-accent">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  Not set
+                </span>
+              </td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs bg-accent/10 text-accent border border-accent/25">
+                  <span class="w-1.5 h-1.5 rounded-full bg-accent"></span> Needs setup
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <button class="h-7 px-3 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity">Configure</button>
+              </td>
+            </tr>
+
+            <!-- disabled -->
+            <tr class="hover:bg-surface-2/50 transition-colors opacity-70">
+              <td class="pl-4 pr-3 py-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+                    <span class="font-display font-bold text-2xs text-text-muted">CS</span>
+                  </div>
+                  <span class="text-sm font-medium">ConnectSecure</span>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="font-mono text-xs text-text-muted">connectsecure</code></td>
+              <td class="px-3 py-3"><span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span></td>
+              <td class="px-3 py-3"><span class="inline-flex items-center gap-1.5 text-2xs text-status-success">Set</span></td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs bg-surface-2 text-text-muted border border-border-main">
+                  <span class="w-1.5 h-1.5 rounded-full bg-text-muted"></span> Disabled
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <button class="h-7 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Configure</button>
+              </td>
+            </tr>
+
+            <!-- orphaned: YAML removed from repo -->
+            <tr class="bg-status-error/[0.03]">
+              <td class="pl-4 pr-3 py-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg border border-dashed border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+                    <span class="font-display font-bold text-2xs text-text-muted">IL</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-sm font-medium text-text-muted line-through decoration-1">IBM Loyalty</div>
+                    <div class="text-2xs text-text-muted mt-0.5">YAML file no longer in the repo</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="font-mono text-xs text-text-muted">ibm_loyalty</code></td>
+              <td class="px-3 py-3"><span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span></td>
+              <td class="px-3 py-3"><span class="text-2xs text-text-muted">—</span></td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs bg-status-error/10 text-status-error border border-status-error/25">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  Orphaned
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <button disabled class="h-7 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted/60 cursor-not-allowed">Configure</button>
+              </td>
+            </tr>
+
+            <!-- api_key provider -->
+            <tr class="hover:bg-surface-2/50 transition-colors">
+              <td class="pl-4 pr-3 py-3">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-7 h-7 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-surface-2">
+                    <span class="font-display font-bold text-2xs text-text-muted">EX</span>
+                  </div>
+                  <span class="text-sm font-medium">Example API</span>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="font-mono text-xs text-text-muted">example</code></td>
+              <td class="px-3 py-3"><span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">api_key</span></td>
+              <td class="px-3 py-3"><span class="text-2xs text-text-muted">Per user</span></td>
+              <td class="px-3 py-3">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs bg-status-success/10 text-status-success border border-status-success/25">
+                  <span class="w-1.5 h-1.5 rounded-full bg-status-success"></span> Enabled
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <button class="h-7 px-3 rounded-lg text-xs font-medium border border-border-main text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">Configure</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- loading / empty states -->
+      <div class="anno m-3 p-3">
+        <span class="anno-tag">state · loading rows</span>
+        <div class="mt-3 space-y-3">
+          <div class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg skeleton"></div><div class="h-3.5 w-40 rounded skeleton"></div><div class="h-3.5 w-24 rounded skeleton ml-auto"></div></div>
+          <div class="flex items-center gap-3"><div class="w-7 h-7 rounded-lg skeleton"></div><div class="h-3.5 w-32 rounded skeleton"></div><div class="h-3.5 w-24 rounded skeleton ml-auto"></div></div>
+        </div>
+      </div>
+      <div class="anno m-3 p-3">
+        <span class="anno-tag">state · zero results</span>
+        <div class="mt-3 py-8 text-center">
+          <p class="text-sm text-text-muted">No providers match <span class="font-mono text-xs text-text-main">"zend"</span>.</p>
+          <button class="mt-2 text-xs text-primary hover:underline">Clear search</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-admin guard -->
+    <div class="anno p-3">
+      <span class="anno-tag">state · 403 (caller is not a system admin)</span>
+      <div class="mt-3 rounded-2xl border border-border-main bg-surface px-6 py-10 text-center">
+        <div class="w-11 h-11 rounded-xl bg-status-error/10 flex items-center justify-center mx-auto">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-base mt-3">Admins only</h3>
+        <p class="text-sm text-text-muted mt-1">The provider catalog is restricted to system administrators.</p>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- Configure drawer — PATCH /connections/providers/{key}       -->
+    <!-- ========================================================= -->
+    <div class="anno p-3">
+      <span class="anno-tag">drawer · configure provider (PATCH /connections/providers/{key})</span>
+
+      <div class="mt-3 mx-auto w-full max-w-[34rem] bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+        <div class="spectrum-rule"></div>
+
+        <!-- header -->
+        <div class="px-6 pt-5 pb-4 border-b border-border-main flex items-start justify-between gap-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-lg border border-border-main flex items-center justify-center shrink-0 bg-white">
+              <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="10" height="10" fill="#F25022"/><rect x="13" y="1" width="10" height="10" fill="#7FBA00"/><rect x="1" y="13" width="10" height="10" fill="#00A4EF"/><rect x="13" y="13" width="10" height="10" fill="#FFB900"/></svg>
+            </div>
+            <div>
+              <h2 class="font-display font-semibold text-base">Microsoft 365</h2>
+              <div class="flex items-center gap-1.5 mt-1">
+                <code class="font-mono text-2xs text-text-muted">microsoft</code>
+                <span class="text-border-main">·</span>
+                <span class="px-1.5 py-0.5 rounded font-mono text-2xs bg-surface-2 border border-border-main text-text-muted">oauth2</span>
+              </div>
+            </div>
+          </div>
+          <button class="w-8 h-8 -mr-1 -mt-1 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors shrink-0" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="px-6 py-5 space-y-6 max-h-[60vh] overflow-y-auto scroll-quiet">
+
+          <!-- enabled toggle -->
+          <div class="flex items-center justify-between rounded-xl border border-border-main bg-surface-2 px-4 py-3">
+            <div class="min-w-0">
+              <div class="text-sm font-medium">Available to users</div>
+              <p class="text-xs text-text-muted mt-0.5">Disabling hides it from the Connections page. Existing connections keep working.</p>
+            </div>
+            <button role="switch" aria-checked="true" class="shrink-0 ml-4 w-10 h-6 rounded-full bg-primary relative transition-colors">
+              <span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow-lift"></span>
+            </button>
+          </div>
+
+          <!-- OAuth client credentials -->
+          <div>
+            <div class="flex items-center justify-between mb-2.5">
+              <span class="kicker">OAuth client</span>
+              <span class="inline-flex items-center gap-1.5 text-2xs text-status-success">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Credentials on file
+              </span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-medium mb-1.5" for="p-client-id">Client ID</label>
+                <input id="p-client-id" class="field field-mono" type="text" placeholder="Enter to replace — current value hidden">
+              </div>
+              <div>
+                <label class="block text-xs font-medium mb-1.5" for="p-client-secret">Client secret</label>
+                <input id="p-client-secret" class="field field-mono" type="password" placeholder="Enter to replace — current value hidden">
+              </div>
+            </div>
+            <p class="text-2xs text-text-muted mt-2 flex items-start gap-1.5">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Write-only. Stored encrypted and never returned by the API — leave blank to keep the current values.
+            </p>
+          </div>
+
+          <!-- redirect URI (read-only, copyable) -->
+          <div>
+            <div class="kicker mb-2">Redirect URI</div>
+            <div class="flex items-center gap-2 rounded-lg border border-border-main bg-surface-2 px-3 py-2">
+              <code class="font-mono text-2xs text-text-main truncate flex-1">https://newton.optioai.com/api/mid/connections/oauth/callback</code>
+              <button class="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface transition-colors" aria-label="Copy redirect URI">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+            </div>
+            <p class="text-2xs text-text-muted mt-1.5">Register this exact URL in the provider's app settings.</p>
+          </div>
+
+          <!-- scopes -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="kicker">Scopes</span>
+              <button class="text-2xs text-primary hover:underline">Reset to catalog default</button>
+            </div>
+            <div class="rounded-xl border border-border-main p-3 flex flex-wrap gap-1.5">
+              <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg font-mono text-2xs bg-surface-2 border border-border-main">
+                Mail.Read
+                <button class="text-text-muted hover:text-status-error transition-colors" aria-label="Remove Mail.Read">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg font-mono text-2xs bg-surface-2 border border-border-main">
+                Mail.Send
+                <button class="text-text-muted hover:text-status-error transition-colors" aria-label="Remove Mail.Send">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg font-mono text-2xs bg-surface-2 border border-border-main">
+                Calendars.ReadWrite
+                <button class="text-text-muted hover:text-status-error transition-colors" aria-label="Remove Calendars.ReadWrite">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+              </span>
+              <input class="flex-1 min-w-[8rem] bg-transparent text-2xs font-mono outline-none placeholder:text-text-muted/80 px-1" placeholder="Add scope + Enter">
+            </div>
+            <p class="text-2xs text-accent mt-1.5">Overriding the catalog default — users who already connected keep their old consent until they reconnect.</p>
+          </div>
+
+          <!-- provider config -->
+          <div>
+            <div class="kicker mb-2">Provider config</div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-medium mb-1.5" for="p-tenant">tenant_id <span class="text-status-error">*</span></label>
+                <input id="p-tenant" class="field field-mono" type="text" value="7f2b91cc-4d10-42a8-9b21-0f6e1c9a3d55">
+              </div>
+              <!-- raw JSON escape hatch -->
+              <div class="anno p-2.5">
+                <span class="anno-tag">variant · raw JSON editor (unknown keys)</span>
+                <textarea class="field field-mono mt-2" rows="4" spellcheck="false">{
+  "tenant_id": "7f2b91cc-4d10-42a8-9b21-0f6e1c9a3d55",
+  "api_base_url": "https://graph.microsoft.com/v1.0"
+}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- read-only spec summary -->
+          <div>
+            <div class="kicker mb-2">Catalog spec (read-only)</div>
+            <dl class="rounded-xl border border-border-main divide-y divide-border-main text-xs">
+              <div class="flex items-center justify-between px-3 py-2">
+                <dt class="text-text-muted">Base URL</dt>
+                <dd class="font-mono text-2xs truncate ml-4">https://graph.microsoft.com/v1.0</dd>
+              </div>
+              <div class="flex items-center justify-between px-3 py-2">
+                <dt class="text-text-muted">Retry on</dt>
+                <dd class="font-mono text-2xs ml-4">429, 503 · max 3</dd>
+              </div>
+              <div class="flex items-center justify-between px-3 py-2">
+                <dt class="text-text-muted">PKCE</dt>
+                <dd class="font-mono text-2xs ml-4">not required</dd>
+              </div>
+              <div class="flex items-center justify-between px-3 py-2">
+                <dt class="text-text-muted">Active connections</dt>
+                <dd class="font-mono text-2xs tabular-nums ml-4">128</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 border-t border-border-main flex items-center gap-2 bg-surface-2">
+          <span class="text-2xs text-text-muted">Changes apply to new connect flows immediately.</span>
+          <div class="flex-1"></div>
+          <button class="h-8 px-3.5 rounded-lg text-xs font-medium border border-border-main bg-surface hover:bg-background transition-colors">Cancel</button>
+          <button class="h-8 px-3.5 rounded-lg text-xs font-medium bg-primary text-white hover:opacity-90 transition-opacity">Save changes</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle light and dark mode">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

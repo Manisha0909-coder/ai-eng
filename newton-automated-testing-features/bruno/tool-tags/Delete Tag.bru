@@ -1,0 +1,31 @@
+meta {
+  name: Delete Tag
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/api/mid/tool-tags/{{tag_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const tagId = bru.getEnvVar("tag_id");
+  if (!tagId) {
+    console.log("[Delete Tag] ⚠️ No tag_id set — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+  console.log(`[Delete Tag] 🗑️ Deleting tag_id: ${tagId}`);
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+}

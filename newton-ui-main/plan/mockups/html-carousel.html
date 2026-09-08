@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · HTML Chart Carousel — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:       'rgb(var(--c-background) / <alpha-value>)',
+          surface:          'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':      'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':      'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':     'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main':    'rgb(var(--c-border) / <alpha-value>)',
+          primary:          'rgb(var(--c-primary) / <alpha-value>)',
+          accent:           'rgb(var(--c-accent) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    180 112 24;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno-tag  { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); display: block; margin-bottom: 0.5rem; }
+  .panel-title { font-family: "Bricolage Grotesque", system-ui; font-weight: 600; font-size: 0.95rem; color: rgb(var(--c-text-main)); margin-bottom: 0.5rem; }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+
+  /* Carousel snap-scroll rail */
+  .chart-rail { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; gap: 0.75rem; }
+  .chart-rail::-webkit-scrollbar { display: none; }
+  .chart-slide { scroll-snap-align: start; flex: 0 0 100%; }
+
+  /* Shimmer skeleton */
+  @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+  .skeleton { background: linear-gradient(90deg, rgb(var(--c-surface-2)) 25%, rgb(var(--c-border) / 0.5) 50%, rgb(var(--c-surface-2)) 75%); background-size: 200% 100%; animation: shimmer 1.6s ease-in-out infinite; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 0.9s linear infinite; }
+
+  /* Fake chart SVG colors that adapt to theme */
+  .bar-primary  { fill: rgb(var(--c-primary) / 0.8); }
+  .bar-accent   { fill: rgb(var(--c-accent)  / 0.7); }
+  .bar-muted    { fill: rgb(var(--c-border)); }
+  .line-primary { stroke: rgb(var(--c-primary)); fill: none; stroke-width: 2; }
+  .area-primary { fill: rgb(var(--c-primary) / 0.12); }
+  .grid-line    { stroke: rgb(var(--c-border)); stroke-width: 1; }
+  .axis-label   { fill: rgb(var(--c-text-muted)); font-family: "Spline Sans Mono", monospace; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+<!-- Header -->
+<header class="h-14 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 gap-3 sticky top-0 z-20">
+  <button class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-2 transition-colors">
+    <svg width="22" height="22" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-base">Newton</span>
+  </button>
+  <div class="flex-1"></div>
+  <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Toggle theme">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  </button>
+</header>
+
+<div class="max-w-2xl mx-auto px-4 py-8 space-y-14">
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 1 · Single chart — no carousel chrome               -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 1 · Single chart (no carousel chrome)</div>
+    <span class="anno-tag">1 chart → render the slide card directly. No counter, no navigation arrows. Count label "1 chart" still shown above.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main mb-2.5 leading-relaxed">Here is the revenue breakdown for Q3:</p>
+
+        <!-- Count label -->
+        <p class="text-2xs text-text-muted mb-2">1 chart</p>
+
+        <!-- Single slide card -->
+        <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+          <!-- Chart title bar -->
+          <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <span class="text-xs font-medium text-text-main">Q3 Revenue by Region</span>
+          </div>
+          <!-- Chart placeholder (bar chart) -->
+          <div class="p-4">
+            <svg viewBox="0 0 360 180" width="100%" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid lines -->
+              <line x1="40" y1="20" x2="40" y2="150" class="grid-line"/>
+              <line x1="40" y1="150" x2="350" y2="150" class="grid-line"/>
+              <line x1="40" y1="110" x2="350" y2="110" class="grid-line" stroke-dasharray="3 3"/>
+              <line x1="40" y1="70"  x2="350" y2="70"  class="grid-line" stroke-dasharray="3 3"/>
+              <line x1="40" y1="30"  x2="350" y2="30"  class="grid-line" stroke-dasharray="3 3"/>
+              <!-- Axis labels -->
+              <text x="35" y="153" class="axis-label" font-size="8" text-anchor="end">0</text>
+              <text x="35" y="113" class="axis-label" font-size="8" text-anchor="end">25K</text>
+              <text x="35" y="73"  class="axis-label" font-size="8" text-anchor="end">50K</text>
+              <text x="35" y="33"  class="axis-label" font-size="8" text-anchor="end">75K</text>
+              <!-- Bars — APAC, EMEA, Americas, LATAM -->
+              <rect x="55"  y="55"  width="40" height="95" rx="3" class="bar-primary"/>
+              <rect x="115" y="80"  width="40" height="70" rx="3" class="bar-accent"/>
+              <rect x="175" y="40"  width="40" height="110" rx="3" class="bar-primary" opacity="0.7"/>
+              <rect x="235" y="100" width="40" height="50" rx="3" class="bar-accent" opacity="0.7"/>
+              <rect x="295" y="120" width="40" height="30" rx="3" class="bar-muted"/>
+              <!-- X labels -->
+              <text x="75"  y="165" class="axis-label" font-size="8" text-anchor="middle">APAC</text>
+              <text x="135" y="165" class="axis-label" font-size="8" text-anchor="middle">EMEA</text>
+              <text x="195" y="165" class="axis-label" font-size="8" text-anchor="middle">Americas</text>
+              <text x="255" y="165" class="axis-label" font-size="8" text-anchor="middle">MEA</text>
+              <text x="315" y="165" class="axis-label" font-size="8" text-anchor="middle">LATAM</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 2 · Multi-chart carousel — slide 1 of 3             -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 2 · Multi-chart carousel — slide 1 of 3 (active)</div>
+    <span class="anno-tag">2+ charts → carousel. One chart fills full width per slide. Navigation row below: prev · counter · next. Dots omitted — counter is sufficient.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main mb-2.5 leading-relaxed">Here are the charts for your APAC analysis:</p>
+
+        <!-- Count label -->
+        <p class="text-2xs text-text-muted mb-2">3 charts</p>
+
+        <!-- Carousel wrapper -->
+        <div>
+          <!-- Rail (snap-scroll, one slide wide) -->
+          <div class="chart-rail rounded-xl overflow-hidden" id="rail-p2">
+            <!-- Slide 1 — active / visible -->
+            <div class="chart-slide">
+              <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+                <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <span class="text-xs font-medium text-text-main">APAC Market Share — Line</span>
+                </div>
+                <div class="p-4">
+                  <svg viewBox="0 0 360 180" width="100%" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="40" y1="20" x2="40" y2="150" class="grid-line"/>
+                    <line x1="40" y1="150" x2="350" y2="150" class="grid-line"/>
+                    <line x1="40" y1="110" x2="350" y2="110" class="grid-line" stroke-dasharray="3 3"/>
+                    <line x1="40" y1="70"  x2="350" y2="70"  class="grid-line" stroke-dasharray="3 3"/>
+                    <line x1="40" y1="30"  x2="350" y2="30"  class="grid-line" stroke-dasharray="3 3"/>
+                    <!-- Area fill -->
+                    <path d="M60 120 L110 95 L160 70 L210 55 L260 45 L310 38 L310 150 L60 150 Z" class="area-primary"/>
+                    <!-- Line -->
+                    <polyline points="60,120 110,95 160,70 210,55 260,45 310,38" class="line-primary"/>
+                    <!-- Data points -->
+                    <circle cx="60"  cy="120" r="3" fill="rgb(var(--c-primary))"/>
+                    <circle cx="110" cy="95"  r="3" fill="rgb(var(--c-primary))"/>
+                    <circle cx="160" cy="70"  r="3" fill="rgb(var(--c-primary))"/>
+                    <circle cx="210" cy="55"  r="3" fill="rgb(var(--c-primary))"/>
+                    <circle cx="260" cy="45"  r="3" fill="rgb(var(--c-primary))"/>
+                    <circle cx="310" cy="38"  r="3" fill="rgb(var(--c-primary))"/>
+                    <text x="60"  y="165" class="axis-label" font-size="8" text-anchor="middle">Q1</text>
+                    <text x="110" y="165" class="axis-label" font-size="8" text-anchor="middle">Q2</text>
+                    <text x="160" y="165" class="axis-label" font-size="8" text-anchor="middle">Q3</text>
+                    <text x="210" y="165" class="axis-label" font-size="8" text-anchor="middle">Q4</text>
+                    <text x="260" y="165" class="axis-label" font-size="8" text-anchor="middle">Q5</text>
+                    <text x="310" y="165" class="axis-label" font-size="8" text-anchor="middle">Q6</text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <!-- Slides 2 + 3 hidden by overflow — not shown in HTML -->
+          </div>
+
+          <!-- Navigation row: prev · counter · next -->
+          <div class="flex items-center justify-between mt-2 px-0.5">
+            <!-- Prev (disabled on slide 1) -->
+            <button disabled class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted opacity-40 cursor-not-allowed">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Prev
+            </button>
+
+            <!-- Counter -->
+            <span class="text-xs font-mono text-text-muted tabular-nums">1 / 3</span>
+
+            <!-- Next -->
+            <button class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+              Next
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 3 · Carousel — mid-position (slide 2 of 3)          -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 3 · Carousel — mid-position (slide 2 of 3)</div>
+    <span class="anno-tag">Both Prev and Next are enabled. Counter updates. Chart height adapts to iframe content — outer container transitions height smoothly.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-2xs text-text-muted mb-2">3 charts</p>
+        <div>
+          <!-- Slide card -->
+          <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+            <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <span class="text-xs font-medium text-text-main">Vertical Opportunity Matrix</span>
+            </div>
+            <div class="p-4">
+              <!-- Scatter / bubble chart proxy -->
+              <svg viewBox="0 0 360 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+                <line x1="50" y1="20" x2="50" y2="170" class="grid-line"/>
+                <line x1="50" y1="170" x2="350" y2="170" class="grid-line"/>
+                <line x1="50" y1="130" x2="350" y2="130" class="grid-line" stroke-dasharray="3 3"/>
+                <line x1="50" y1="95"  x2="350" y2="95"  class="grid-line" stroke-dasharray="3 3"/>
+                <line x1="50" y1="55"  x2="350" y2="55"  class="grid-line" stroke-dasharray="3 3"/>
+                <!-- Axis labels -->
+                <text x="200" y="190" class="axis-label" font-size="8" text-anchor="middle">Market size →</text>
+                <text x="20" y="100" class="axis-label" font-size="8" text-anchor="middle" transform="rotate(-90 20 100)">Ease →</text>
+                <!-- Bubbles -->
+                <circle cx="100" cy="60"  r="22" class="bar-primary" opacity="0.75"/>
+                <text x="100" cy="60" y="63" class="axis-label" font-size="7" text-anchor="middle">Fintech</text>
+                <circle cx="200" cy="90"  r="16" class="bar-primary" opacity="0.6"/>
+                <text x="200" cy="90" y="93" class="axis-label" font-size="7" text-anchor="middle">SaaS</text>
+                <circle cx="290" cy="120" r="26" class="bar-accent" opacity="0.65"/>
+                <text x="290" cy="120" y="123" class="axis-label" font-size="7" text-anchor="middle">Health</text>
+                <circle cx="160" cy="140" r="11" class="bar-muted"/>
+                <text x="160" cy="140" y="143" class="axis-label" font-size="6" text-anchor="middle">Logistics</text>
+                <circle cx="80"  cy="110" r="13" class="bar-accent" opacity="0.5"/>
+                <text x="80" cy="110" y="113" class="axis-label" font-size="6" text-anchor="middle">Energy</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Navigation row — mid position (both enabled) -->
+          <div class="flex items-center justify-between mt-2 px-0.5">
+            <button class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Prev
+            </button>
+            <span class="text-xs font-mono text-text-muted tabular-nums">2 / 3</span>
+            <button class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+              Next
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 4 · Last slide — Next disabled                       -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 4 · Last slide — Next disabled</div>
+    <span class="anno-tag">Next button is disabled (opacity-40, cursor-not-allowed). Prev is enabled. Counter shows 3 / 3.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-2xs text-text-muted mb-2">3 charts</p>
+        <div>
+          <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+            <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="text-xs font-medium text-text-main">Timeline — Regulatory Milestones</span>
+            </div>
+            <div class="p-4">
+              <!-- Simple horizontal timeline proxy -->
+              <svg viewBox="0 0 360 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+                <line x1="40" y1="60" x2="330" y2="60" class="grid-line" stroke-width="2"/>
+                <!-- Milestones -->
+                <circle cx="60"  cy="60" r="7" fill="rgb(var(--c-success))"/>
+                <circle cx="130" cy="60" r="7" fill="rgb(var(--c-success))"/>
+                <circle cx="200" cy="60" r="7" fill="rgb(var(--c-primary))"/>
+                <circle cx="270" cy="60" r="7" class="bar-muted"/>
+                <circle cx="320" cy="60" r="7" class="bar-muted"/>
+                <!-- Labels below -->
+                <text x="60"  y="80" class="axis-label" font-size="7" text-anchor="middle">MAS Apply</text>
+                <text x="130" y="80" class="axis-label" font-size="7" text-anchor="middle">Review</text>
+                <text x="200" y="80" class="axis-label" font-size="7" text-anchor="middle">Now</text>
+                <text x="270" y="80" class="axis-label" font-size="7" text-anchor="middle">License</text>
+                <text x="320" y="80" class="axis-label" font-size="7" text-anchor="middle">Launch</text>
+                <!-- Values above -->
+                <text x="60"  y="45" class="axis-label" font-size="7" text-anchor="middle">Month 0</text>
+                <text x="130" y="45" class="axis-label" font-size="7" text-anchor="middle">Month 3</text>
+                <text x="200" y="45" class="axis-label" font-size="7" text-anchor="middle">Month 6</text>
+                <text x="270" y="45" class="axis-label" font-size="7" text-anchor="middle">Month 9</text>
+                <text x="320" y="45" class="axis-label" font-size="7" text-anchor="middle">Month 12</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Navigation — last slide -->
+          <div class="flex items-center justify-between mt-2 px-0.5">
+            <button class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Prev
+            </button>
+            <span class="text-xs font-mono text-text-muted tabular-nums">3 / 3</span>
+            <button disabled class="flex items-center gap-1 h-7 px-2.5 rounded-lg border border-border-main bg-surface text-xs text-text-muted opacity-40 cursor-not-allowed">
+              Next
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 5 · Loading skeleton                                 -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 5 · Loading skeleton</div>
+    <span class="anno-tag">Shown while the iframe content renders. The slide card shell appears immediately; its interior is replaced by a shimmer skeleton until the iframe fires its load event.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <!-- Count label skeleton -->
+        <div class="h-2 w-12 rounded skeleton mb-2.5"></div>
+
+        <!-- Card with skeleton interior -->
+        <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+          <!-- Title bar skeleton -->
+          <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+            <div class="w-3 h-3 rounded skeleton shrink-0"></div>
+            <div class="h-2 w-32 rounded skeleton"></div>
+          </div>
+          <!-- Chart area skeleton -->
+          <div class="p-4">
+            <div class="h-44 rounded-lg skeleton"></div>
+          </div>
+        </div>
+
+        <!-- Nav row skeleton -->
+        <div class="flex items-center justify-between mt-2 px-0.5">
+          <div class="h-7 w-16 rounded-lg skeleton"></div>
+          <div class="h-2 w-8 rounded skeleton"></div>
+          <div class="h-7 w-16 rounded-lg skeleton"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 6 · Height adaptation                                -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 6 · Height adaptation — tall vs short charts</div>
+    <span class="anno-tag">The carousel container transitions its height to match the tallest slide loaded so far (max of all measured iframe heights). Min height 240 px, max 2400 px.</span>
+
+    <div class="grid grid-cols-2 gap-4 mt-3">
+      <!-- Short chart -->
+      <div>
+        <span class="anno-tag">Short chart (~200 px content)</span>
+        <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+          <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <span class="text-xs font-medium text-text-main">KPI Summary</span>
+          </div>
+          <div class="p-4 flex flex-col gap-3">
+            <div class="flex justify-between items-center px-3 py-2 rounded-lg bg-surface-2">
+              <span class="text-xs text-text-muted">Total revenue</span>
+              <span class="text-sm font-semibold text-text-main tabular-nums">$4.2 M</span>
+            </div>
+            <div class="flex justify-between items-center px-3 py-2 rounded-lg bg-surface-2">
+              <span class="text-xs text-text-muted">Growth</span>
+              <span class="text-sm font-semibold text-status-success tabular-nums">+18%</span>
+            </div>
+            <div class="flex justify-between items-center px-3 py-2 rounded-lg bg-surface-2">
+              <span class="text-xs text-text-muted">Markets entered</span>
+              <span class="text-sm font-semibold text-text-main tabular-nums">7</span>
+            </div>
+          </div>
+        </div>
+        <span class="anno-tag mt-1.5">Container height = this slide's content height</span>
+      </div>
+
+      <!-- Tall chart -->
+      <div>
+        <span class="anno-tag">Tall chart (~420 px content)</span>
+        <div class="rounded-xl border border-border-main bg-surface shadow-sm overflow-hidden">
+          <div class="flex items-center gap-2 px-3 py-2 border-b border-border-main bg-surface-2/50">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span class="text-xs font-medium text-text-main">Regional Heatmap</span>
+          </div>
+          <div class="p-4">
+            <svg viewBox="0 0 200 280" width="100%" xmlns="http://www.w3.org/2000/svg">
+              <!-- Heatmap grid 5×7 -->
+              <text x="100" y="12" class="axis-label" font-size="7" text-anchor="middle">Penetration by region × quarter</text>
+              <!-- Row labels -->
+              <text x="22" y="45"  class="axis-label" font-size="6" text-anchor="end">APAC</text>
+              <text x="22" y="85"  class="axis-label" font-size="6" text-anchor="end">EMEA</text>
+              <text x="22" y="125" class="axis-label" font-size="6" text-anchor="end">Americas</text>
+              <text x="22" y="165" class="axis-label" font-size="6" text-anchor="end">MEA</text>
+              <text x="22" y="205" class="axis-label" font-size="6" text-anchor="end">LATAM</text>
+              <!-- Col labels -->
+              <text x="50"  y="230" class="axis-label" font-size="6" text-anchor="middle">Q1</text>
+              <text x="85"  y="230" class="axis-label" font-size="6" text-anchor="middle">Q2</text>
+              <text x="120" y="230" class="axis-label" font-size="6" text-anchor="middle">Q3</text>
+              <text x="155" y="230" class="axis-label" font-size="6" text-anchor="middle">Q4</text>
+              <!-- Cells -->
+              <rect x="30" y="25" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.85"/>
+              <rect x="65" y="25" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.65"/>
+              <rect x="100" y="25" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.45"/>
+              <rect x="135" y="25" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.25"/>
+
+              <rect x="30" y="65" width="30" height="30" rx="3" fill="rgb(var(--c-accent))" opacity="0.7"/>
+              <rect x="65" y="65" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.5"/>
+              <rect x="100" y="65" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.75"/>
+              <rect x="135" y="65" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.9"/>
+
+              <rect x="30" y="105" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.9"/>
+              <rect x="65" y="105" width="30" height="30" rx="3" fill="rgb(var(--c-accent))" opacity="0.5"/>
+              <rect x="100" y="105" width="30" height="30" rx="3" fill="rgb(var(--c-border))"/>
+              <rect x="135" y="105" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.3"/>
+
+              <rect x="30" y="145" width="30" height="30" rx="3" fill="rgb(var(--c-border))"/>
+              <rect x="65" y="145" width="30" height="30" rx="3" fill="rgb(var(--c-accent))" opacity="0.3"/>
+              <rect x="100" y="145" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.4"/>
+              <rect x="135" y="145" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.6"/>
+
+              <rect x="30" y="185" width="30" height="30" rx="3" fill="rgb(var(--c-border))"/>
+              <rect x="65" y="185" width="30" height="30" rx="3" fill="rgb(var(--c-border))"/>
+              <rect x="100" y="185" width="30" height="30" rx="3" fill="rgb(var(--c-accent))" opacity="0.4"/>
+              <rect x="135" y="185" width="30" height="30" rx="3" fill="rgb(var(--c-primary))" opacity="0.5"/>
+            </svg>
+          </div>
+        </div>
+        <span class="anno-tag mt-1.5">Container expands to accommodate taller chart; height transitions smoothly (transition: height 0.3s)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 7 · Anatomy summary                                  -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 7 · Anatomy summary — labeled</div>
+    <span class="anno-tag">Reference for implementation. Each numbered callout maps to a DOM layer in HtmlCarousel.tsx.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0 space-y-2">
+
+        <!-- ① Count label -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">1</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Count label</p>
+            <p class="text-2xs text-text-muted">Always shown above the rail. "N chart" / "N charts". <code class="bg-surface-2 px-1 rounded">text-2xs text-text-muted</code></p>
+          </div>
+        </div>
+
+        <!-- ② Snap-scroll rail -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">2</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Snap-scroll rail</p>
+            <p class="text-2xs text-text-muted">overflow-x: auto · scroll-snap-type: x mandatory · scrollbar hidden · gap-3. Each slide is 100% wide.</p>
+          </div>
+        </div>
+
+        <!-- ③ Slide card -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">3</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Slide card</p>
+            <p class="text-2xs text-text-muted"><code class="bg-surface-2 px-1 rounded">rounded-xl border border-border-main bg-surface shadow-sm</code>. Contains title bar + iframe.</p>
+          </div>
+        </div>
+
+        <!-- ④ Chart title bar -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">4</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Chart title bar</p>
+            <p class="text-2xs text-text-muted">Icon + chart title string. <code class="bg-surface-2 px-1 rounded">text-xs font-medium text-text-main</code>. Hidden when title is null.</p>
+          </div>
+        </div>
+
+        <!-- ⑤ Navigation row -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">5</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Navigation row</p>
+            <p class="text-2xs text-text-muted">Prev button · counter (X / N, <code class="bg-surface-2 px-1 rounded">font-mono tabular-nums</code>) · Next button. Hidden when N = 1.</p>
+          </div>
+        </div>
+
+        <!-- ⑥ Height transition -->
+        <div class="flex items-center gap-3 px-3 py-2 rounded-lg border border-border-main bg-surface">
+          <span class="w-5 h-5 rounded-full bg-primary/15 text-primary text-2xs font-semibold flex items-center justify-center shrink-0">6</span>
+          <div>
+            <p class="text-xs font-medium text-text-main">Height adaptation</p>
+            <p class="text-2xs text-text-muted">Rail height = max of all measured iframe heights. <code class="bg-surface-2 px-1 rounded">transition: height 0.3s ease-out</code>. Min 240 px.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- /max-w -->
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle theme">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background:linear-gradient(90deg,currentColor 50%,transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

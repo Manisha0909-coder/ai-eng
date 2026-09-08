@@ -1,0 +1,11 @@
+S.No,Email,Purpose
+1,testuser01@example.com,Valid standard email
+2,qa.tester@example.com,Valid with dot in local part
+3,manisha+test@example.com,Valid with plus alias
+4,user_123@testmail.com,Valid with underscore & digits
+5,automation.qa@example.co.in,Valid with multi-level domain
+6,UPPERCASE@EXAMPLE.COM,Valid uppercase email
+7,a@b.co,Valid minimal-length email
+8,invalid-email.com,Invalid – missing @
+9,user@@example.com,Invalid – double @
+10,user@.com,Invalid – missing domain name

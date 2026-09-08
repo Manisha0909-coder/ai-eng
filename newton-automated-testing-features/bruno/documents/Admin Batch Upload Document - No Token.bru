@@ -1,0 +1,45 @@
+meta {
+  name: Admin Batch Upload Document - No Token
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{base_url}}/api/core/admin/documents/batch-upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:multipart-form {
+  files: @file(../test-data/test.pdf)
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Admin Batch Upload Documents - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Admin Batch Upload Documents - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Admin Batch Upload Documents - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

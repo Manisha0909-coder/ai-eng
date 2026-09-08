@@ -1,0 +1,50 @@
+meta {
+  name: Setup - List Messages
+  type: http
+  seq: 0
+}
+
+post {
+  url: {{base_url}}/api/mid/session/list_message
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+vars:pre-request {
+  session_id:
+}
+
+script:pre-request {
+  const sid = bru.getVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const messages = (body && body.data && body.data.messages) || [];
+  if (messages.length > 1) {
+    bru.setVar("message_id", messages[messages.length - 1].message_id);
+    bru.setVar("bulk_message_id", messages[0].message_id);
+    console.log("Setup: message_id:", messages[messages.length - 1].message_id);
+    console.log("Setup: bulk_message_id:", messages[0].message_id);
+  } else if (messages.length === 1) {
+    bru.setVar("message_id", messages[0].message_id);
+    bru.setVar("bulk_message_id", "");
+    console.log("Setup: message_id:", messages[0].message_id, "(only 1 msg — bulk ops will skip)");
+  } else {
+    console.log("Setup: no messages found — Create Feedback will be skipped");
+  }
+}

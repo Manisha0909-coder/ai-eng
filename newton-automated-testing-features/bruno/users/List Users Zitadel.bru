@@ -1,0 +1,33 @@
+meta {
+  name: List Users Zitadel
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/users/list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit:
+  ~offset:
+  ~search:
+  ~roles:
+  ~include_admins:
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

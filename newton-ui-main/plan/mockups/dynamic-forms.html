@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Dynamic Forms — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:       'rgb(var(--c-background) / <alpha-value>)',
+          surface:          'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':      'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':      'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':     'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main':    'rgb(var(--c-border) / <alpha-value>)',
+          primary:          'rgb(var(--c-primary) / <alpha-value>)',
+          accent:           'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':       'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    180 112 24;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+    --c-error:      220 90 75;
+    --c-success:    61 185 100;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno-tag  { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); display: block; margin-bottom: 0.5rem; }
+  .panel-title { font-family: "Bricolage Grotesque", system-ui; font-weight: 600; font-size: 0.95rem; color: rgb(var(--c-text-main)); margin-bottom: 0.5rem; }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+
+  /* Field primitives — maps to spec token classes */
+  .f-label  { display: block; font-size: 0.875rem; font-weight: 500; color: rgb(var(--c-text-main)); margin-bottom: 0.25rem; }
+  .f-req    { color: rgb(var(--c-error)); margin-left: 0.2rem; }
+  .f-hint   { font-size: 0.625rem; color: rgb(var(--c-text-muted)); margin-top: 0.2rem; display: block; }
+  .f-err    { font-size: 0.625rem; color: rgb(var(--c-error)); margin-top: 0.2rem; display: block; }
+  .f-auto   { font-size: 0.625rem; color: rgb(var(--c-primary)); margin-left: 0.4rem; }
+  .f-input  { width: 100%; height: 2rem; padding: 0 0.625rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.875rem; color: rgb(var(--c-text-main)); outline: none; font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s; }
+  .f-input:focus { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .f-input.err { border-color: rgb(var(--c-error) / 0.5); }
+  .f-input.focus-demo { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .f-select { width: 100%; height: 2rem; padding: 0 2rem 0 0.625rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.875rem; color: rgb(var(--c-text-main)); outline: none; font-family: inherit; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2392a79a' stroke-width='2' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.625rem center; transition: border-color 0.15s; }
+  .f-select:focus { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .f-textarea { width: 100%; min-height: 4.5rem; padding: 0.5rem 0.625rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.875rem; color: rgb(var(--c-text-main)); outline: none; font-family: inherit; resize: vertical; transition: border-color 0.15s; }
+  .f-textarea:focus { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .f-ro { font-size: 0.875rem; color: rgb(var(--c-text-main)); padding: 0.2rem 0; }
+  .f-ro-label { font-size: 0.625rem; color: rgb(var(--c-text-muted)); display: block; margin-bottom: 0.15rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 0.8s linear infinite; }
+  @keyframes pulse-dot { 0%,100% { opacity: 0.3; transform: scale(0.75); } 50% { opacity: 1; transform: scale(1); } }
+  .dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+<!-- Header -->
+<header class="h-14 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 gap-3 sticky top-0 z-20">
+  <button class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-2 transition-colors">
+    <svg width="22" height="22" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-base">Newton</span>
+  </button>
+  <div class="flex-1"></div>
+  <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Toggle theme">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  </button>
+</header>
+
+<div class="max-w-2xl mx-auto px-4 py-8 space-y-14">
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 1 · Editable form — all field types                  -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 1 · Editable form — all field types</div>
+    <span class="anno-tag">Form always renders inside an assistant message bubble. Card uses cardDefault tier (border + bg-surface + shadow-sm).</span>
+
+    <!-- Assistant message shell -->
+    <div class="flex gap-3 mt-3">
+      <!-- Newton avatar -->
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main mb-3 leading-relaxed">Please fill in the details below to submit your request:</p>
+
+        <!-- Form card -->
+        <div class="border border-border-main rounded-xl overflow-hidden bg-surface shadow-sm">
+
+          <!-- Title bar -->
+          <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-border-main bg-surface-2/60">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="text-sm font-semibold text-text-main">Leave Request Form</span>
+          </div>
+
+          <!-- Fields -->
+          <div class="px-3.5 py-3.5 space-y-3.5">
+
+            <!-- text -->
+            <div>
+              <label class="f-label">Employee name <span class="f-req">*</span></label>
+              <input class="f-input" type="text" value="Alex Johnson" readonly />
+              <span class="f-hint">Auto-filled from your profile</span>
+            </div>
+
+            <!-- email with autocomplete open -->
+            <div class="relative">
+              <label class="f-label">Notify email <span class="f-req">*</span></label>
+              <span class="f-hint" style="margin-bottom:0.3rem;">Separate multiple addresses with commas</span>
+              <input class="f-input focus-demo" type="text" value="alex@" />
+              <!-- Autocomplete dropdown -->
+              <div class="absolute left-0 right-0 top-[calc(100%-2px)] bg-surface border border-border-main rounded-lg shadow-lift z-20 overflow-hidden">
+                <div class="flex items-center gap-2.5 px-3 py-2 bg-primary/5 border-b border-border-main cursor-pointer">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted shrink-0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <div>
+                    <p class="text-xs font-medium text-text-main">Alex Johnson</p>
+                    <p class="text-2xs text-text-muted">alex@optioai.com</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2.5 px-3 py-2 hover:bg-surface-2 cursor-pointer">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted shrink-0"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  <div>
+                    <p class="text-xs font-medium text-text-main">Alex Smith</p>
+                    <p class="text-2xs text-text-muted">alex.smith@company.com</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- select -->
+            <div>
+              <label class="f-label">Leave type <span class="f-req">*</span></label>
+              <select class="f-select">
+                <option value="" disabled selected>Please select</option>
+                <option>Annual Leave</option>
+                <option>Sick Leave</option>
+                <option>Unpaid Leave</option>
+              </select>
+            </div>
+
+            <!-- date row: start + end + auto-calculated days -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="f-label">Start date <span class="f-req">*</span></label>
+                <input class="f-input" type="date" value="2025-08-04" />
+              </div>
+              <div>
+                <label class="f-label">End date <span class="f-req">*</span></label>
+                <input class="f-input" type="date" value="2025-08-08" />
+              </div>
+            </div>
+
+            <!-- number — auto-calculated, read-only -->
+            <div>
+              <label class="f-label">
+                Days requested
+                <span class="f-auto font-mono">Auto-calculated</span>
+              </label>
+              <input class="f-input" type="number" value="5" readonly style="opacity:0.65;cursor:not-allowed;" />
+            </div>
+
+            <!-- duration (hour + minute selects) -->
+            <div>
+              <label class="f-label">Partial day duration</label>
+              <div class="flex gap-2">
+                <select class="f-select">
+                  <option>0 hr</option><option>1 hr</option><option>2 hr</option><option>3 hr</option>
+                </select>
+                <select class="f-select">
+                  <option>0 mins</option><option>15 mins</option><option>30 mins</option><option selected>45 mins</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- time -->
+            <div>
+              <label class="f-label">Return time <span class="f-req">*</span></label>
+              <input class="f-input" type="time" value="09:00" />
+            </div>
+
+            <!-- textarea -->
+            <div>
+              <label class="f-label">Reason <span class="f-req">*</span></label>
+              <textarea class="f-textarea" placeholder="Describe the reason for your leave…">Annual family trip.</textarea>
+            </div>
+
+            <!-- file upload -->
+            <div>
+              <label class="f-label">Supporting document</label>
+              <span class="f-hint" style="margin-bottom:0.3rem;">Max 5 MB per file · 120 MB total</span>
+              <label class="flex items-center gap-1.5 h-8 w-max px-3 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 cursor-pointer transition-colors">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                Attach file
+              </label>
+              <!-- Attached chip -->
+              <div class="flex flex-wrap gap-1.5 mt-1.5">
+                <div class="flex items-center gap-1.5 h-6 px-2 rounded-full border border-border-main bg-surface-2 text-2xs text-text-muted">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  medical_cert.pdf · 1.1 MB
+                  <button class="text-text-muted hover:text-text-main ml-0.5"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- radio / boolean -->
+            <div>
+              <label class="f-label">Requires coverage? <span class="f-req">*</span></label>
+              <div class="flex gap-4 mt-1">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-primary"></div>
+                  </div>
+                  <span class="text-sm text-text-main">Yes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main"></div>
+                  <span class="text-sm text-text-main">No</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- toggle / switch -->
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="f-label" style="margin-bottom:0;">Notify manager</label>
+                <span class="f-hint">Send an email to your direct manager</span>
+              </div>
+              <!-- Switch ON -->
+              <div class="w-9 h-5 rounded-full flex items-center px-0.5 cursor-pointer" style="background:rgb(var(--c-primary));">
+                <div class="w-4 h-4 rounded-full bg-white shadow-sm ml-auto"></div>
+              </div>
+            </div>
+
+            <!-- info (read-only metadata row) -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-2">
+              <span class="text-2xs text-text-muted">Request ID</span>
+              <span class="text-xs font-mono text-text-main ml-auto">LR-2025-1142</span>
+            </div>
+
+            <!-- number with validation error -->
+            <div>
+              <label class="f-label">Emergency contact number <span class="f-req">*</span></label>
+              <input class="f-input err" type="text" value="" placeholder="+971 50 000 0000" />
+              <span class="f-err">Contact number is required.</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-2 pt-1">
+              <button class="flex-1 h-8 rounded-lg border border-border-main text-xs font-medium text-text-muted hover:bg-surface-2 transition-colors">Cancel</button>
+              <button class="flex-1 h-8 rounded-lg text-xs font-medium bg-primary text-white hover:bg-primary/90 transition-colors">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 2 · Read-only / submitted                            -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 2 · Read-only / submitted (<code class="text-xs bg-surface-2 px-1 rounded">isReadOnly = true</code>)</div>
+    <span class="anno-tag">Fields render as plain text — no borders, no backgrounds. "Submitted" badge in title bar. Edit button re-opens the form.</span>
+
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main mb-3 leading-relaxed">Here is your submitted request:</p>
+        <div class="border border-border-main rounded-xl overflow-hidden bg-surface shadow-sm">
+
+          <!-- Title bar with badge -->
+          <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-border-main bg-surface-2/60">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="text-sm font-semibold text-text-main flex-1">Leave Request Form</span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-medium bg-status-success/10 text-status-success border border-status-success/20">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Submitted
+            </span>
+          </div>
+
+          <!-- Read-only fields — 2 columns -->
+          <div class="px-3.5 py-3.5 grid grid-cols-2 gap-x-6 gap-y-3">
+            <div><span class="f-ro-label">Employee name</span><p class="f-ro">Alex Johnson</p></div>
+            <div><span class="f-ro-label">Notify email</span><p class="f-ro">alex@optioai.com</p></div>
+            <div><span class="f-ro-label">Leave type</span><p class="f-ro">Annual Leave</p></div>
+            <div><span class="f-ro-label">Days requested</span><p class="f-ro">5</p></div>
+            <div><span class="f-ro-label">Start date</span><p class="f-ro">Aug 4, 2025</p></div>
+            <div><span class="f-ro-label">End date</span><p class="f-ro">Aug 8, 2025</p></div>
+            <div><span class="f-ro-label">Requires coverage</span><p class="f-ro">Yes</p></div>
+            <div><span class="f-ro-label">Notify manager</span><p class="f-ro">On</p></div>
+            <div class="col-span-2"><span class="f-ro-label">Reason</span><p class="f-ro">Annual family trip.</p></div>
+            <div class="col-span-2">
+              <span class="f-ro-label">Supporting document</span>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span class="text-xs text-text-muted">medical_cert.pdf · 1.1 MB</span>
+              </div>
+            </div>
+            <div><span class="f-ro-label">Request ID</span><p class="f-ro font-mono text-xs">LR-2025-1142</p></div>
+          </div>
+        </div>
+        <p class="text-sm text-text-muted mt-2.5 leading-relaxed">Your leave request has been submitted. You'll receive a confirmation email shortly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 3 · Submitting state                                 -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 3 · Submitting state</div>
+    <span class="anno-tag">Fields become pointer-events-none + opacity-60. Submit button shows spinner + "Submitting…". Cancel disabled.</span>
+    <div class="flex gap-3 mt-3">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5"><svg width="13" height="13" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg></div>
+      <div class="flex-1 min-w-0">
+        <div class="border border-border-main rounded-xl overflow-hidden bg-surface shadow-sm" style="opacity:0.92;">
+          <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-border-main bg-surface-2/60">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="text-sm font-semibold text-text-main">Leave Request Form</span>
+          </div>
+          <!-- Skeleton fields -->
+          <div class="px-3.5 py-3.5 space-y-3.5 pointer-events-none" style="opacity:0.6;">
+            <div><div class="h-2 w-24 rounded bg-surface-2 mb-2"></div><div class="h-8 rounded-lg bg-surface-2 border border-border-main"></div></div>
+            <div class="grid grid-cols-2 gap-3"><div><div class="h-2 w-16 rounded bg-surface-2 mb-2"></div><div class="h-8 rounded-lg bg-surface-2 border border-border-main"></div></div><div><div class="h-2 w-16 rounded bg-surface-2 mb-2"></div><div class="h-8 rounded-lg bg-surface-2 border border-border-main"></div></div></div>
+            <div><div class="h-2 w-20 rounded bg-surface-2 mb-2"></div><div class="h-16 rounded-lg bg-surface-2 border border-border-main"></div></div>
+          </div>
+          <div class="px-3.5 pb-3.5 flex gap-2">
+            <button class="flex-1 h-8 rounded-lg border border-border-main text-xs font-medium text-text-muted opacity-40 cursor-not-allowed">Cancel</button>
+            <button class="flex-1 h-8 rounded-lg text-xs font-medium bg-primary text-white flex items-center justify-center gap-1.5 opacity-80">
+              <svg class="spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+              Submitting…
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 4 · Success · Cancelled — side by side               -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 4 · Success &amp; Cancelled</div>
+    <div class="grid grid-cols-2 gap-4 mt-3">
+
+      <!-- Success -->
+      <div>
+        <span class="anno-tag">State · Success — collapses to this after ~1 s then calls closeForm()</span>
+        <div class="border border-border-main rounded-xl overflow-hidden bg-surface shadow-sm">
+          <div class="flex items-center justify-between gap-2 px-3.5 py-2.5 border-b border-border-main bg-surface-2/60">
+            <div class="flex items-center gap-2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <span class="text-sm font-semibold text-text-main">Leave Request Form</span>
+            </div>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs font-medium bg-status-success/10 text-status-success border border-status-success/20">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Done
+            </span>
+          </div>
+          <div class="px-3.5 py-6 flex flex-col items-center gap-2 text-center">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center bg-status-success/10">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-sm font-medium text-text-main">Submitted!</p>
+            <p class="text-2xs text-text-muted">Closing in 1 s…</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cancelled -->
+      <div>
+        <span class="anno-tag">State · Cancelled — form collapses to this inline notice</span>
+        <div class="border border-border-main rounded-xl overflow-hidden bg-surface shadow-sm">
+          <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-border-main bg-surface-2/60">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted shrink-0"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="text-sm font-semibold text-text-muted">Leave Request Form</span>
+          </div>
+          <div class="px-3.5 py-3 flex items-center gap-2.5">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted shrink-0"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <p class="text-xs text-text-muted">Form cancelled — not submitted.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <!-- PANEL 5 · Field-level states reference                     -->
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <section>
+    <div class="panel-title">Panel 5 · Field-level states reference</div>
+    <span class="anno-tag">All four input states shown side by side for quick reference during implementation.</span>
+    <div class="grid grid-cols-2 gap-x-6 gap-y-4 mt-3">
+
+      <!-- Default -->
+      <div>
+        <span class="anno-tag">Default</span>
+        <label class="f-label">Field label <span class="f-req">*</span></label>
+        <input class="f-input" type="text" placeholder="Placeholder text" />
+      </div>
+
+      <!-- Focused -->
+      <div>
+        <span class="anno-tag">Focused</span>
+        <label class="f-label">Field label <span class="f-req">*</span></label>
+        <input class="f-input focus-demo" type="text" value="Entered value" />
+      </div>
+
+      <!-- Error -->
+      <div>
+        <span class="anno-tag">Error</span>
+        <label class="f-label">Field label <span class="f-req">*</span></label>
+        <input class="f-input err" type="text" value="" />
+        <span class="f-err">This field is required.</span>
+      </div>
+
+      <!-- Disabled / read-only -->
+      <div>
+        <span class="anno-tag">Read-only (auto-calculated)</span>
+        <label class="f-label">Days <span class="f-auto font-mono">Auto-calculated</span></label>
+        <input class="f-input" type="text" value="5" readonly style="opacity:0.65;cursor:not-allowed;" />
+        <span class="f-hint">Derived from start and end dates.</span>
+      </div>
+
+      <!-- Select default -->
+      <div>
+        <span class="anno-tag">Select — unselected</span>
+        <label class="f-label">Priority <span class="f-req">*</span></label>
+        <select class="f-select"><option value="" disabled selected>Please select</option><option>High</option><option>Medium</option></select>
+      </div>
+
+      <!-- Select with value -->
+      <div>
+        <span class="anno-tag">Select — value chosen</span>
+        <label class="f-label">Priority <span class="f-req">*</span></label>
+        <select class="f-select"><option>High</option><option selected>Medium</option></select>
+      </div>
+
+      <!-- Duration -->
+      <div class="col-span-2">
+        <span class="anno-tag">Duration (hour + minute selects)</span>
+        <label class="f-label">Meeting duration</label>
+        <div class="flex gap-2">
+          <select class="f-select"><option>0 hr</option><option selected>1 hr</option><option>2 hr</option></select>
+          <select class="f-select"><option>0 mins</option><option selected>30 mins</option><option>45 mins</option></select>
+        </div>
+      </div>
+
+      <!-- File editable -->
+      <div>
+        <span class="anno-tag">File — editable</span>
+        <label class="f-label">Attachment</label>
+        <span class="f-hint" style="margin-bottom:0.3rem;">Max 5 MB · 120 MB total</span>
+        <label class="flex items-center gap-1.5 h-8 w-max px-3 rounded-lg border border-border-main bg-surface text-xs text-text-muted hover:bg-surface-2 cursor-pointer transition-colors">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          Attach file
+        </label>
+        <div class="flex gap-1 mt-1.5">
+          <div class="flex items-center gap-1.5 h-6 px-2 rounded-full border border-border-main bg-surface-2 text-2xs text-text-muted">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            report.pdf · 880 KB
+            <button class="text-text-muted hover:text-text-main ml-0.5"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- File read-only -->
+      <div>
+        <span class="anno-tag">File — read-only (submitted)</span>
+        <label class="f-label" style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.04em;color:rgb(var(--c-text-muted));font-weight:400;">Attachment</label>
+        <div class="flex items-center gap-1.5 py-1">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error shrink-0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="text-xs text-text-main">report.pdf</span>
+          <span class="text-2xs text-text-muted ml-auto">880 KB</span>
+        </div>
+        <span class="f-hint">No remove button in read-only mode.</span>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /max-w -->
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle theme">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background:linear-gradient(90deg,currentColor 50%,transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

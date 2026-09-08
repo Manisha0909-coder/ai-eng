@@ -1,0 +1,39 @@
+meta {
+  name: Archive Session
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/mid/session/archive_chat_session
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+script:pre-request {
+  const sid = bru.getEnvVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+    return;
+  }
+  req.setBody({ session_id: sid });
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  if (status >= 400) {
+    console.error(`❌ [Archive Session] ${status} — ${JSON.stringify(body)}`);
+  }
+}

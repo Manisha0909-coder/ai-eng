@@ -1,0 +1,32 @@
+meta {
+  name: Delete Shared Memory
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base_url}}/api/mid/shared-memory/{{shared_memory_persona_id}}/{{shared_memory_block_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const bid = bru.getVar("shared_memory_block_id");
+  const pid = bru.getVar("shared_memory_persona_id");
+  if (!bid || bid.trim() === "" || !pid || pid.trim() === "") {
+    console.warn("[Delete Shared Memory] ⚠️ No block_id or persona_id — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+  console.log(`[Delete Shared Memory] 🗑️ Deleting block_id: ${bid} for persona_id: ${pid}`);
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+}

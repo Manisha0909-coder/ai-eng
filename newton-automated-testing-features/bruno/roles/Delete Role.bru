@@ -1,0 +1,31 @@
+meta {
+  name: Delete Role
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{base_url}}/api/mid/roles/{{role_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const roleId = bru.getEnvVar("role_id");
+  if (!roleId) {
+    console.log("[Delete Role] ⚠️ No role_id set — skipping to avoid deleting unintended roles");
+    bru.runner.skipRequest();
+    return;
+  }
+  console.log(`[Delete Role] 🗑️ Deleting test role_id: ${roleId} (created by Create Role in this run)`);
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+}

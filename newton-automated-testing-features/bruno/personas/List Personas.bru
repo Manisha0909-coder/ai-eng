@@ -1,0 +1,38 @@
+meta {
+  name: List Personas
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "search": null,
+    "roots_only": true
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data contains personas array", function() {
+    expect(res.getBody().data.personas).to.be.an('array');
+  });
+}

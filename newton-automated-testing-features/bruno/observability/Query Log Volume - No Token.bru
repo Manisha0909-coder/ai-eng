@@ -1,0 +1,46 @@
+meta {
+  name: Query Log Volume - No Token
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{base_url}}/api/mid/observability/logs/volume
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "service_name": "middleware"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Query Log Volume - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Query Log Volume - No Token] Expected 401 — got ${status}`);
+  } else {
+    console.log(`✅ [Query Log Volume - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

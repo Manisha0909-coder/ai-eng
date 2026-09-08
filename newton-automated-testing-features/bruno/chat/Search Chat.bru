@@ -1,0 +1,44 @@
+meta {
+  name: Search Chat
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/api/mid/chat/search
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit:
+  ~persona_id:
+  ~persona_ids:
+}
+
+vars:pre-request {
+  search_query: hi
+}
+
+script:pre-request {
+  const q = bru.getVar("search_query") || "hi";
+  req.setUrl(req.getUrl() + "?query=" + encodeURIComponent(q));
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains results array", function() {
+    expect(res.getBody().data.results).to.be.an('array');
+  });
+}

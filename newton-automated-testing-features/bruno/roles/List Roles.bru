@@ -1,0 +1,37 @@
+meta {
+  name: List Roles
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "search": null
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data contains roles array", function() {
+    expect(res.getBody().data.roles).to.be.an('array');
+  });
+}

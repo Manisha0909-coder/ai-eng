@@ -1,0 +1,52 @@
+meta {
+  name: Create Chat - No Auth
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/api/mid/chat/create
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+  x-title: Newton Chat
+}
+
+body:json {
+  {
+    "timezone": "Asia/Kolkata",
+    "session_id": null,
+    "query": "hi",
+    "persona_id": {{persona_id}},
+    "language": "EN"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Chat - No Auth] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Create Chat - No Auth] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Chat - No Auth] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

@@ -1,0 +1,41 @@
+meta {
+  name: List Admin Users
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/mid/admin/users/list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit: 
+  ~offset: 
+  ~search: 
+  ~role: 
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has admin_users array", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("admin_users");
+    expect(body.data.admin_users).to.be.an("array");
+  });
+
+  test("Response has pagination fields", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("total");
+    expect(body.data).to.have.property("limit");
+    expect(body.data).to.have.property("offset");
+  });
+}

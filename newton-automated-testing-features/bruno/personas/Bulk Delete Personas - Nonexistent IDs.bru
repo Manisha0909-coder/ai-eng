@@ -1,0 +1,57 @@
+meta {
+  name: Bulk Delete Personas - Nonexistent IDs
+  type: http
+  seq: 48
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log("[Bulk Delete Personas - Nonexistent IDs] Running negative test: persona IDs that do not exist");
+}
+
+body:json {
+  {
+    "persona_ids": [999999999]
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const totalDeleted = body?.data?.total_deleted;
+  const totalFailed = body?.data?.total_failed;
+  if (totalDeleted !== 0 || totalFailed === 0) {
+    console.error(`❌ [Bulk Delete Personas - Nonexistent IDs] Expected 0 deleted / ≥1 failed — got deleted=${totalDeleted} failed=${totalFailed}`);
+    console.error(`Response: ${JSON.stringify(body)}`);
+  } else {
+    console.log(`✅ [Bulk Delete Personas - Nonexistent IDs] Correctly reported 0 deleted, ${totalFailed} failed`);
+  }
+}
+
+tests {
+  test("Status is 200 (bulk op always returns 200)", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("No personas were deleted", function() {
+    expect(res.getBody().data.total_deleted).to.equal(0);
+  });
+
+  test("All submitted IDs reported as failed", function() {
+    expect(res.getBody().data.total_failed).to.be.above(0);
+  });
+
+  test("Per-item result shows persona not found", function() {
+    const result = res.getBody().data.results[0];
+    expect(result.success).to.equal(false);
+    expect(result.persona_id).to.equal(999999999);
+  });
+}

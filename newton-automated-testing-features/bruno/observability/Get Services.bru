@@ -1,0 +1,29 @@
+meta {
+  name: Get Services
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/mid/observability/services
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains services array", function() {
+    expect(res.getBody().data.services).to.be.an('array');
+  });
+}

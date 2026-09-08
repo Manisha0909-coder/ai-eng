@@ -1,0 +1,32 @@
+meta {
+  name: Delete Session
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{base_url}}/api/mid/session/delete_chat_session
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+script:pre-request {
+  const sid = bru.getEnvVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+    return;
+  }
+  req.setBody({ session_id: sid });
+  console.log(`[Delete Session] 🗑️ Deleting session_id: ${sid}`);
+}

@@ -1,0 +1,48 @@
+meta {
+  name: Update Personal Doc Tag - Invalid ID
+  type: http
+  seq: 12
+}
+
+put {
+  url: {{base_url}}/api/mid/personal-doc-tag/999999999
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": "Invalid ID Update",
+    "description": null
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Update Personal Doc Tag - Invalid ID] Running negative test: nonexistent tag_id 999999999");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 404];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Update Personal Doc Tag - Invalid ID] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Update Personal Doc Tag - Invalid ID] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 404", function() {
+    expect([400, 404]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

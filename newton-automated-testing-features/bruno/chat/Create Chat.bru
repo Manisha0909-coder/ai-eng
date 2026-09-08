@@ -1,0 +1,74 @@
+meta {
+  name: Create Chat
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/chat/create
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  x-title: Newton Chat
+}
+
+body:json {
+  {
+    "timezone": "Asia/Kolkata",
+    "session_id": null,
+    "query": "apply sick leave for tomorrow",
+    "persona_id": 105,
+    "language": "EN"
+  }
+}
+
+script:post-response {
+  // Response is SSE (string) on 200, JSON object on error
+  const raw = res.getBody();
+  const body = typeof raw === 'string' ? raw : JSON.stringify(raw);
+  const lines = body.split('\n');
+  let sessionId = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].trim() === 'event: message') {
+      const dataLine = lines[i + 1] || '';
+      if (dataLine.startsWith('data: ')) {
+        try {
+          const data = JSON.parse(dataLine.slice(6));
+          if (data.session_id) {
+            sessionId = data.session_id;
+            break;
+          }
+        } catch (e) {}
+      }
+    }
+  }
+
+  if (sessionId) {
+    bru.setVar("session_id", sessionId);
+    console.log("session_id captured:", sessionId);
+  } else {
+    console.log("WARNING: session_id not found in response");
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response contains session_id", function() {
+    const raw = res.getBody();
+    const body = typeof raw === 'string' ? raw : JSON.stringify(raw);
+    expect(body).to.include("session_id");
+  });
+
+  test("Response contains stop event", function() {
+    const raw = res.getBody();
+    const body = typeof raw === 'string' ? raw : JSON.stringify(raw);
+    expect(body).to.include("event: stop");
+  });
+}

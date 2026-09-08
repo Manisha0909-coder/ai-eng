@@ -1,0 +1,52 @@
+meta {
+  name: Create Chat - Invalid Persona ID
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/mid/chat/create
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  x-title: Newton Chat
+}
+
+body:json {
+  {
+    "timezone": "Asia/Kolkata",
+    "session_id": null,
+    "query": "hi",
+    "persona_id": 999999999,
+    "language": "EN"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Chat - Invalid Persona ID] Running negative test: nonexistent persona_id 999999999");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 403, 404];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Create Chat - Invalid Persona ID] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Chat - Invalid Persona ID] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 403", function() {
+    expect(res.getStatus()).to.equal(403);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

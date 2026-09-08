@@ -1,0 +1,68 @@
+meta {
+  name: List Rule Types
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/mid/tool-rules/types
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  // Get available models
+  const modelsRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/models`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+  const models = modelsRes.data?.data?.models ?? [];
+  const modelId = models.length > 0 ? String(models[0].id) : null;
+
+  // Create a test persona shared by all tool-rules tests in this suite
+  const testName = "Bruno Tool Rules Test " + Date.now();
+  const createRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: {
+      persona_name: testName,
+      persona: "Test persona for tool-rules automation.",
+      model_id: modelId,
+      greeting_message: null,
+      type: "chat",
+      supports_documents: false,
+      temperature: 0.7,
+      context_window_limit: 4096
+    }
+  });
+
+  const personaId = createRes.data?.data?.persona?.id;
+  if (personaId) {
+    bru.setEnvVar("persona_id", String(personaId));
+    console.log(`[List Rule Types] ✅ Created test persona ID: ${personaId}`);
+  } else {
+    console.warn(`[List Rule Types] ⚠️ Failed to create test persona: ${JSON.stringify(createRes.data)}`);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has data", function() {
+    expect(res.getBody()).to.have.property("data");
+  });
+}

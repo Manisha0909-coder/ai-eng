@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Message Action Buttons — Redesign Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+          'status-info':    'rgb(var(--c-info) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+    --c-info:       62 124 177;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.4); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse-dot { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+  .animate-spin-slow { animation: spin 1s linear infinite; }
+  .thinking-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+  .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; } .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+  /* Markdown prose styles */
+  .prose-newton h2 { font-family: "Bricolage Grotesque", system-ui; font-weight: 600; font-size: 1rem; margin: 1.2em 0 0.5em; color: rgb(var(--c-text-main)); }
+  .prose-newton h3 { font-weight: 600; font-size: 0.9rem; margin: 1em 0 0.4em; color: rgb(var(--c-text-main)); }
+  .prose-newton p { margin: 0.6em 0; color: rgb(var(--c-text-main)); font-size: 0.9rem; line-height: 1.65; }
+  .prose-newton ul { margin: 0.6em 0 0.6em 1.2em; list-style: disc; }
+  .prose-newton li { font-size: 0.9rem; line-height: 1.6; color: rgb(var(--c-text-main)); margin: 0.25em 0; }
+  .prose-newton table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75em 0; }
+  .prose-newton th { padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border)); color: rgb(var(--c-text-muted)); text-transform: uppercase; letter-spacing: 0.05em; }
+  .prose-newton td { padding: 0.45rem 0.75rem; border: 1px solid rgb(var(--c-border)); color: rgb(var(--c-text-main)); }
+  .prose-newton tr:hover td { background: rgb(var(--c-surface-2) / 0.5); }
+  .prose-newton code { font-family: "Spline Sans Mono", monospace; font-size: 0.82em; padding: 0.15em 0.4em; border-radius: 4px; background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border) / 0.7); color: rgb(var(--c-primary)); }
+  .code-block { background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border)); border-radius: 10px; overflow: hidden; margin: 0.75em 0; }
+  .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgb(var(--c-border)); }
+  .code-block pre { padding: 0.85rem; overflow-x: auto; font-family: "Spline Sans Mono", monospace; font-size: 0.8rem; line-height: 1.55; color: rgb(var(--c-text-main)); margin: 0; }
+</style>
+<!-- END shared-head -->
+<style>
+  /* Variant B — per-button label reveal on hover */
+  .reveal-label { max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; transition: max-width .2s ease, opacity .15s ease, margin-left .2s ease; }
+  .reveal-btn:hover .reveal-label,
+  .reveal-btn:focus-visible .reveal-label { max-width: 5rem; opacity: 1; margin-left: 0.375rem; }
+</style>
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+<div class="max-w-3xl mx-auto px-5 md:px-8 py-10">
+  <div class="spectrum-rule rounded-full mb-6"></div>
+
+  <header class="mb-8">
+    <p class="anno-tag mb-1">redesign · message action buttons</p>
+    <h1 class="font-display font-bold text-2xl tracking-tight mb-2">Message action buttons</h1>
+    <p class="text-sm text-text-muted leading-relaxed max-w-xl">
+      Three directions for the hover actions under assistant &amp; user messages, on the Newton
+      viridian/brass system. Toggle light/dark bottom-right. The baseline reproduces what ships
+      today (see <code class="text-primary">chat-conversation.html</code>). Rows show at full
+      opacity here so buttons are visible without hover; in production they fade in on message hover.
+    </p>
+  </header>
+
+  <!-- =============================================================
+       BASELINE — current production behavior
+       ============================================================= -->
+  <section class="mb-10">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="anno-tag">baseline · shipping today</span>
+      <div class="flex-1 h-px bg-border-main"></div>
+    </div>
+
+    <!-- Assistant baseline -->
+    <div class="flex gap-3 mb-5">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main leading-relaxed">Here's the APAC breakdown you asked for — fintech and B2B SaaS lead on ease of entry.</p>
+        <div class="flex items-center gap-0.5 mt-3 -ml-1">
+          <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy response"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="text-2xs">Copy</span></button>
+          <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span class="text-2xs">Share</span></button>
+          <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Read aloud"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span class="text-2xs">Read aloud</span></button>
+          <div class="flex-1"></div>
+          <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-success transition-colors" aria-label="Helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+          <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-error transition-colors" aria-label="Not helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User baseline -->
+    <div class="flex justify-end">
+      <div class="max-w-lg">
+        <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3"><p class="text-sm leading-relaxed">Can you analyze APAC entry by vertical?</p></div>
+        <div class="flex items-center gap-1 mt-1.5 justify-end">
+          <button class="w-6 h-6 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy message"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="w-6 h-6 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Edit message"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <p class="text-2xs text-text-muted mt-3 italic">Issue: mixes text+icon actions on the left with icon-only feedback on the right; the row spans full width and the two clusters feel disconnected.</p>
+  </section>
+
+  <!-- =============================================================
+       VARIANT A — Segmented pill toolbar
+       ============================================================= -->
+  <section class="anno p-4 mb-8">
+    <div class="flex items-baseline gap-2 mb-4">
+      <span class="anno-tag text-primary">variant a</span>
+      <h2 class="font-display font-semibold text-base">Segmented pill toolbar</h2>
+      <span class="text-2xs text-text-muted ml-auto">grouped container · divider before feedback</span>
+    </div>
+
+    <!-- Assistant -->
+    <div class="flex gap-3 mb-5">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main leading-relaxed">Here's the APAC breakdown you asked for — fintech and B2B SaaS lead on ease of entry.</p>
+        <div class="inline-flex items-center gap-0.5 mt-3 p-1 rounded-full bg-surface-2 border border-border-main">
+          <button class="flex items-center gap-1.5 h-7 px-2.5 rounded-full text-text-muted hover:bg-surface hover:text-text-main transition-colors" aria-label="Copy response"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="text-2xs">Copy</span></button>
+          <button class="flex items-center gap-1.5 h-7 px-2.5 rounded-full text-text-muted hover:bg-surface hover:text-text-main transition-colors" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span class="text-2xs">Share</span></button>
+          <button class="flex items-center gap-1.5 h-7 px-2.5 rounded-full text-text-muted hover:bg-surface hover:text-text-main transition-colors" aria-label="Read aloud"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span class="text-2xs">Listen</span></button>
+          <span class="w-px h-4 bg-border-main mx-1"></span>
+          <button class="w-7 h-7 rounded-full flex items-center justify-center text-text-muted hover:bg-surface hover:text-status-success transition-colors" aria-label="Helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+          <button class="w-7 h-7 rounded-full flex items-center justify-center text-text-muted hover:bg-surface hover:text-status-error transition-colors" aria-label="Not helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User -->
+    <div class="flex justify-end">
+      <div class="max-w-lg flex flex-col items-end">
+        <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3"><p class="text-sm leading-relaxed">Can you analyze APAC entry by vertical?</p></div>
+        <div class="inline-flex items-center gap-0.5 mt-1.5 p-1 rounded-full bg-surface-2 border border-border-main">
+          <button class="w-7 h-7 rounded-full flex items-center justify-center text-text-muted hover:bg-surface hover:text-text-main transition-colors" aria-label="Copy message"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="flex items-center gap-1.5 h-7 px-2.5 rounded-full text-text-muted hover:bg-surface hover:text-text-main transition-colors" aria-label="Edit message"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="text-2xs">Edit</span></button>
+        </div>
+      </div>
+    </div>
+    <p class="text-2xs text-text-muted mt-3">Reads as one deliberate toolbar; the container gives the floating buttons a home. Slightly heavier visually.</p>
+  </section>
+
+  <!-- =============================================================
+       VARIANT B — Ghost icons, label on hover
+       ============================================================= -->
+  <section class="anno p-4 mb-8">
+    <div class="flex items-baseline gap-2 mb-4">
+      <span class="anno-tag text-primary">variant b</span>
+      <h2 class="font-display font-semibold text-base">Ghost icons, label on hover</h2>
+      <span class="text-2xs text-text-muted ml-auto">no container · per-button label reveal</span>
+    </div>
+
+    <!-- Assistant -->
+    <div class="flex gap-3 mb-5">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main leading-relaxed">Here's the APAC breakdown you asked for — fintech and B2B SaaS lead on ease of entry.</p>
+        <div class="flex items-center gap-0.5 mt-3 -ml-1">
+          <button class="reveal-btn flex items-center h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy response"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="reveal-label text-2xs">Copy</span></button>
+          <button class="reveal-btn flex items-center h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Share"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg><span class="reveal-label text-2xs">Share</span></button>
+          <button class="reveal-btn flex items-center h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Read aloud"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span class="reveal-label text-2xs">Listen</span></button>
+          <div class="flex-1"></div>
+          <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-success transition-colors" aria-label="Helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+          <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-error transition-colors" aria-label="Not helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User -->
+    <div class="flex justify-end">
+      <div class="max-w-lg flex flex-col items-end">
+        <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3"><p class="text-sm leading-relaxed">Can you analyze APAC entry by vertical?</p></div>
+        <div class="flex items-center gap-0.5 mt-1.5">
+          <button class="reveal-btn flex items-center h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy message"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="reveal-label text-2xs">Copy</span></button>
+          <button class="reveal-btn flex items-center h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Edit message"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="reveal-label text-2xs">Edit</span></button>
+        </div>
+      </div>
+    </div>
+    <p class="text-2xs text-text-muted mt-3">Lightest footprint at rest; the hovered action names itself. Hover over a single button to see the label slide out.</p>
+  </section>
+
+  <!-- =============================================================
+       VARIANT C — Icon-only, grouped feedback
+       ============================================================= -->
+  <section class="anno p-4 mb-8">
+    <div class="flex items-baseline gap-2 mb-4">
+      <span class="anno-tag text-primary">variant c</span>
+      <h2 class="font-display font-semibold text-base">Icon-only, minimal</h2>
+      <span class="text-2xs text-text-muted ml-auto">boxed icons · tooltip-driven · feedback split by divider</span>
+    </div>
+
+    <!-- Assistant -->
+    <div class="flex gap-3 mb-5">
+      <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+        <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-text-main leading-relaxed">Here's the APAC breakdown you asked for — fintech and B2B SaaS lead on ease of entry.</p>
+        <div class="flex items-center gap-1 mt-3">
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-text-main transition-all" title="Copy" aria-label="Copy response"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-text-main transition-all" title="Share" aria-label="Share"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-text-main transition-all" title="Read aloud" aria-label="Read aloud"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>
+          <span class="w-px h-5 bg-border-main mx-1.5"></span>
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-status-success transition-all" title="Helpful" aria-label="Helpful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-status-error transition-all" title="Not helpful" aria-label="Not helpful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User -->
+    <div class="flex justify-end">
+      <div class="max-w-lg flex flex-col items-end">
+        <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3"><p class="text-sm leading-relaxed">Can you analyze APAC entry by vertical?</p></div>
+        <div class="flex items-center gap-1 mt-1.5">
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-text-main transition-all" title="Copy" aria-label="Copy message"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+          <button class="w-8 h-8 rounded-lg border border-transparent flex items-center justify-center text-text-muted hover:bg-surface-2 hover:border-border-main hover:text-text-main transition-all" title="Edit" aria-label="Edit message"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <p class="text-2xs text-text-muted mt-3">Cleanest, most uniform grid; consistent 32px hit targets. Relies on tooltips for discoverability, so labels are lost at a glance.</p>
+  </section>
+
+</div>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle light and dark mode">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

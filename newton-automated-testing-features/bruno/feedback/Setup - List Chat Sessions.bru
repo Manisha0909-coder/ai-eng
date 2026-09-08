@@ -1,0 +1,26 @@
+meta {
+  name: Setup - List Chat Sessions
+  type: http
+  seq: 0
+}
+
+get {
+  url: {{base_url}}/api/mid/session/list_chat_sessions
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:post-response {
+  const body = res.getBody();
+  const sessions = (body && body.data && body.data.sessions) || [];
+  if (sessions.length > 0) {
+    bru.setVar("session_id", sessions[0].session_id);
+    console.log("Setup: session_id captured:", sessions[0].session_id);
+  } else {
+    console.log("Setup: no sessions found — message_id will not be available");
+  }
+}

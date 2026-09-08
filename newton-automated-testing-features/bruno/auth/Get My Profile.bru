@@ -1,0 +1,16 @@
+meta {
+  name: Get My Profile
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/profile/me
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+

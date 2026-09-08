@@ -1,0 +1,49 @@
+meta {
+  name: Form Callback
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/mid/chat/forms/callback
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "message_id": "{{message_id}}",
+    "form_id": "{{form_id}}",
+    "submitted_values": {}
+  }
+}
+
+vars:pre-request {
+  form_id:
+  message_id:
+}
+
+script:pre-request {
+  const fid = bru.getVar("form_id");
+  const mid = bru.getVar("message_id");
+  if (!fid || fid.trim() === "" || !mid || mid.trim() === "") {
+    console.log("Skipping Form Callback — form_id or message_id not found in List Messages response");
+    bru.runner.skipRequest();
+  } else {
+    console.log("form_id:", fid, "| message_id:", mid);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

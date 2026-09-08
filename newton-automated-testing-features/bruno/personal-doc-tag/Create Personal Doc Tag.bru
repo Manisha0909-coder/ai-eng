@@ -1,0 +1,56 @@
+meta {
+  name: Create Personal Doc Tag
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/personal-doc-tag/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const name = `Bruno Personal Tag ${Date.now()}`;
+  bru.setVar("tag_name", name);
+  console.log(`[Create Personal Doc Tag] Using name: ${name}`);
+}
+
+body:json {
+  {
+    "name": "{{tag_name}}",
+    "description": null
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const tagId = body?.data?.id ?? body?.data?.tag_id ?? body?.data?.personal_doc_tag?.id;
+  if (tagId) {
+    bru.setEnvVar("tag_id", tagId);
+    console.log(`[Create Personal Doc Tag] ✅ tag_id saved: ${tagId}`);
+  } else {
+    console.error(`[Create Personal Doc Tag] ❌ Could not extract tag_id from response`);
+    console.error(`Response: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains tag id", function() {
+    const body = res.getBody();
+    const tagId = body?.data?.id ?? body?.data?.tag_id ?? body?.data?.personal_doc_tag?.id;
+    expect(tagId).to.be.a("number");
+  });
+}

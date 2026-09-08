@@ -1,0 +1,63 @@
+meta {
+  name: Attach Tool Server
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-servers/attach
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  // If TEST_SERVER is already attached from a previous failed run, detach it first
+  try {
+    await bru.sendRequest({
+      url: `${baseUrl}/api/mid/tool-servers/detach`,
+      method: "POST",
+      headers: {
+        "Cookie": `access_token=${token}`,
+        "Content-Type": "application/json"
+      },
+      data: { name: "TEST_SERVER" }
+    });
+    console.log("[Attach] Pre-cleaned existing TEST_SERVER — re-attaching fresh");
+  } catch (e) {
+    console.log("[Attach] TEST_SERVER not previously attached — attaching fresh");
+  }
+
+  bru.setEnvVar("ts_server_name", "TEST_SERVER");
+  req.setBody({
+    name: "TEST_SERVER",
+    url: "http://localhost:9005",
+    type: "custom",
+    envs: { "TEST_TOOL_SERVER_BASE_URL": "http://localhost:9005" }
+  });
+}
+
+body:json {
+  {
+    "name": "TEST_SERVER",
+    "url": "http://localhost:9005",
+    "type": "custom",
+    "envs": { "TEST_TOOL_SERVER_BASE_URL": "http://localhost:9005" }
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

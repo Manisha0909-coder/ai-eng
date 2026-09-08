@@ -1,0 +1,30 @@
+meta {
+  name: Feedback Metrics
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/feedback/metrics
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~from_date:
+  ~to_date:
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

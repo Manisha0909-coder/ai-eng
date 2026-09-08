@@ -1,0 +1,31 @@
+meta {
+  name: Query Log Volume
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/mid/observability/logs/volume
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "service_name": "middleware"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

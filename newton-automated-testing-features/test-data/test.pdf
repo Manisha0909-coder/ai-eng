@@ -1,0 +1,82 @@
+%PDF-1.4
+1 0 obj
+<</Type /Catalog /Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3>>
+endobj
+3 0 obj
+<</Length 235>>
+stream
+BT /F1 12 Tf 50 750 Td 14 TL
+(Newton AI Platform) Tj T*
+(Test Document — PDF Format) Tj T*
+() Tj T*
+(This document is used for automated upload testing.) Tj T*
+(It contains structured content across multiple pages.) Tj T*
+() Tj T*
+ET
+endstream
+endstream
+endobj
+4 0 obj
+<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 3 0 R /Resources <</Font <</F1 <</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>>>>>>>>>
+endobj
+5 0 obj
+<</Length 331>>
+stream
+BT /F1 12 Tf 50 750 Td 14 TL
+(Section 1: Company Overview) Tj T*
+() Tj T*
+(Newton AI is an enterprise-grade AI platform.) Tj T*
+(We serve 500+ customers across 30 countries.) Tj T*
+() Tj T*
+(Key Features:) Tj T*
+(- Multi-persona chat) Tj T*
+(- Document upload) Tj T*
+(- Shared sessions) Tj T*
+(- Role-based access control) Tj T*
+ET
+endstream
+endstream
+endobj
+6 0 obj
+<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources <</Font <</F1 <</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>>>>>>>>>
+endobj
+7 0 obj
+<</Length 285>>
+stream
+BT /F1 12 Tf 50 750 Td 14 TL
+(Section 2: HR Policy Summary) Tj T*
+() Tj T*
+(Annual Leave: 20 days) Tj T*
+(Sick Leave: 10 days) Tj T*
+(Parental Leave: 90 days) Tj T*
+() Tj T*
+(Benefits:) Tj T*
+(- Health insurance) Tj T*
+(- 401\(k\) matching) Tj T*
+(- Learning budget $2,000/yr) Tj T*
+ET
+endstream
+endstream
+endobj
+8 0 obj
+<</Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources <</Font <</F1 <</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>>>>>>>>>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000009 00000 n 
+0000000056 00000 n 
+0000000123 00000 n 
+0000000417 00000 n 
+0000000586 00000 n 
+0000000976 00000 n 
+0000001145 00000 n 
+0000001489 00000 n 
+trailer
+<</Size 9 /Root 1 0 R>>
+startxref
+1658
+%%EOF

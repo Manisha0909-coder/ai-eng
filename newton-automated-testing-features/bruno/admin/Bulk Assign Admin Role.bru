@@ -1,0 +1,71 @@
+meta {
+  name: Bulk Assign Admin Role
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/mid/admin/users/bulk_assign_role
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "emails": ["{{test_email}}"],
+    "role": "user_admin"
+  }
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  // Try non-admins first
+  const nonAdminRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/admin/users/non-admins?limit=1`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+  const nonAdmins = nonAdminRes.data?.data?.users ?? [];
+
+  if (nonAdmins.length > 0) {
+    const email = nonAdmins[0].email;
+    req.setBody({ emails: [email], role: "user_admin" });
+    console.log(`[Bulk Assign Admin Role] Using non-admin email: ${email}`);
+    return;
+  }
+
+  // Fallback: re-assign an existing admin user (idempotent)
+  const adminRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/admin/users/list?limit=1`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+  const admins = adminRes.data?.data?.admin_users ?? [];
+  if (admins.length > 0) {
+    const email = admins[0].email;
+    req.setBody({ emails: [email], role: "user_admin" });
+    console.log(`[Bulk Assign Admin Role] No non-admins available — re-assigning existing admin: ${email}`);
+  } else {
+    bru.runner.skipRequest();
+    console.warn("[Bulk Assign Admin Role] No users found — skipping");
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response has processing results", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("total_processed");
+    expect(body.data).to.have.property("total_updated");
+    expect(body.data).to.have.property("results");
+  });
+}

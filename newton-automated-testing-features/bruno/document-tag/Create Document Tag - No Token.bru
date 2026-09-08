@@ -1,0 +1,48 @@
+meta {
+  name: Create Document Tag - No Token
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/api/mid/document-tag/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "name": "No Token Tag",
+    "description": null
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Document Tag - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Create Document Tag - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Document Tag - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

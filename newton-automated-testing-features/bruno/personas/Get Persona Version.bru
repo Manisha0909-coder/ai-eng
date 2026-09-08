@@ -1,0 +1,33 @@
+meta {
+  name: Get Persona Version
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/versions/{{new_version_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Get Persona Version] persona_id: ${bru.getEnvVar("persona_id")}, new_version_id: ${bru.getEnvVar("new_version_id")}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains version id", function() {
+    expect(res.getBody().data.version.id).to.be.a('number');
+  });
+}

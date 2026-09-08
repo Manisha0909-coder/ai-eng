@@ -1,0 +1,47 @@
+meta {
+  name: Create Data Source - Missing Kind
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{base_url}}/api/core/api/data-sources
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "datasource_name": "Test DS No Kind"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Data Source - Missing Kind] Running negative test: no kind field");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Create Data Source - Missing Kind] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Data Source - Missing Kind] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

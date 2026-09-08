@@ -1,0 +1,23 @@
+meta {
+  name: Text to Speech
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/audio/text-to-speech
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "input": "Hello, world!",
+    "model": "tts-1",
+    "voice": "onyx"
+  }
+}

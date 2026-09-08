@@ -1,0 +1,29 @@
+meta {
+  name: Bulk Create Users CSV
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/api/mid/users/bulk_create_csv
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  csv_file: @file(test_users.csv)
+}
+
+tests {
+  test("Status is 200, 201 or 207", function() {
+    expect([200, 201, 207]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

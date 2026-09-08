@@ -1,0 +1,70 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: playwright_automation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install ".[dev]" 2>/dev/null || pip install playwright pytest-playwright pytest python-dotenv
+
+      - name: Install Playwright browsers
+        run: playwright install chromium --with-deps
+
+      - name: Run Playwright tests
+        env:
+          PLAYWRIGHT_BASE_URL: https://gotalk.dev
+          PLAYWRIGHT_BROWSER: chromium
+          HEADLESS: "true"
+          PLAYWRIGHT_SLOW_MO: "0"
+          SUPER_ADMIN_EMAIL: ${{ secrets.SUPER_ADMIN_EMAIL }}
+          SUPER_ADMIN_PASS: ${{ secrets.SUPER_ADMIN_PASS }}
+          USER_ADMIN_EMAIL: ${{ secrets.USER_ADMIN_EMAIL }}
+          USER_ADMIN_PASS: ${{ secrets.USER_ADMIN_PASS }}
+          SYS_ADMIN_EMAIL: ${{ secrets.SYS_ADMIN_EMAIL }}
+          SYS_ADMIN_PASS: ${{ secrets.SYS_ADMIN_PASS }}
+          NO_ROLE_EMAIL: ${{ secrets.NO_ROLE_EMAIL }}
+          NO_ROLE_PASS: ${{ secrets.NO_ROLE_PASS }}
+          DS_PG_HOST: ${{ secrets.DS_PG_HOST }}
+          DS_PG_PORT: ${{ secrets.DS_PG_PORT }}
+          DS_PG_USER: ${{ secrets.DS_PG_USER }}
+          DS_PG_DB: ${{ secrets.DS_PG_DB }}
+          DS_PG_PASS: ${{ secrets.DS_PG_PASS }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          NON_ADMIN_EMAIL: ${{ secrets.NON_ADMIN_EMAIL }}
+          NON_ADMIN_PASSWORD: ${{ secrets.NON_ADMIN_PASSWORD }}
+          PLAYWRIGHT_EMAIL: ${{ secrets.PLAYWRIGHT_EMAIL }}
+          PLAYWRIGHT_PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
+        run: pytest tests/ -v --tb=short
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots
+          path: playwright_automation/results/
+          retention-days: 7
+
+      - name: Upload all screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-results
+          path: playwright_automation/results/
+          retention-days: 3

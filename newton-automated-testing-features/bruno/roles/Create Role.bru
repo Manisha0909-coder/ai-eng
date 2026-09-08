@@ -1,0 +1,55 @@
+meta {
+  name: Create Role
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": "My Role",
+    "description": null,
+    "persona_ids": null,
+    "document_tag_ids": null
+  }
+}
+
+script:pre-request {
+  const testName = `Bruno Test Role ${Date.now()}`;
+  console.log(`[Create Role] Using name: ${testName}`);
+  req.setBody({ name: testName, description: null, persona_ids: null, document_tag_ids: null });
+}
+
+script:post-response {
+  const body = res.getBody();
+  const roleId = body?.data?.role?.id ?? body?.data?.id;
+  if (roleId) {
+    bru.setEnvVar("role_id", String(roleId));
+    console.log(`[Create Role] ✅ role_id saved: ${roleId}`);
+  } else {
+    console.log(`[Create Role] ⚠️ role_id not found in response: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains role id", function() {
+    expect(res.getBody().data.role.id).to.be.a('number');
+  });
+}

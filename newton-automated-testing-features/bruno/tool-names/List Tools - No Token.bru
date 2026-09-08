@@ -1,0 +1,51 @@
+meta {
+  name: List Tools - No Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/mid/tool_names/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "search": null,
+    "type": null,
+    "tool_server": null
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[List Tools - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [List Tools - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [List Tools - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

@@ -1,0 +1,46 @@
+meta {
+  name: Bulk Delete Users - Missing Field
+  type: http
+  seq: 32
+}
+
+post {
+  url: {{base_url}}/api/mid/users/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Bulk Delete Users - Missing Field] Running negative test: body missing user_ids field");
+}
+
+body:json {
+  {
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Bulk Delete Users - Missing Field] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Bulk Delete Users - Missing Field] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

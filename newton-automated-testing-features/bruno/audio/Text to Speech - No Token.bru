@@ -1,0 +1,50 @@
+meta {
+  name: Text to Speech - No Token
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/audio/text-to-speech
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Text to Speech - No Token] Running negative test: missing auth cookie");
+}
+
+body:json {
+  {
+    "input": "Hello, world!",
+    "model": "tts-1",
+    "voice": "onyx"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Text to Speech - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Text to Speech - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

@@ -1,0 +1,37 @@
+meta {
+  name: Update Tag
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/api/mid/tool-tags/{{tag_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": null,
+    "tool_names": null,
+    "description": null
+  }
+}
+
+script:pre-request {
+  console.log(`[Update Tag] tag_id: ${bru.getEnvVar("tag_id")}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

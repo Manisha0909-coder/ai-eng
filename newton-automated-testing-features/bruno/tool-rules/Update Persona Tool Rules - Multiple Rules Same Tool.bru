@@ -1,0 +1,103 @@
+meta {
+  name: Update Persona Tool Rules - Multiple Rules Same Tool
+  type: http
+  seq: 16
+}
+
+put {
+  url: {{base_url}}/api/mid/tool-rules/personas/{{persona_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "tool_rules": [
+      {
+        "type": "run_first",
+        "tool_name": "firecrawl_web_search_tool"
+      },
+      {
+        "type": "max_count_per_step",
+        "tool_name": "firecrawl_web_search_tool",
+        "max_count": 2
+      },
+      {
+        "type": "required_before_exit",
+        "tool_name": "firecrawl_web_search_tool"
+      }
+    ]
+  }
+}
+
+script:pre-request {
+  // Self-contained: create a fresh persona so this request doesn't depend on
+  // another file in the sequence having run first.
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  const modelsRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/models`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+  const models = modelsRes.data?.data?.models ?? [];
+  const modelId = models.length > 0 ? String(models[0].id) : null;
+
+  const testName = `Bruno MultiRule Test ${Date.now()}`;
+  const createRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: {
+      persona_name: testName,
+      persona: "Test persona for the multiple-tool-rules-on-one-tool automation case.",
+      model_id: modelId,
+      greeting_message: null,
+      type: "chat",
+      supports_documents: false,
+      temperature: 0.7,
+      context_window_limit: 4096
+    }
+  });
+
+  const personaId = createRes.data?.data?.persona?.id;
+  if (personaId) {
+    bru.setEnvVar("persona_id", String(personaId));
+    console.log(`[Update Persona Tool Rules - Multiple Rules Same Tool] ✅ Created test persona ID: ${personaId}`);
+  } else {
+    console.warn(`[Update Persona Tool Rules - Multiple Rules Same Tool] ⚠️ Failed to create test persona: ${JSON.stringify(createRes.data)}`);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response confirms 3 tool rules updated", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+    expect(body.data.tool_rules).to.be.an("array").with.length(3);
+  });
+
+  test("All 3 rules target the same tool_name", function() {
+    const rules = res.getBody().data.tool_rules;
+    const toolNames = new Set(rules.map(r => r.tool_name));
+    expect(toolNames.size).to.equal(1);
+    expect(rules[0].tool_name).to.equal("firecrawl_web_search_tool");
+  });
+
+  test("Rule types are run_first, max_count_per_step, required_before_exit", function() {
+    const rules = res.getBody().data.tool_rules;
+    const types = rules.map(r => r.type).sort();
+    expect(types).to.eql(["max_count_per_step", "required_before_exit", "run_first"]);
+  });
+}

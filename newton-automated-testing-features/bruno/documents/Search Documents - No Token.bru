@@ -1,0 +1,50 @@
+meta {
+  name: Search Documents - No Token
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{base_url}}/api/core/search
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "query": "test",
+    "session_id": "00000000-0000-0000-0000-000000000000",
+    "limit": 10
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Search Documents - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Search Documents - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Search Documents - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

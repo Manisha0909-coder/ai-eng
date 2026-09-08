@@ -1,0 +1,24 @@
+meta {
+  name: List Shared Memory
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/shared-memory/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "persona_id": null,
+    "search": null
+  }
+}

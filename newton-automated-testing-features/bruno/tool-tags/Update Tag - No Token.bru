@@ -1,0 +1,48 @@
+meta {
+  name: Update Tag - No Token
+  type: http
+  seq: 12
+}
+
+patch {
+  url: {{base_url}}/api/mid/tool-tags/999999999
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Update Tag - No Token] Running negative test: missing auth cookie");
+}
+
+body:json {
+  {
+    "name": "Should Not Update"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Update Tag - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Update Tag - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

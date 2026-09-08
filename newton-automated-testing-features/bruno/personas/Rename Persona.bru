@@ -1,0 +1,31 @@
+meta {
+  name: Rename Persona
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/rename
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "persona_name": "New Name"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

@@ -1,0 +1,24 @@
+meta {
+  name: List Chat Sessions
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/session/list_chat_sessions
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~is_pin: 
+  ~persona_id: 
+  ~offset: 
+  ~limit: 
+  ~type: 
+  ~is_archived: 
+}

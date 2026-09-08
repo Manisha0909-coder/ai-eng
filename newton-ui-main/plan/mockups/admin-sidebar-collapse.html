@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Admin Sidebar Collapse — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: 14px; }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .scroll-quiet::-webkit-scrollbar { width: 4px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+</head>
+<body class="bg-background text-text-main antialiased">
+
+<div class="flex gap-12 p-8 flex-wrap">
+
+  <!-- ── VARIANT A · Expanded ─────────────────────────────────────────── -->
+  <div>
+    <p class="text-xs text-text-muted font-mono uppercase tracking-widest mb-3">Expanded</p>
+
+    <div class="flex h-[560px] overflow-hidden rounded-xl border border-border-main shadow-sm">
+
+      <!-- Sidebar -->
+      <div class="flex w-52 flex-col border-r border-border-main bg-surface">
+
+        <!-- Sidebar header (non-scrolling) -->
+        <div class="flex h-12 shrink-0 items-center justify-between border-b border-border-main px-3">
+          <!-- Brand -->
+          <div class="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+              <path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-text-main))" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/>
+            </svg>
+            <span class="font-display font-semibold text-sm text-text-main leading-none">Newton</span>
+          </div>
+          <!-- Toggle -->
+          <button class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" title="Collapse sidebar">
+            <!-- panel-left-close icon -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M9 3v18"/>
+              <path d="M16 15l-3-3 3-3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Nav items (scrolling) -->
+        <nav class="flex-1 overflow-y-auto scroll-quiet py-2 px-2 space-y-0.5">
+          <!-- Overview (active) -->
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Overview
+          </a>
+
+          <div class="pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Tools &amp; Servers</span></div>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Tool Tags</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Data Sources</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>Servers</a>
+
+          <div class="pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Documents</span></div>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Docs</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Doc Tags</a>
+
+          <div class="pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Access</span></div>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>Roles</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Personas</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Shared Memory</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Users</a>
+
+          <div class="pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Other</span></div>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Feedback</a>
+          <a href="#" class="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</a>
+        </nav>
+      </div>
+
+      <!-- Page stub -->
+      <div class="flex flex-1 items-center justify-center bg-background">
+        <span class="text-sm text-text-muted">Main content</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VARIANT A · Collapsed ─────────────────────────────────────────── -->
+  <div>
+    <p class="text-xs text-text-muted font-mono uppercase tracking-widest mb-3">Collapsed</p>
+
+    <div class="flex h-[560px] overflow-hidden rounded-xl border border-border-main shadow-sm">
+
+      <!-- Sidebar (collapsed) -->
+      <div class="flex w-12 flex-col border-r border-border-main bg-surface">
+
+        <!-- Sidebar header -->
+        <div class="flex h-12 shrink-0 items-center justify-center border-b border-border-main">
+          <button class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" title="Expand sidebar">
+            <!-- panel-left-open icon -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M9 3v18"/>
+              <path d="M13 15l3-3-3-3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Nav icons only -->
+        <nav class="flex-1 overflow-y-auto scroll-quiet py-2 px-1.5 space-y-0.5">
+          <!-- Overview (active) -->
+          <button title="Overview" class="flex w-full items-center justify-center rounded-lg p-2 bg-primary/10 border border-primary/20 text-primary transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          </button>
+
+          <!-- Divider -->
+          <div class="my-1.5 mx-1 border-t border-border-main/60"></div>
+
+          <button title="Tools" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></button>
+          <button title="Tool Tags" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+          <button title="Data Sources" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></button>
+          <button title="Servers" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg></button>
+
+          <div class="my-1.5 mx-1 border-t border-border-main/60"></div>
+
+          <button title="Docs" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+          <button title="Doc Tags" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></button>
+
+          <div class="my-1.5 mx-1 border-t border-border-main/60"></div>
+
+          <button title="Roles" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg></button>
+          <button title="Personas" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+          <button title="Shared Memory" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></button>
+          <button title="Users" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></button>
+
+          <div class="my-1.5 mx-1 border-t border-border-main/60"></div>
+
+          <button title="Feedback" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+          <button title="Admin" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></button>
+        </nav>
+      </div>
+
+      <!-- Page stub -->
+      <div class="flex flex-1 items-center justify-center bg-background">
+        <span class="text-sm text-text-muted">Main content</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INTERACTIVE demo ──────────────────────────────────────────────── -->
+  <div>
+    <p class="text-xs text-text-muted font-mono uppercase tracking-widest mb-3">Interactive</p>
+
+    <div class="flex h-[560px] overflow-hidden rounded-xl border border-border-main shadow-sm" id="demo">
+
+      <!-- Sidebar -->
+      <div class="flex flex-col border-r border-border-main bg-surface transition-[width] duration-200 ease-in-out" id="sidebar" style="width:208px">
+
+        <!-- Header -->
+        <div class="flex h-12 shrink-0 items-center border-b border-border-main px-3" id="sidebar-header">
+          <!-- Brand (shown when expanded) -->
+          <div class="flex flex-1 items-center gap-2 overflow-hidden" id="brand">
+            <svg width="18" height="18" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+              <path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-text-main))" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/>
+            </svg>
+            <span class="font-display font-semibold text-sm text-text-main leading-none whitespace-nowrap" id="brand-text">Newton</span>
+          </div>
+          <!-- Toggle button (always visible) -->
+          <button onclick="toggleSidebar()" id="toggle-btn" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg id="toggle-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M9 3v18"/>
+              <path d="M16 15l-3-3 3-3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Nav -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-0.5" id="nav" style="padding-left:8px;padding-right:8px">
+          <button onclick="setActive(this)" class="nav-item active flex w-full items-center rounded-lg px-3 py-2 bg-primary/10 border border-primary/20 text-primary text-sm font-medium" data-label="Overview">
+            <svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            <span class="nav-label ml-2.5 text-sm">Overview</span>
+          </button>
+
+          <div class="nav-group-header pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Tools &amp; Servers</span></div>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Tools"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="nav-label ml-2.5">Tools</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Tool Tags"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="nav-label ml-2.5">Tool Tags</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Data Sources"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span class="nav-label ml-2.5">Data Sources</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Servers"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg><span class="nav-label ml-2.5">Servers</span></button>
+
+          <div class="nav-group-header pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Documents</span></div>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Docs"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="nav-label ml-2.5">Docs</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Doc Tags"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><span class="nav-label ml-2.5">Doc Tags</span></button>
+
+          <div class="nav-group-header pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Access</span></div>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Roles"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg><span class="nav-label ml-2.5">Roles</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Personas"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nav-label ml-2.5">Personas</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Shared Memory"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg><span class="nav-label ml-2.5">Shared Memory</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Users"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="nav-label ml-2.5">Users</span></button>
+
+          <div class="nav-group-header pt-3 pb-1 px-3"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Other</span></div>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Feedback"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nav-label ml-2.5">Feedback</span></button>
+          <button onclick="setActive(this)" class="nav-item flex w-full items-center rounded-lg px-3 py-2 text-text-muted hover:bg-surface-2 hover:text-text-main text-sm transition-colors" data-label="Admin"><svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label ml-2.5">Admin</span></button>
+        </nav>
+      </div>
+
+      <!-- Page stub -->
+      <div class="flex flex-1 flex-col bg-background">
+        <div class="flex h-12 items-center border-b border-border-main px-4">
+          <span class="text-sm font-medium text-text-main" id="page-title">Overview</span>
+        </div>
+        <div class="flex flex-1 items-center justify-center">
+          <span class="text-sm text-text-muted">Click sidebar items or the toggle →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Theme toggle -->
+<button onclick="toggleTheme()" class="fixed bottom-4 right-4 rounded-lg border border-border-main bg-surface px-3 py-1.5 text-xs text-text-muted hover:bg-surface-2 transition-colors">Toggle theme</button>
+
+<style>
+  /* Collapsed state styles — driven by data-collapsed on the sidebar */
+  #sidebar[data-collapsed] { width: 48px; }
+  #sidebar[data-collapsed] #brand { display: none; }
+  #sidebar[data-collapsed] .nav-label { display: none; }
+  #sidebar[data-collapsed] .nav-group-header { display: none; }
+  #sidebar[data-collapsed] .nav-divider { display: block !important; }
+  #sidebar[data-collapsed] .nav-item { justify-content: center; padding-left: 8px; padding-right: 8px; }
+  #sidebar[data-collapsed] #sidebar-header { justify-content: center; }
+</style>
+
+<script>
+  let collapsed = false;
+
+  const collapsedIcon = `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M13 15l3-3-3-3"/>`;
+  const expandedIcon  = `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M16 15l-3-3 3-3"/>`;
+
+  // Insert dividers between groups (hidden when expanded)
+  document.querySelectorAll('.nav-group-header').forEach(el => {
+    const div = document.createElement('div');
+    div.className = 'nav-divider my-1.5 mx-1 border-t border-border-main/60 hidden';
+    el.parentNode.insertBefore(div, el);
+  });
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    collapsed = !collapsed;
+    if (collapsed) {
+      sidebar.setAttribute('data-collapsed', '');
+    } else {
+      sidebar.removeAttribute('data-collapsed');
+    }
+    document.getElementById('toggle-icon').innerHTML = collapsed ? collapsedIcon : expandedIcon;
+  }
+
+  function setActive(btn) {
+    document.querySelectorAll('.nav-item').forEach(el => {
+      el.classList.remove('active', 'bg-primary/10', 'border', 'border-primary/20', 'text-primary', 'font-medium');
+      el.classList.add('text-text-muted');
+    });
+    btn.classList.add('active', 'bg-primary/10', 'border', 'border-primary/20', 'text-primary', 'font-medium');
+    btn.classList.remove('text-text-muted');
+    document.getElementById('page-title').textContent = btn.dataset.label;
+  }
+
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', isDark ? 'dark' : 'light');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: ${UI_DIR:-.}
+      dockerfile: Dockerfile
+      args:
+        VITE_ACTIVE_THEME: ${VITE_ACTIVE_THEME:-Gemini}
+        VITE_ENABLE_UPLOAD_IMAGE: ${VITE_ENABLE_UPLOAD_IMAGE:-true}
+        VITE_SHOW_REASONING: ${VITE_SHOW_REASONING:-true}
+        VITE_DEV_HTTPS: ${VITE_DEV_HTTPS:-true}
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+        VITE_PREVIEW_PORT: ${VITE_PREVIEW_PORT:-80}
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    ports:
+      - "${VITE_PREVIEW_PORT:-80}:80"
+    restart: unless-stopped

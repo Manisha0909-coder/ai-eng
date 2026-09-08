@@ -1,0 +1,76 @@
+meta {
+  name: Push Calendar Data
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/queue/push_calendar_data
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  X-API-Key: {{api_key}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}",
+    "events": [
+      {
+        "title": "Bruno Test Event",
+        "start": "2026-06-24T10:00:00",
+        "end": "2026-06-24T11:00:00"
+      }
+    ]
+  }
+}
+
+script:pre-request {
+  let sid = bru.getVar("session_id") || bru.getEnvVar("session_id");
+  if (!sid || sid.trim() === "") {
+    const axios = require("axios");
+    const baseUrl = bru.getEnvVar("base_url");
+    const token = bru.getEnvVar("access_token");
+    const personaId = bru.getEnvVar("persona_id");
+    try {
+      const res = await axios.post(
+        `${baseUrl}/api/mid/chat/create`,
+        { timezone: "Asia/Kolkata", session_id: null, query: "hi", persona_id: Number(personaId), language: "EN" },
+        { headers: { Cookie: `access_token=${token}`, "x-title": "Newton Chat" }, responseType: "text", timeout: 8000 }
+      );
+      const match = res.data.match(/"session_id"\s*:\s*"([^"]+)"/);
+      if (match) {
+        sid = match[1];
+        bru.setVar("session_id", sid);
+        console.log("session_id fetched:", sid);
+      }
+    } catch (e) {
+      console.log("Failed to fetch session_id:", e.message);
+    }
+  }
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains session_id", function() {
+    expect(res.getBody().data.session_id).to.be.a('string');
+  });
+
+  test("Response contains event_count", function() {
+    expect(res.getBody().data.event_count).to.equal(1);
+  });
+}

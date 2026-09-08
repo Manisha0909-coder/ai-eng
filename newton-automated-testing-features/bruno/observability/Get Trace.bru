@@ -1,0 +1,36 @@
+meta {
+  name: Get Trace
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/observability/traces/{{trace_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  trace_id:
+}
+
+script:pre-request {
+  const tid = bru.getVar("trace_id");
+  if (!tid || tid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

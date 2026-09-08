@@ -1,0 +1,31 @@
+meta {
+  name: Get User List
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{base_url}}/api/mid/users/user_list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit:
+  ~offset:
+  ~search:
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

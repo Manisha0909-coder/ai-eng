@@ -1,0 +1,70 @@
+meta {
+  name: Bulk Delete Personas
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  console.log("[Bulk Delete Personas] Creating temp persona for bulk delete test...");
+
+  const modelsRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/models`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+  const models = modelsRes.data?.data?.models ?? [];
+  const modelId = models.length > 0 ? String(models[0].id) : null;
+
+  const createRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: {
+      persona_name: `Bulk Delete Test Persona ${Date.now()}`,
+      persona: "You are a test assistant.",
+      model_id: modelId,
+      greeting_message: null,
+      type: "chat",
+      supports_documents: false,
+      temperature: 0.7,
+      context_window_limit: 4096
+    }
+  });
+
+  const bulkPersonaId = createRes.data?.data?.persona?.id ?? createRes.data?.data?.id;
+  console.log(`[Bulk Delete Personas] ✅ Temp persona created: ${bulkPersonaId}`);
+  req.setBody({ persona_ids: [bulkPersonaId] });
+  console.log(`[Bulk Delete Personas] Bulk deleting persona_ids: [${bulkPersonaId}]`);
+}
+
+body:json {
+  {
+    "persona_ids": []
+  }
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

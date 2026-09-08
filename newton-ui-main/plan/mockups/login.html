@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Login — Mockup</title>
+<!-- BEGIN shared-head (canonical copy: this block must be byte-identical in every mockup file) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme before first paint to avoid flash
+  if (localStorage.getItem('newton-mock-theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:     'rgb(var(--c-background) / <alpha-value>)',
+          surface:        'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':    'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':    'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':   'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main':  'rgb(var(--c-border) / <alpha-value>)',
+          primary:        'rgb(var(--c-primary) / <alpha-value>)',
+          accent:         'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':     'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+          'status-info':    'rgb(var(--c-info) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: {
+          '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
+        },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style type="text/css">
+  :root {
+    --c-background: 246 247 244;  /* paper — cool green-tinted white */
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;  /* nested / flat panels */
+    --c-text-main:  26 34 31;     /* spruce ink */
+    --c-text-muted: 92 107 102;   /* mist */
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;    /* viridian */
+    --c-accent:     168 123 45;   /* brass — decorative only */
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+    --c-info:       62 124 177;
+  }
+  .dark {
+    --c-background: 13 20 17;     /* observatory green-black */
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;   /* viridian, lifted for dark */
+    --c-accent:     212 169 95;   /* brass, lifted for dark */
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+
+  /* Signature: the spectrum rule — Newton's prism as a 2px hairline. Use once per page. */
+  .spectrum-rule {
+    height: 2px;
+    background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent)));
+  }
+
+  /* Mockup annotation chrome (not part of the product UI) */
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.45); border-radius: 10px; }
+  .anno-tag {
+    font-family: "Spline Sans Mono", monospace;
+    font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgb(var(--c-text-muted));
+  }
+
+  /* Shared keyframes */
+  @keyframes drift-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
+  @keyframes drift-b { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-30px,24px) scale(0.95); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse-dot { 0%,100% { opacity: 0.25; } 50% { opacity: 1; } }
+  @keyframes caret-blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .animate-spin-slow { animation: spin 1s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* Quiet scrollbars */
+  .scroll-quiet::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 8px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+  <!-- Refraction field: two soft light spills behind the card -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="absolute -top-32 -left-24 w-[34rem] h-[34rem] rounded-full opacity-40 dark:opacity-25 blur-3xl"
+         style="background: radial-gradient(circle, rgb(var(--c-primary) / 0.35), transparent 70%); animation: drift-a 18s ease-in-out infinite;"></div>
+    <div class="absolute -bottom-40 -right-28 w-[38rem] h-[38rem] rounded-full opacity-35 dark:opacity-20 blur-3xl"
+         style="background: radial-gradient(circle, rgb(var(--c-accent) / 0.30), transparent 70%); animation: drift-b 22s ease-in-out infinite;"></div>
+  </div>
+
+  <main class="relative min-h-screen flex flex-col items-center justify-center px-4 py-12">
+
+    <!-- Login card -->
+    <section class="w-full max-w-sm bg-surface border border-border-main rounded-2xl shadow-lift overflow-hidden">
+      <div class="spectrum-rule"></div>
+      <div class="p-8 flex flex-col items-center text-center">
+
+        <!-- Tenant logo: prism mark + wordmark -->
+        <div class="flex items-center gap-2.5 mb-8">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+            <path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/>
+          </svg>
+          <span class="font-display font-semibold text-2xl tracking-tight">Newton</span>
+        </div>
+
+        <h1 class="font-display font-semibold text-xl mb-1.5">Welcome back</h1>
+        <p class="text-sm text-text-muted mb-8">Sign in with your organization account to continue.</p>
+
+        <button class="w-full h-11 rounded-lg bg-primary text-white dark:text-[#0d1411] font-medium text-sm
+                       hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Login
+        </button>
+
+        <p class="mt-6 font-mono text-2xs uppercase tracking-[0.14em] text-text-muted">Optio · secure sign-on</p>
+      </div>
+    </section>
+
+    <!-- Annotated states (mockup spec, not product UI) -->
+    <section class="w-full max-w-sm mt-10 space-y-4">
+      <div class="anno p-4">
+        <span class="anno-tag">state · redirecting</span>
+        <div class="mt-3">
+          <button disabled class="w-full h-11 rounded-lg bg-primary/70 text-white dark:text-[#0d1411] font-medium text-sm flex items-center justify-center gap-2 cursor-not-allowed">
+            <svg class="animate-spin-slow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+            </svg>
+            Redirecting…
+          </button>
+        </div>
+      </div>
+
+      <div class="anno p-4">
+        <span class="anno-tag">state · finishing connection (oauth return)</span>
+        <div class="mt-3 flex items-center justify-center gap-2.5 h-11 text-sm text-text-muted">
+          <svg class="animate-spin-slow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+          </svg>
+          Finishing connection…
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- BEGIN theme-toggle (canonical copy: identical in every mockup file) -->
+  <button onclick="newtonToggleTheme()"
+          class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider
+                 flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+          aria-label="Toggle light and dark mode">
+    <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+    <span>Theme</span>
+  </button>
+  <script>
+    function newtonToggleTheme() {
+      const dark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+    }
+  </script>
+  <!-- END theme-toggle -->
+
+</body>
+</html>

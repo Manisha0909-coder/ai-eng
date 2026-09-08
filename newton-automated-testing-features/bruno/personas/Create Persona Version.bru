@@ -1,0 +1,47 @@
+meta {
+  name: Create Persona Version
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/versions
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "set_as_current": true
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const newVersionId = body?.data?.persona?.current_version_id;
+  if (newVersionId) {
+    bru.setEnvVar("new_version_id", String(newVersionId));
+    console.log(`[Create Persona Version] ✅ new_version_id saved: ${newVersionId} (current active)`);
+    console.log(`[Create Persona Version] version_id (${bru.getEnvVar("version_id")}) remains as non-current — safe to delete`);
+  } else {
+    console.log(`[Create Persona Version] ⚠️ new_version_id not found in response: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains new version id", function() {
+    expect(res.getBody().data.persona.current_version_id).to.be.a('number');
+  });
+}

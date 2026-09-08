@@ -1,0 +1,25 @@
+meta {
+  name: Delete Persona
+  type: http
+  seq: 16
+}
+
+delete {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Delete Persona] 🗑️ Deleting persona_id: ${bru.getEnvVar("persona_id")}`);
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+}

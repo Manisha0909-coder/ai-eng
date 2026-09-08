@@ -1,0 +1,35 @@
+meta {
+  name: Get Tag
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/mid/tool-tags/{{tag_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Get Tag] tag_id: ${bru.getEnvVar("tag_id")}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains tag id", function() {
+    const body = res.getBody();
+    const tagId = body?.data?.tag?.id ?? body?.data?.id;
+    expect(tagId).to.be.a("number");
+  });
+}

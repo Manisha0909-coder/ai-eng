@@ -1,0 +1,87 @@
+meta {
+  name: Get User Details by Session
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{base_url}}/api/mid/users/user_details
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  X-API-Key: {{api_key}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  // Create a fresh chat session so it's in Redis
+  console.log("[Get User Details by Session] Creating new chat session...");
+  try {
+    await bru.sendRequest({
+      url: `${baseUrl}/api/mid/chat/create`,
+      method: "POST",
+      headers: {
+        "Cookie": `access_token=${token}`,
+        "Content-Type": "application/json",
+        "x-title": "Bruno Test Session"
+      },
+      data: {
+        timezone: "Asia/Kolkata",
+        session_id: null,
+        query: "hi",
+        persona_id: 105,
+        language: "EN"
+      }
+    });
+  } catch (e) {
+    // chat/create returns SSE stream — error is expected, session is still created
+    console.log("[Get User Details by Session] Chat session created (SSE response)");
+  }
+
+  // Fetch the most recently created session
+  const listRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/session/list_chat_sessions?limit=1`,
+    method: "GET",
+    headers: {
+      "Cookie": `access_token=${token}`
+    }
+  });
+
+  const sessions = listRes.data?.data?.sessions || listRes.data?.sessions || [];
+  const sessionId = sessions.length > 0 ? sessions[0].session_id : null;
+  console.log(`[Get User Details by Session] Using session_id: ${sessionId}`);
+
+  if (!sessionId) {
+    bru.runner.skipRequest();
+    return;
+  }
+
+  req.setBody({ session_id: sessionId, agent_id: null, connection: null });
+}
+
+body:json {
+  {
+    "session_id": null,
+    "agent_id": null,
+    "connection": null
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data is an object", function() {
+    expect(res.getBody().data).to.be.an('object');
+  });
+}

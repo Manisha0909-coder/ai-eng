@@ -1,0 +1,48 @@
+meta {
+  name: Update Shared Memory
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{base_url}}/api/mid/shared-memory/{{shared_memory_persona_id}}/{{shared_memory_block_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "label": "bruno-test-memory-updated",
+    "description": "Updated by Bruno test",
+    "value": "updated value"
+  }
+}
+
+script:pre-request {
+  const bid = bru.getVar("shared_memory_block_id");
+  const pid = bru.getVar("shared_memory_persona_id");
+  if (!bid || bid.trim() === "" || !pid || pid.trim() === "") {
+    console.warn("[Update Shared Memory] ⚠️ No block_id or persona_id — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+  req.setBody({
+    label: "bruno-test-memory-updated",
+    description: "Updated by Bruno test",
+    value: "updated value"
+  });
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

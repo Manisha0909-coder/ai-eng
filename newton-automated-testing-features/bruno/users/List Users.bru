@@ -1,0 +1,38 @@
+meta {
+  name: List Users
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/users/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "search": null,
+    "include_admins": true
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response data contains users array", function() {
+    expect(res.getBody().data.users).to.be.an('array');
+  });
+}

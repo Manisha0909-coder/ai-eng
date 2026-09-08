@@ -1,0 +1,47 @@
+meta {
+  name: Create Persona Version - No Token
+  type: http
+  seq: 25
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/999999999/versions
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Persona Version - No Token] Running negative test: missing auth");
+}
+
+body:json {
+  {
+    "set_as_current": true
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Create Persona Version - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Persona Version - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

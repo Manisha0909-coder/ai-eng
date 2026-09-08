@@ -1,0 +1,99 @@
+Order ID,Order Date,Ship Date,Ship Mode,Customer ID,Customer Name,Segment,Country,City,State,Region,Product ID,Category,Sub-Category,Product Name,Sales,Quantity,Discount,Profit
+CA-2022-001,2022-01-05,2022-01-08,Second Class,C001,John Smith,Consumer,United States,New York,New York,East,P001,Technology,Phones,Apple iPhone 14,1299.99,1,0.00,389.99
+CA-2022-002,2022-01-12,2022-01-15,Standard Class,C002,Emily Johnson,Corporate,United States,Los Angeles,California,West,P002,Furniture,Chairs,Herman Miller Chair,899.00,2,0.10,179.80
+CA-2022-003,2022-01-18,2022-01-22,First Class,C003,Michael Brown,Home Office,United States,Chicago,Illinois,Central,P003,Office Supplies,Paper,A4 Paper Ream,45.99,10,0.00,18.39
+CA-2022-004,2022-01-25,2022-01-28,Second Class,C004,Sarah Davis,Consumer,United States,Houston,Texas,South,P004,Technology,Laptops,Dell XPS 15,1599.00,1,0.05,319.80
+CA-2022-005,2022-02-03,2022-02-07,Standard Class,C005,James Wilson,Corporate,United States,Phoenix,Arizona,West,P005,Office Supplies,Binders,Avery Heavy Duty Binder,24.99,5,0.10,7.49
+CA-2022-006,2022-02-10,2022-02-14,Second Class,C006,Linda Martinez,Consumer,United States,Philadelphia,Pennsylvania,East,P006,Furniture,Tables,IKEA Dining Table,499.00,1,0.00,124.75
+CA-2022-007,2022-02-17,2022-02-21,Standard Class,C007,Robert Garcia,Home Office,United States,San Antonio,Texas,South,P007,Technology,Accessories,Logitech Mouse,49.99,3,0.05,12.49
+CA-2022-008,2022-02-24,2022-02-28,First Class,C008,Patricia Jones,Corporate,United States,San Diego,California,West,P008,Office Supplies,Pens,Pilot G2 Pen Set,19.99,8,0.00,7.99
+CA-2022-009,2022-03-03,2022-03-06,Second Class,C009,David Lee,Consumer,United States,Dallas,Texas,South,P009,Technology,Monitors,Samsung 27-inch Monitor,449.00,2,0.10,89.80
+CA-2022-010,2022-03-10,2022-03-14,Standard Class,C010,Jennifer White,Corporate,United States,San Jose,California,West,P010,Furniture,Bookcases,IKEA Billy Bookcase,199.00,1,0.00,59.70
+CA-2022-011,2022-03-17,2022-03-21,First Class,C001,John Smith,Consumer,United States,New York,New York,East,P011,Office Supplies,Labels,Avery Address Labels,14.99,6,0.00,5.99
+CA-2022-012,2022-03-24,2022-03-28,Second Class,C011,Christopher Harris,Home Office,United States,Austin,Texas,South,P012,Technology,Keyboards,Apple Magic Keyboard,129.00,1,0.00,32.25
+CA-2022-013,2022-04-02,2022-04-06,Standard Class,C012,Amanda Clark,Corporate,United States,Jacksonville,Florida,South,P013,Furniture,Chairs,Office Depot Chair,299.00,3,0.15,44.85
+CA-2022-014,2022-04-09,2022-04-13,Second Class,C013,Matthew Lewis,Consumer,United States,San Francisco,California,West,P014,Office Supplies,Storage,Bankers Box,39.99,4,0.00,15.99
+CA-2022-015,2022-04-16,2022-04-20,First Class,C014,Elizabeth Robinson,Corporate,United States,Columbus,Ohio,East,P015,Technology,Tablets,iPad Pro 11,1099.00,1,0.00,219.80
+CA-2022-016,2022-04-23,2022-04-27,Standard Class,C015,Daniel Walker,Home Office,United States,Charlotte,North Carolina,South,P016,Office Supplies,Art,Crayola Marker Set,12.99,10,0.05,3.89
+CA-2022-017,2022-05-01,2022-05-05,Second Class,C016,Stephanie Hall,Consumer,United States,Indianapolis,Indiana,Central,P017,Furniture,Desks,Sauder L-Desk,649.00,1,0.10,129.80
+CA-2022-018,2022-05-08,2022-05-12,Standard Class,C017,Joshua Allen,Corporate,United States,Seattle,Washington,West,P018,Technology,Printers,HP LaserJet Pro,349.00,1,0.00,87.25
+CA-2022-019,2022-05-15,2022-05-19,First Class,C018,Melissa Young,Consumer,United States,Denver,Colorado,West,P019,Office Supplies,Envelopes,Manila Envelopes 100pk,9.99,5,0.00,3.99
+CA-2022-020,2022-05-22,2022-05-26,Second Class,C019,Andrew Hernandez,Home Office,United States,Nashville,Tennessee,South,P020,Furniture,Furnishings,Whiteboard 48x36,189.00,1,0.00,56.70
+CA-2022-021,2022-06-01,2022-06-05,Standard Class,C020,Hannah King,Corporate,United States,Louisville,Kentucky,South,P001,Technology,Phones,Apple iPhone 14,1299.99,2,0.05,389.99
+CA-2022-022,2022-06-08,2022-06-12,Second Class,C003,Michael Brown,Home Office,United States,Chicago,Illinois,Central,P021,Office Supplies,Scissors,Fiskars Scissors,8.99,12,0.00,3.59
+CA-2022-023,2022-06-15,2022-06-19,First Class,C021,Tyler Wright,Consumer,United States,Portland,Oregon,West,P022,Technology,Laptops,HP Spectre x360,1399.00,1,0.10,209.85
+CA-2022-024,2022-06-22,2022-06-26,Standard Class,C022,Grace Scott,Corporate,United States,Oklahoma City,Oklahoma,South,P023,Furniture,Tables,Folding Table 6ft,129.00,2,0.00,38.70
+CA-2022-025,2022-07-01,2022-07-05,Second Class,C023,Ethan Torres,Consumer,United States,Las Vegas,Nevada,West,P024,Office Supplies,Paper,Photo Paper 50pk,19.99,6,0.05,7.99
+CA-2022-026,2022-07-08,2022-07-12,Standard Class,C024,Olivia Nguyen,Home Office,United States,Memphis,Tennessee,South,P025,Technology,Monitors,LG 24-inch 4K Monitor,499.00,1,0.00,124.75
+CA-2022-027,2022-07-15,2022-07-19,First Class,C025,Alexander Hill,Corporate,United States,Baltimore,Maryland,East,P026,Furniture,Chairs,Mesh Office Chair,359.00,4,0.10,143.60
+CA-2022-028,2022-07-22,2022-07-26,Second Class,C006,Linda Martinez,Consumer,United States,Philadelphia,Pennsylvania,East,P027,Office Supplies,Binders,Staples Binder 3-inch,12.99,8,0.00,5.19
+CA-2022-029,2022-08-01,2022-08-05,Standard Class,C026,Victoria Flores,Corporate,United States,Milwaukee,Wisconsin,Central,P028,Technology,Accessories,USB-C Hub,69.99,3,0.05,20.99
+CA-2022-030,2022-08-08,2022-08-12,Second Class,C027,Kevin Adams,Consumer,United States,Albuquerque,New Mexico,West,P029,Furniture,Bookcases,Sauder 5-Shelf Bookcase,159.00,2,0.00,47.70
+CA-2022-031,2022-08-15,2022-08-19,First Class,C028,Samantha Nelson,Home Office,United States,Tucson,Arizona,West,P030,Office Supplies,Storage,Plastic Drawer Unit,49.99,3,0.10,14.99
+CA-2022-032,2022-08-22,2022-08-26,Standard Class,C029,Brandon Baker,Corporate,United States,Fresno,California,West,P004,Technology,Laptops,Dell XPS 15,1599.00,2,0.10,479.70
+CA-2022-033,2022-09-01,2022-09-05,Second Class,C030,Rachel Carter,Consumer,United States,Sacramento,California,West,P031,Office Supplies,Labels,Return Address Labels,7.99,10,0.00,3.19
+CA-2022-034,2022-09-08,2022-09-12,Standard Class,C031,Nathan Mitchell,Home Office,United States,Atlanta,Georgia,South,P032,Technology,Keyboards,Logitech K380,49.99,2,0.05,12.49
+CA-2022-035,2022-09-15,2022-09-19,First Class,C032,Lauren Perez,Corporate,United States,Kansas City,Missouri,Central,P033,Furniture,Desks,Standing Desk Converter,299.00,1,0.00,89.70
+CA-2022-036,2022-09-22,2022-09-26,Second Class,C033,Austin Roberts,Consumer,United States,Mesa,Arizona,West,P034,Office Supplies,Pens,Sharpie Marker Set,14.99,7,0.05,5.99
+CA-2022-037,2022-10-01,2022-10-05,Standard Class,C034,Kayla Turner,Corporate,United States,Omaha,Nebraska,Central,P035,Technology,Tablets,Samsung Galaxy Tab S8,699.00,1,0.00,139.80
+CA-2022-038,2022-10-08,2022-10-12,Second Class,C035,Jordan Phillips,Home Office,United States,Raleigh,North Carolina,South,P036,Furniture,Chairs,Gaming Chair,449.00,1,0.15,67.35
+CA-2022-039,2022-10-15,2022-10-19,First Class,C036,Brittany Campbell,Consumer,United States,Colorado Springs,Colorado,West,P037,Office Supplies,Art,Watercolor Paint Set,24.99,4,0.00,9.99
+CA-2022-040,2022-10-22,2022-10-26,Standard Class,C037,Ryan Parker,Corporate,United States,Long Beach,California,West,P038,Technology,Printers,Epson EcoTank ET-2760,299.00,1,0.10,59.80
+CA-2022-041,2022-11-01,2022-11-05,Second Class,C038,Destiny Evans,Consumer,United States,Virginia Beach,Virginia,East,P039,Office Supplies,Envelopes,Bubble Mailers 25pk,15.99,5,0.00,6.39
+CA-2022-042,2022-11-08,2022-11-12,Standard Class,C039,Zachary Collins,Home Office,United States,Minneapolis,Minnesota,Central,P040,Furniture,Tables,Coffee Table,229.00,1,0.00,68.70
+CA-2022-043,2022-11-15,2022-11-19,First Class,C040,Amber Stewart,Corporate,United States,Tampa,Florida,South,P001,Technology,Phones,Apple iPhone 14,1299.99,3,0.05,584.99
+CA-2022-044,2022-11-22,2022-11-26,Second Class,C041,Justin Sanchez,Consumer,United States,Honolulu,Hawaii,West,P041,Office Supplies,Paper,Legal Pad 12pk,18.99,6,0.10,7.59
+CA-2022-045,2022-12-01,2022-12-05,Standard Class,C042,Megan Morris,Corporate,United States,El Paso,Texas,South,P042,Technology,Accessories,HDMI Cable 3-pack,24.99,4,0.00,9.99
+CA-2022-046,2022-12-08,2022-12-12,Second Class,C043,Aaron Rogers,Home Office,United States,Colorado Springs,Colorado,West,P043,Furniture,Bookcases,Floating Wall Shelves,89.99,2,0.05,26.99
+CA-2022-047,2022-12-15,2022-12-19,First Class,C044,Nicole Reed,Consumer,United States,Aurora,Colorado,West,P044,Technology,Monitors,Asus 27-inch Gaming Monitor,549.00,1,0.00,137.25
+CA-2022-048,2022-12-22,2022-12-26,Standard Class,C045,Patrick Cooper,Corporate,United States,Riverside,California,West,P045,Office Supplies,Storage,Filing Cabinet 2-drawer,179.00,1,0.10,53.70
+CA-2023-001,2023-01-05,2023-01-09,Second Class,C001,John Smith,Consumer,United States,New York,New York,East,P001,Technology,Phones,Apple iPhone 15,1399.99,1,0.00,419.99
+CA-2023-002,2023-01-12,2023-01-16,Standard Class,C002,Emily Johnson,Corporate,United States,Los Angeles,California,West,P002,Furniture,Chairs,Herman Miller Chair,949.00,2,0.10,189.80
+CA-2023-003,2023-01-19,2023-01-23,First Class,C046,Diana Morgan,Consumer,United States,Boston,Massachusetts,East,P046,Technology,Laptops,MacBook Air M2,1299.00,1,0.00,389.70
+CA-2023-004,2023-01-26,2023-01-30,Second Class,C047,Victor Richardson,Home Office,United States,Charlotte,North Carolina,South,P047,Office Supplies,Pens,Zebra Pen Set 20pk,22.99,5,0.05,9.19
+CA-2023-005,2023-02-02,2023-02-06,Standard Class,C048,Tiffany Cox,Corporate,United States,Indianapolis,Indiana,Central,P048,Furniture,Desks,Autonomous SmartDesk Pro,699.00,1,0.10,139.80
+CA-2023-006,2023-02-09,2023-02-13,Second Class,C049,Marcus Howard,Consumer,United States,San Jose,California,West,P049,Technology,Tablets,iPad Air 5,749.00,1,0.00,187.25
+CA-2023-007,2023-02-16,2023-02-20,First Class,C050,Natalie Ward,Corporate,United States,Jacksonville,Florida,South,P050,Office Supplies,Paper,Premium Printer Paper,52.99,8,0.00,21.19
+CA-2023-008,2023-02-23,2023-02-27,Standard Class,C051,Jerome Torres,Home Office,United States,San Francisco,California,West,P051,Technology,Accessories,Jabra Headset,199.00,1,0.05,49.75
+CA-2023-009,2023-03-02,2023-03-06,Second Class,C052,Monique Peterson,Consumer,United States,Columbus,Ohio,East,P052,Furniture,Chairs,ErgoChair Pro,499.00,1,0.00,149.70
+CA-2023-010,2023-03-09,2023-03-13,Standard Class,C053,Reginald Gray,Corporate,United States,Austin,Texas,South,P053,Technology,Monitors,Dell UltraSharp 27,649.00,2,0.10,259.60
+CA-2023-011,2023-03-16,2023-03-20,First Class,C054,Cassandra James,Home Office,United States,Denver,Colorado,West,P054,Office Supplies,Binders,Cardinal View Binder,16.99,10,0.00,6.79
+CA-2023-012,2023-03-23,2023-03-27,Second Class,C055,Darius Watson,Consumer,United States,Fort Worth,Texas,South,P055,Technology,Keyboards,Keychron K2 Keyboard,89.99,2,0.05,22.49
+CA-2023-013,2023-04-01,2023-04-05,Standard Class,C056,Priscilla Brooks,Corporate,United States,Seattle,Washington,West,P056,Furniture,Tables,Adjustable Side Table,149.00,3,0.00,44.70
+CA-2023-014,2023-04-08,2023-04-12,Second Class,C057,Cedric Kelly,Consumer,United States,Nashville,Tennessee,South,P057,Office Supplies,Storage,Banker Box 12pk,64.99,2,0.10,19.49
+CA-2023-015,2023-04-15,2023-04-19,First Class,C058,Dominique Sanders,Home Office,United States,El Paso,Texas,South,P058,Technology,Printers,Canon PIXMA TS9120,179.00,1,0.00,44.75
+CA-2023-016,2023-04-22,2023-04-26,Standard Class,C059,Marcia Price,Corporate,United States,Portland,Oregon,West,P059,Office Supplies,Labels,Brother P-Touch Tape,12.99,8,0.05,5.19
+CA-2023-017,2023-05-01,2023-05-05,Second Class,C060,Terrence Bennett,Consumer,United States,Las Vegas,Nevada,West,P046,Technology,Laptops,MacBook Air M2,1299.00,2,0.05,518.40
+CA-2023-018,2023-05-08,2023-05-12,Standard Class,C061,Latoya Wood,Corporate,United States,Louisville,Kentucky,South,P060,Furniture,Bookcases,Threshold Bookshelf,129.00,2,0.00,38.70
+CA-2023-019,2023-05-15,2023-05-19,First Class,C062,Damien Barnes,Home Office,United States,Memphis,Tennessee,South,P061,Technology,Phones,Samsung Galaxy S23,1199.00,1,0.00,359.70
+CA-2023-020,2023-05-22,2023-05-26,Second Class,C063,Felicia Ross,Consumer,United States,Albuquerque,New Mexico,West,P062,Office Supplies,Art,Prismacolor Pencils,34.99,3,0.00,13.99
+CA-2023-021,2023-06-01,2023-06-05,Standard Class,C064,Byron Henderson,Corporate,United States,Omaha,Nebraska,Central,P063,Technology,Accessories,Anker Power Bank,49.99,4,0.10,14.99
+CA-2023-022,2023-06-08,2023-06-12,Second Class,C065,Yolanda Coleman,Consumer,United States,Kansas City,Missouri,Central,P064,Furniture,Chairs,Accent Chair,399.00,1,0.15,59.85
+CA-2023-023,2023-06-15,2023-06-19,First Class,C066,Malcolm Jenkins,Home Office,United States,Minneapolis,Minnesota,Central,P049,Technology,Tablets,iPad Air 5,749.00,2,0.10,299.60
+CA-2023-024,2023-06-22,2023-06-26,Standard Class,C067,Tanisha Murphy,Corporate,United States,Tucson,Arizona,West,P065,Office Supplies,Pens,Pentel EnerGel Set,17.99,6,0.00,7.19
+CA-2023-025,2023-07-01,2023-07-05,Second Class,C068,Kendall Rivera,Consumer,United States,Atlanta,Georgia,South,P066,Technology,Monitors,BenQ 32-inch 4K,799.00,1,0.00,239.70
+CA-2023-026,2023-07-08,2023-07-12,Standard Class,C069,Shanice Cook,Home Office,United States,Raleigh,North Carolina,South,P067,Furniture,Desks,Uplift V2 Standing Desk,899.00,1,0.10,179.80
+CA-2023-027,2023-07-15,2023-07-19,First Class,C070,Roderick Morgan,Corporate,United States,Tampa,Florida,South,P068,Office Supplies,Paper,Construction Paper Pack,9.99,15,0.00,3.99
+CA-2023-028,2023-07-22,2023-07-26,Second Class,C071,Lakisha Bell,Consumer,United States,Virginia Beach,Virginia,East,P069,Technology,Keyboards,Apple Magic Keyboard,129.00,3,0.05,48.37
+CA-2023-029,2023-08-01,2023-08-05,Standard Class,C072,Jamal Murphy,Corporate,United States,Long Beach,California,West,P070,Furniture,Tables,Extendable Dining Table,599.00,1,0.00,179.70
+CA-2023-030,2023-08-08,2023-08-12,Second Class,C073,Chandra Bailey,Home Office,United States,Riverside,California,West,P071,Office Supplies,Binders,Avery Ultra Duty Binder,21.99,4,0.05,8.79
+CA-2023-031,2023-08-15,2023-08-19,First Class,C074,Darnell Cooper,Consumer,United States,Aurora,Colorado,West,P072,Technology,Accessories,Belkin Charging Pad,39.99,5,0.00,15.99
+CA-2023-032,2023-08-22,2023-08-26,Standard Class,C075,Keisha Richardson,Corporate,United States,Anaheim,California,West,P073,Furniture,Chairs,Flash Furniture Rocker,249.00,2,0.10,49.80
+CA-2023-033,2023-09-01,2023-09-05,Second Class,C076,Leroy Sanders,Home Office,United States,Corpus Christi,Texas,South,P046,Technology,Laptops,MacBook Air M2,1299.00,1,0.00,389.70
+CA-2023-034,2023-09-08,2023-09-12,Standard Class,C077,Wanda Hughes,Consumer,United States,Lexington,Kentucky,South,P074,Office Supplies,Labels,Avery Laser Labels,24.99,5,0.00,9.99
+CA-2023-035,2023-09-15,2023-09-19,First Class,C078,Clifton Price,Corporate,United States,Stockton,California,West,P075,Technology,Printers,Brother HL-L2350DW,199.00,2,0.05,59.70
+CA-2023-036,2023-09-22,2023-09-26,Second Class,C079,Vera Foster,Home Office,United States,Pittsburgh,Pennsylvania,East,P076,Furniture,Bookcases,Mainstays 5-Shelf,99.00,3,0.00,29.70
+CA-2023-037,2023-10-01,2023-10-05,Standard Class,C080,Eugene Flores,Consumer,United States,Henderson,Nevada,West,P077,Technology,Phones,Google Pixel 8,999.00,1,0.00,299.70
+CA-2023-038,2023-10-08,2023-10-12,Second Class,C081,Bernice Washington,Corporate,United States,Lincoln,Nebraska,Central,P078,Office Supplies,Storage,Sterilite Storage Box 6pk,29.99,4,0.10,8.99
+CA-2023-039,2023-10-15,2023-10-19,First Class,C082,Rufus Jenkins,Home Office,United States,Greensboro,North Carolina,South,P079,Technology,Monitors,Acer 24-inch FHD,229.00,2,0.10,45.80
+CA-2023-040,2023-10-22,2023-10-26,Standard Class,C083,Roberta Perry,Consumer,United States,Plano,Texas,South,P080,Furniture,Desks,IKEA Micke Desk,179.00,1,0.00,53.70
+CA-2023-041,2023-11-01,2023-11-05,Second Class,C084,Alvin Griffin,Corporate,United States,Chandler,Arizona,West,P001,Technology,Phones,Apple iPhone 15,1399.99,2,0.05,839.99
+CA-2023-042,2023-11-08,2023-11-12,Standard Class,C085,Mabel Diaz,Home Office,United States,St. Louis,Missouri,Central,P081,Office Supplies,Pens,Uni-ball Signo Set,19.99,10,0.00,7.99
+CA-2023-043,2023-11-15,2023-11-19,First Class,C086,Floyd Hayes,Consumer,United States,Madison,Wisconsin,Central,P082,Furniture,Chairs,Serta Executive Chair,549.00,1,0.15,82.35
+CA-2023-044,2023-11-22,2023-11-26,Second Class,C087,Eloise Bryant,Corporate,United States,Orlando,Florida,South,P083,Technology,Tablets,Microsoft Surface Pro 9,1299.00,1,0.00,389.70
+CA-2023-045,2023-12-01,2023-12-05,Standard Class,C088,Percy Alexander,Home Office,United States,Baton Rouge,Louisiana,South,P084,Office Supplies,Paper,Cardstock Paper 50pk,14.99,8,0.05,5.99
+CA-2023-046,2023-12-08,2023-12-12,Second Class,C089,Gwen Washington,Consumer,United States,Norfolk,Virginia,East,P085,Technology,Accessories,Tile Tracker 4pk,69.99,3,0.00,20.99
+CA-2023-047,2023-12-15,2023-12-19,First Class,C090,Archie Mitchell,Corporate,United States,Laredo,Texas,South,P086,Furniture,Tables,IKEA Lack Coffee Table,59.99,2,0.00,17.99
+CA-2023-048,2023-12-22,2023-12-26,Standard Class,C091,Irene Coleman,Home Office,United States,Durham,North Carolina,South,P087,Technology,Keyboards,Microsoft Ergonomic Keyboard,119.00,1,0.10,35.70
+CA-2023-049,2023-12-29,2024-01-02,Second Class,C092,Walt Henderson,Consumer,United States,Winston-Salem,North Carolina,South,P088,Office Supplies,Storage,Whitmor Double Rod Organizer,44.99,2,0.05,13.49
+CA-2023-050,2023-12-30,2024-01-03,First Class,C093,Estelle Ross,Corporate,United States,Fort Wayne,Indiana,Central,P089,Technology,Printers,HP OfficeJet Pro 9015,279.00,1,0.00,83.70

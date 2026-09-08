@@ -1,0 +1,43 @@
+meta {
+  name: Get Persona Tool Rules - Invalid ID
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/api/mid/tool-rules/personas/999999999
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Get Persona Tool Rules - Invalid ID] Running negative test: nonexistent persona_id 999999999");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  const toolRules = body?.data?.tool_rules;
+  if (status === 200 && Array.isArray(toolRules) && toolRules.length === 0) {
+    console.log(`✅ [Get Persona Tool Rules - Invalid ID] Got 200 with empty tool_rules for unknown persona`);
+  } else {
+    console.error(`❌ [Get Persona Tool Rules - Invalid ID] Unexpected response — status: ${status}, body: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Returns empty tool_rules array for unknown persona", function() {
+    const body = res.getBody();
+    expect(body.data).to.have.property("tool_rules");
+    expect(body.data.tool_rules).to.be.an("array").that.is.empty;
+  });
+}

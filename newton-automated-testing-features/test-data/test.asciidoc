@@ -1,0 +1,82 @@
+= Employee Onboarding Guide
+HR Department <hr@company.com>
+v2.1, 2026-04-01
+:toc:
+:toclevels: 3
+:description: Comprehensive onboarding guide for new employees
+
+== Introduction
+
+Welcome to the company! This guide outlines everything you need to know during your first 30 days.
+
+== Pre-Joining Checklist
+
+* Submit signed offer letter
+* Complete background verification
+* Set up corporate email
+* Install required software tools
+
+== Week 1: Orientation
+
+=== Day 1
+
+[cols="1,3", options="header"]
+|===
+|Time |Activity
+|9:00 AM |Welcome session with HR
+|10:00 AM |Office tour and ID card issuance
+|11:00 AM |IT setup — laptop, credentials, VPN
+|1:00 PM |Team introduction lunch
+|3:00 PM |Manager 1:1 meeting
+|===
+
+=== Day 2–5
+
+* Complete mandatory compliance training
+* Review company policies handbook
+* Set up development environment
+* Shadow senior team member
+
+== Benefits Overview
+
+=== Health Insurance
+
+The company provides comprehensive health coverage including:
+
+* Medical — Blue Shield PPO
+* Dental — Delta Dental
+* Vision — VSP
+
+=== Leave Policy
+
+[source,text]
+----
+Annual Leave:     15 days
+Sick Leave:       10 days
+Casual Leave:     5 days
+Maternity/Paternity: 90 days
+----
+
+== IT Security Guidelines
+
+IMPORTANT: All employees must complete security training within 7 days of joining.
+
+* Use strong passwords (minimum 12 characters)
+* Enable two-factor authentication on all accounts
+* Never share credentials
+* Report suspicious activity to security@company.com
+
+== Contacts
+
+[cols="1,2,2"]
+|===
+|Department |Contact Person |Email
+|HR |Sarah Johnson |sarah.j@company.com
+|IT Support |Mike Chen |it-support@company.com
+|Finance |Lisa Park |finance@company.com
+|Legal |David Kumar |legal@company.com
+|===
+
+== Conclusion
+
+We are excited to have you on board. Reach out to your buddy or HR at any time.

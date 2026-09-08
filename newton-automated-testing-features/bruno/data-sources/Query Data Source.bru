@@ -1,0 +1,48 @@
+
+meta {
+  name: Query Data Source
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/core/api/data-sources/{{source_id}}/query
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "query": "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' LIMIT 10"
+  }
+}
+
+script:pre-request {
+  const sid = bru.getVar("pg_source_id");
+  if (sid && sid.trim() !== "") {
+    bru.setVar("source_id", sid);
+    console.log("Using pg_source_id:", sid);
+  }
+  const finalSid = bru.getVar("source_id");
+  if (!finalSid || finalSid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains data rows", function() {
+    expect(res.getBody().data.data).to.be.an('array');
+  });
+}

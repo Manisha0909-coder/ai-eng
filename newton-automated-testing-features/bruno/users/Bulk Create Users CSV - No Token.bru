@@ -1,0 +1,46 @@
+meta {
+  name: Bulk Create Users CSV - No Token
+  type: http
+  seq: 35
+}
+
+post {
+  url: {{base_url}}/api/mid/users/bulk_create_csv
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Bulk Create Users CSV - No Token] Running negative test: missing auth cookie");
+}
+
+body:multipart-form {
+  csv_file: @file(test_users.csv)
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Bulk Create Users CSV - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Bulk Create Users CSV - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

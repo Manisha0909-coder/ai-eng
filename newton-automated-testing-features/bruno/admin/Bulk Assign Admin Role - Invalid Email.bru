@@ -1,0 +1,53 @@
+meta {
+  name: Bulk Assign Admin Role - Invalid Email
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/api/mid/admin/users/bulk_assign_role
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "emails": ["not-a-valid-email"],
+    "role": "user_admin"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Bulk Assign Admin Role - Invalid Email] Running negative test: malformed email address");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (expected.includes(status)) {
+    console.log(`✅ [Bulk Assign Admin Role - Invalid Email] Correctly rejected with ${status}`);
+  } else {
+    console.error(`❌ [Bulk Assign Admin Role - Invalid Email] Expected ${expected.join(" or ")} — got ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+
+  test("Error mentions email field", function() {
+    const body = res.getBody();
+    const msg = body.message || "";
+    expect(msg.toLowerCase()).to.include("email");
+  });
+}

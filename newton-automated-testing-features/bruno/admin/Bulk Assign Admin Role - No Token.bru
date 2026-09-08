@@ -1,0 +1,47 @@
+meta {
+  name: Bulk Assign Admin Role - No Token
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/mid/admin/users/bulk_assign_role
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "emails": ["test@example.com"],
+    "role": "user_admin"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Bulk Assign Admin Role - No Token] Running negative test: missing auth cookie");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 401) {
+    console.log(`✅ [Bulk Assign Admin Role - No Token] Correctly rejected with 401`);
+  } else {
+    console.error(`❌ [Bulk Assign Admin Role - No Token] Expected 401 — got ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

@@ -1,0 +1,50 @@
+meta {
+  name: List Roles - No Token
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[List Roles - No Token] Running negative test: missing auth cookie");
+}
+
+body:json {
+  {
+    "limit": 50,
+    "offset": 0,
+    "search": null
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [List Roles - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [List Roles - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Reconnect to Stream
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/mid/chat/sessions/{{session_id}}/stream
+  body: none
+  auth: none
+}
+
+params:query {
+  ~last_id: 
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  session_id:
+}
+
+script:pre-request {
+  const sid = bru.getVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+  // 404 is valid when no stream is in progress — suppress collection-level error guard
+  bru.setVar("negative_test", true);
+}
+
+tests {
+  test("Status is 200 (active stream) or 404 (no stream in progress)", function() {
+    expect([200, 404]).to.include(res.getStatus());
+  });
+}

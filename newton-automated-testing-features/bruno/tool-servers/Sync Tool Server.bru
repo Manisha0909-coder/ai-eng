@@ -1,0 +1,36 @@
+meta {
+  name: Sync Tool Server
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-servers/sync
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const serverName = bru.getEnvVar("ts_server_name") || "TEST_SERVER";
+  req.setBody({ name: serverName });
+}
+
+body:json {
+  {
+    "name": "TEST_SERVER"
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

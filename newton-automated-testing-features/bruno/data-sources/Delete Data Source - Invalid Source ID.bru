@@ -1,0 +1,41 @@
+meta {
+  name: Delete Data Source - Invalid Source ID
+  type: http
+  seq: 29
+}
+
+delete {
+  url: {{base_url}}/api/core/api/data-sources/00000000-0000-0000-0000-000000000000
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Delete Data Source - Invalid Source ID] Running negative test: nonexistent source_id 00000000-0000-0000-0000-000000000000");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 403, 404];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Delete Data Source - Invalid Source ID] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Delete Data Source - Invalid Source ID] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400, 403, or 404", function() {
+    expect([400, 403, 404]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

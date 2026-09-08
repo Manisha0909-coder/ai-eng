@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Chat Conversation — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+          'status-info':    'rgb(var(--c-info) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+    --c-info:       62 124 177;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.4); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse-dot { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1); } }
+  .animate-spin-slow { animation: spin 1s linear infinite; }
+  .thinking-dot { animation: pulse-dot 1.4s ease-in-out infinite; }
+  .thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; } .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+  /* Markdown prose styles */
+  .prose-newton h2 { font-family: "Bricolage Grotesque", system-ui; font-weight: 600; font-size: 1rem; margin: 1.2em 0 0.5em; color: rgb(var(--c-text-main)); }
+  .prose-newton h3 { font-weight: 600; font-size: 0.9rem; margin: 1em 0 0.4em; color: rgb(var(--c-text-main)); }
+  .prose-newton p { margin: 0.6em 0; color: rgb(var(--c-text-main)); font-size: 0.9rem; line-height: 1.65; }
+  .prose-newton ul { margin: 0.6em 0 0.6em 1.2em; list-style: disc; }
+  .prose-newton li { font-size: 0.9rem; line-height: 1.6; color: rgb(var(--c-text-main)); margin: 0.25em 0; }
+  .prose-newton table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75em 0; }
+  .prose-newton th { padding: 0.5rem 0.75rem; text-align: left; font-weight: 600; font-size: 0.8rem; background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border)); color: rgb(var(--c-text-muted)); text-transform: uppercase; letter-spacing: 0.05em; }
+  .prose-newton td { padding: 0.45rem 0.75rem; border: 1px solid rgb(var(--c-border)); color: rgb(var(--c-text-main)); }
+  .prose-newton tr:hover td { background: rgb(var(--c-surface-2) / 0.5); }
+  .prose-newton code { font-family: "Spline Sans Mono", monospace; font-size: 0.82em; padding: 0.15em 0.4em; border-radius: 4px; background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border) / 0.7); color: rgb(var(--c-primary)); }
+  .code-block { background: rgb(var(--c-surface-2)); border: 1px solid rgb(var(--c-border)); border-radius: 10px; overflow: hidden; margin: 0.75em 0; }
+  .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgb(var(--c-border)); }
+  .code-block pre { padding: 0.85rem; overflow-x: auto; font-family: "Spline Sans Mono", monospace; font-size: 0.8rem; line-height: 1.55; color: rgb(var(--c-text-main)); margin: 0; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased overflow-hidden h-screen flex flex-col">
+
+<!-- BEGIN shared-header -->
+<header class="h-14 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 gap-3 shrink-0 z-20">
+  <div class="flex items-center gap-1 min-w-0">
+    <button class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-2 transition-colors">
+      <svg width="22" height="22" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+      <span class="font-display font-semibold text-base">Newton</span>
+    </button>
+    <button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-surface-2 transition-colors text-sm border border-border-main ml-1">
+      <span class="w-5 h-5 rounded-full bg-primary/20 text-primary font-semibold text-2xs flex items-center justify-center">RS</span>
+      <span class="font-medium text-text-main max-w-[10rem] truncate">Research Strategist</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+  <div class="flex-1"></div>
+  <div class="flex items-center gap-0.5">
+    <!-- Theme toggle -->
+    <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+    <!-- Admin console (admin-only) -->
+    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Admin console"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></button>
+    <!-- User panel trigger — opens Settings · Documents · Shared Links -->
+    <button class="flex items-center gap-2 h-8 px-2 rounded-lg hover:bg-surface-2 transition-colors ml-0.5" aria-label="Open user panel">
+      <div class="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center font-display font-semibold text-xs text-primary ring-1 ring-primary/20" aria-hidden="true">AJ</div>
+    </button>
+    <!-- Logout -->
+    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Log out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  </div>
+</header>
+<!-- END shared-header -->
+
+<div class="flex flex-1 overflow-hidden">
+
+  <!-- BEGIN shared-sidebar -->
+  <aside class="w-60 border-r border-border-main bg-surface shrink-0 flex flex-col overflow-hidden z-10">
+    <div class="spectrum-rule"></div>
+    <div class="flex items-center gap-1 px-3 pt-3 pb-2">
+      <button class="flex-1 flex items-center justify-start gap-2 px-3 h-9 rounded-lg text-sm text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Search
+      </button>
+      <button class="w-9 h-9 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors border border-border-main" aria-label="New chat"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </div>
+    <div class="px-3 pb-2"><select class="w-full h-8 rounded-md text-xs bg-surface-2 border border-border-main text-text-muted px-2 appearance-none cursor-pointer"><option>All sessions</option><option>Chat</option><option>Dashboard</option></select></div>
+    <div class="px-3 py-1 flex items-center justify-between">
+      <span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Recent Chats</span>
+      <button class="w-5 h-5 flex items-center justify-center text-text-muted hover:text-text-main"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+    </div>
+    <nav class="flex-1 overflow-y-auto scroll-quiet px-2 pb-2 space-y-0.5">
+      <div class="flex items-start group rounded-lg bg-surface-2 border border-border-main">
+        <div class="flex-1 min-w-0 px-3 py-2 cursor-pointer">
+          <p class="text-sm font-medium truncate">Market expansion analysis</p>
+          <div class="flex items-center gap-1.5 mt-0.5"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted shrink-0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="text-2xs text-text-muted truncate">Research Strategist</span></div>
+        </div>
+      </div>
+      <div class="flex items-start group rounded-lg hover:bg-surface-2 cursor-pointer transition-colors">
+        <div class="flex-1 min-w-0 px-3 py-2">
+          <p class="text-sm truncate text-text-main">Q3 revenue forecast model</p>
+          <div class="flex items-center gap-1.5 mt-0.5"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted shrink-0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="text-2xs text-text-muted truncate">Data Analyst</span></div>
+        </div>
+      </div>
+      <div class="flex items-start group rounded-lg hover:bg-surface-2 cursor-pointer transition-colors">
+        <div class="flex-1 min-w-0 px-3 py-2">
+          <div class="flex items-center gap-1.5"><p class="text-sm truncate text-text-main">Competitive landscape</p><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="text-accent shrink-0"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg></div>
+          <div class="flex items-center gap-1.5 mt-0.5"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted shrink-0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="text-2xs text-text-muted truncate">Research Strategist</span></div>
+        </div>
+      </div>
+      <div class="pt-3 pb-1 flex items-center justify-between px-1"><span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Archived</span><button class="w-5 h-5 flex items-center justify-center text-text-muted hover:text-text-main"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 15"/></svg></button></div>
+    </nav>
+  </aside>
+  <!-- END shared-sidebar -->
+
+  <!-- Chat area -->
+  <div class="flex-1 flex flex-col overflow-hidden relative">
+
+    <!-- Message list -->
+    <div class="flex-1 overflow-y-auto scroll-quiet px-4 md:px-8 py-6 space-y-6">
+      <div class="max-w-2xl mx-auto space-y-6">
+
+        <!-- ── USER MESSAGE (read mode) ── -->
+        <div class="flex justify-end">
+          <div class="group relative max-w-lg">
+            <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3">
+              <p class="text-sm leading-relaxed">Can you analyze the APAC market entry opportunities and give me a detailed breakdown by vertical?</p>
+            </div>
+            <div class="flex items-center gap-1 mt-1.5 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
+              <button class="w-6 h-6 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy message"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+              <button class="w-6 h-6 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Edit message"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── USER MESSAGE (edit mode, annotated) ── -->
+        <div class="anno p-3">
+          <span class="anno-tag">user message · edit mode</span>
+          <div class="mt-3 flex justify-end">
+            <div class="max-w-lg w-full">
+              <textarea class="w-full rounded-2xl rounded-tr-sm border border-primary/40 bg-input-bg px-4 py-3 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary/50" rows="3">Can you analyze the APAC market entry opportunities and give me a detailed breakdown by vertical?</textarea>
+              <div class="flex gap-2 justify-end mt-2">
+                <button class="h-7 px-3 rounded-lg text-xs border border-border-main text-text-muted hover:bg-surface-2 transition-colors">Cancel</button>
+                <button class="h-7 px-3 rounded-lg text-xs bg-primary text-white dark:text-[#0d1411] hover:opacity-90 transition-opacity">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── USER MESSAGE with attachment ── -->
+        <div class="flex justify-end">
+          <div class="group relative max-w-lg">
+            <div class="bg-primary/10 border border-primary/20 rounded-2xl rounded-tr-sm px-4 py-3">
+              <p class="text-sm leading-relaxed mb-3">Here's the report from last quarter for context.</p>
+              <div class="flex items-center gap-2 bg-surface rounded-lg px-3 py-2 border border-border-main">
+                <div class="w-8 h-8 rounded-md bg-status-error/10 flex items-center justify-center shrink-0">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs font-medium truncate">Q3_2025_Market_Report.pdf</p>
+                  <p class="text-2xs text-text-muted">2.4 MB</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ASSISTANT MESSAGE ── -->
+        <div class="flex gap-3">
+          <!-- Newton avatar -->
+          <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+            <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+
+            <!-- Reasoning block (collapsed) -->
+            <div class="mb-3 rounded-xl border border-primary/20 bg-primary/5 overflow-hidden">
+              <button class="w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-primary/8 transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/><circle cx="12" cy="12" r="10"/></svg>
+                <span class="text-xs font-medium text-primary">Newton Thoughts</span>
+                <span class="text-2xs text-text-muted ml-auto">4 steps · 1.2s</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-text-muted shrink-0"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="px-3 pb-3 pt-1 border-t border-primary/15 hidden">
+                <p class="text-xs text-text-muted leading-relaxed">Analyzing APAC market data across 6 verticals: fintech, SaaS, healthcare, consumer, logistics, energy. Cross-referencing regulatory environments per region…</p>
+              </div>
+            </div>
+
+            <!-- Tool execution timeline -->
+            <div class="mb-3 rounded-xl border border-border-main bg-surface-2 overflow-hidden">
+              <div class="px-3 py-2.5 border-b border-border-main flex items-center gap-2">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-text-muted"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span class="text-2xs font-mono uppercase tracking-[0.08em] text-text-muted">Process log</span>
+              </div>
+              <div class="divide-y divide-border-main">
+                <div class="flex items-center gap-3 px-3 py-2">
+                  <div class="w-5 h-5 rounded-full bg-status-success/15 flex items-center justify-center shrink-0"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-mono text-text-main truncate">search_market_data("APAC fintech 2025")</p>
+                    <p class="text-2xs text-text-muted">Returned 14 results · 0.8s</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2">
+                  <div class="w-5 h-5 rounded-full bg-status-success/15 flex items-center justify-center shrink-0"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-status-success"><polyline points="20 6 9 17 4 12"/></svg></div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-mono text-text-main truncate">analyze_document("Q3_2025_Market_Report.pdf")</p>
+                    <p class="text-2xs text-text-muted">Extracted 23 data points · 0.4s</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 px-3 py-2">
+                  <div class="w-5 h-5 rounded-full border border-border-main flex items-center justify-center shrink-0">
+                    <span class="thinking-dot w-2 h-2 rounded-full bg-primary inline-block"></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-mono text-text-muted truncate">generate_market_comparison(…)</p>
+                    <p class="text-2xs text-text-muted">Running…</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Markdown body -->
+            <div class="prose-newton">
+              <h2>APAC Market Entry Analysis</h2>
+              <p>Based on Q3 data and current regulatory landscape, here's the breakdown across the six primary verticals you should consider for 2025–2026.</p>
+              <h3>High Opportunity Verticals</h3>
+              <ul>
+                <li><strong>Fintech</strong> — Singapore and Australia remain open to foreign SaaS; MAS licensing is achievable in 6–8 months</li>
+                <li><strong>B2B SaaS</strong> — Japan and South Korea show strong enterprise buying cycles with local partnership requirements</li>
+                <li><strong>Healthcare tech</strong> — Regulatory overhead is high but TAM growth of 18% CAGR makes it viable for a 3-year horizon</li>
+              </ul>
+
+              <table>
+                <thead><tr><th>Vertical</th><th>Market size (USD)</th><th>Ease of entry</th><th>Growth CAGR</th></tr></thead>
+                <tbody>
+                  <tr><td>Fintech</td><td>$47B</td><td><span class="text-status-success font-medium">High</span></td><td>22%</td></tr>
+                  <tr><td>B2B SaaS</td><td>$31B</td><td><span class="text-status-success font-medium">High</span></td><td>17%</td></tr>
+                  <tr><td>Healthcare</td><td>$58B</td><td><span class="text-status-warning font-medium">Medium</span></td><td>18%</td></tr>
+                  <tr><td>Logistics</td><td>$112B</td><td><span class="text-status-error font-medium">Low</span></td><td>12%</td></tr>
+                </tbody>
+              </table>
+
+              <div class="code-block">
+                <div class="code-block-header">
+                  <span class="text-2xs font-mono text-text-muted">Python · scoring model</span>
+                  <button class="flex items-center gap-1 text-2xs text-text-muted hover:text-text-main transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Copy
+                  </button>
+                </div>
+                <pre>def score_market(market_size, growth_rate, ease_index):
+    <span style="color: rgb(var(--c-primary))">weighted</span> = (
+        market_size * 0.4 +
+        growth_rate * 0.35 +
+        ease_index  * 0.25
+    )
+    return round(weighted, 2)</pre>
+              </div>
+            </div>
+
+            <!-- Message action row -->
+            <div class="flex items-center gap-0.5 mt-3 -ml-1">
+              <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Copy response">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="text-2xs">Copy</span>
+              </button>
+              <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Share">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span class="text-2xs">Share</span>
+              </button>
+              <button class="flex items-center gap-1.5 h-7 px-2 rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Read aloud">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <span class="text-2xs">Read aloud</span>
+              </button>
+              <div class="flex-1"></div>
+              <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-success transition-colors" aria-label="Helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+              <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-status-error transition-colors" aria-label="Not helpful"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── THINKING / STREAMING state ── -->
+        <div class="anno p-3">
+          <span class="anno-tag">state · thinking / streaming</span>
+          <div class="mt-3 flex gap-3">
+            <div class="shrink-0 w-7 h-7 rounded-lg bg-primary/15 flex items-center justify-center mt-0.5">
+              <svg width="14" height="14" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+            </div>
+            <div class="flex-1 bg-surface border border-border-main rounded-2xl rounded-tl-sm px-4 py-3.5 flex items-center gap-3">
+              <div class="flex gap-1 items-center">
+                <span class="thinking-dot w-2 h-2 rounded-full bg-primary inline-block"></span>
+                <span class="thinking-dot w-2 h-2 rounded-full bg-primary inline-block"></span>
+                <span class="thinking-dot w-2 h-2 rounded-full bg-primary inline-block"></span>
+              </div>
+              <span class="text-sm text-text-muted">Generating response…</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ERROR CARD ── -->
+        <div class="anno p-3">
+          <span class="anno-tag">state · error</span>
+          <div class="mt-3 flex gap-3">
+            <div class="shrink-0 w-7 h-7 rounded-lg bg-status-error/10 flex items-center justify-center mt-0.5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="flex-1 bg-status-error/5 border border-status-error/25 rounded-2xl rounded-tl-sm px-4 py-3.5">
+              <p class="text-sm font-medium text-status-error mb-1">Something went wrong</p>
+              <p class="text-sm text-text-muted mb-3">Newton couldn't complete this request. Check your connection and try again.</p>
+              <button class="h-8 px-4 rounded-lg text-xs font-medium bg-status-error text-white hover:opacity-90 transition-opacity">Retry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SHARE DIALOG ── -->
+        <div class="anno p-3">
+          <span class="anno-tag">share dialog · overlay on dimmed chat</span>
+          <div class="mt-3 relative rounded-xl overflow-hidden" style="min-height: 12rem;">
+            <div class="absolute inset-0 bg-background/70 backdrop-blur-sm rounded-xl z-0"></div>
+            <div class="relative z-10 mx-auto max-w-md py-4">
+              <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+                <div class="flex items-center gap-2.5 px-5 py-3.5 border-b border-border-main">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary shrink-0"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  <span class="font-display font-semibold text-sm flex-1">Share message</span>
+                  <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+                <!-- State 1: Loading -->
+                <div class="px-5 py-5 border-b border-border-main">
+                  <p class="text-2xs font-mono uppercase tracking-wider text-text-muted mb-3">State 1 · Loading</p>
+                  <div class="flex flex-col items-center gap-2 py-1">
+                    <div class="w-7 h-7 rounded-full border-2 border-primary border-t-transparent animate-spin-slow"></div>
+                    <p class="text-sm text-text-muted">Generating link…</p>
+                  </div>
+                </div>
+                <!-- State 2: Success -->
+                <div class="px-5 py-5 border-b border-border-main">
+                  <p class="text-2xs font-mono uppercase tracking-wider text-text-muted mb-3">State 2 · Success</p>
+                  <div class="flex gap-2 mb-2">
+                    <input readonly value="https://newton.optioai.com/share/msg/a3k9x..." class="flex-1 h-9 px-3 rounded-lg border border-border-main bg-surface-2 text-xs font-mono text-text-muted focus:outline-none" />
+                    <button class="h-9 px-3 rounded-lg border border-border-main bg-surface text-xs font-medium flex items-center gap-1.5 text-text-main hover:bg-surface-2 transition-colors shrink-0">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                      Copy
+                    </button>
+                    <button class="h-9 w-9 rounded-lg border border-border-main bg-surface flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors shrink-0" aria-label="Open in new tab">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </button>
+                  </div>
+                  <p class="text-2xs text-text-muted">Anyone with this link can view this message.</p>
+                </div>
+                <!-- State 3: Error -->
+                <div class="px-5 py-5">
+                  <p class="text-2xs font-mono uppercase tracking-wider text-text-muted mb-3">State 3 · Error</p>
+                  <div class="flex items-center gap-3">
+                    <div class="flex-1">
+                      <p class="text-sm text-status-error font-medium mb-0.5">Couldn't generate link</p>
+                      <p class="text-xs text-text-muted">Check your connection and try again.</p>
+                    </div>
+                    <button class="h-8 px-3 rounded-lg border border-border-main text-xs font-medium text-text-main hover:bg-surface-2 transition-colors shrink-0">Try again</button>
+                  </div>
+                </div>
+              </div>
+              <p class="text-2xs font-mono text-text-muted mt-2 text-center">Open: single-message scope vs full-session share toggle · expiry option?</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /max-w -->
+    </div><!-- /message list -->
+
+    <!-- Scroll to bottom pill -->
+    <div class="absolute bottom-28 right-6 pointer-events-none">
+      <button class="pointer-events-auto flex items-center gap-1.5 h-8 px-3 rounded-full bg-surface border border-border-main shadow-lift text-xs font-medium text-text-muted hover:text-text-main hover:shadow-dialog transition-all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        Scroll to latest
+      </button>
+    </div>
+
+    <!-- ── CHAT INPUT ── -->
+    <div class="border-t border-border-main bg-surface/80 backdrop-blur-md px-4 md:px-8 py-3 shrink-0">
+      <div class="max-w-2xl mx-auto">
+        <!-- File preview chips -->
+        <div class="flex gap-2 flex-wrap mb-2">
+          <div class="flex items-center gap-1.5 h-7 px-2.5 rounded-full border border-border-main bg-surface text-xs text-text-muted">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-status-error"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Q3_Report.pdf
+            <button class="text-text-muted hover:text-text-main ml-0.5" aria-label="Remove file"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+        </div>
+
+        <!-- Input shell -->
+        <div class="flex flex-col rounded-2xl border border-border-main bg-input-bg shadow-lift focus-within:border-primary/40 focus-within:shadow-[0_0_0_3px_rgb(var(--c-primary)/0.08)] transition-all">
+          <textarea class="w-full px-4 pt-3.5 pb-2 text-sm bg-transparent resize-none focus:outline-none placeholder:text-text-muted min-h-[3rem] max-h-40" rows="1" placeholder="What would you like to know?"></textarea>
+          <!-- Input toolbar -->
+          <div class="flex items-center gap-1 px-3 pb-2.5 pt-1">
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Attach file">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="flex items-center gap-1 h-7 px-2 rounded-lg text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors text-xs">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              EN
+            </button>
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors" aria-label="Voice input">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
+            <div class="flex-1"></div>
+            <!-- Send button -->
+            <button class="w-8 h-8 rounded-xl flex items-center justify-center bg-primary text-white dark:text-[#0d1411] hover:opacity-90 transition-opacity" aria-label="Send message">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stop generating (annotated) -->
+        <div class="anno px-3 py-2 mt-2 flex items-center gap-2">
+          <span class="anno-tag">state · generating</span>
+          <button class="ml-auto flex items-center gap-1.5 h-7 px-3 rounded-lg border border-status-error/40 text-status-error text-xs hover:bg-status-error/5 transition-colors">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="rounded-sm"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            Stop generating
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /chat area -->
+</div>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle light and dark mode">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

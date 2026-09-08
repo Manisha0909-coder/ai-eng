@@ -1,0 +1,26 @@
+meta {
+  name: Export Users CSV
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{base_url}}/api/mid/users/export
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~limit:
+  ~offset:
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

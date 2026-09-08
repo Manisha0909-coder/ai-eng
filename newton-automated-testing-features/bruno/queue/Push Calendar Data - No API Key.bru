@@ -1,0 +1,47 @@
+meta {
+  name: Push Calendar Data - No API Key
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{base_url}}/api/mid/queue/push_calendar_data
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  X-API-Key:
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "test-session"
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Push Calendar Data - No API Key] Running negative test: missing X-API-Key");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Push Calendar Data - No API Key] Expected 401 — got ${status}`);
+  } else {
+    console.log(`✅ [Push Calendar Data - No API Key] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

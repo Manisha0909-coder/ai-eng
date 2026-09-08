@@ -1,0 +1,25 @@
+meta {
+  name: Delete Persona Version
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/versions/{{new_version_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log(`[Delete Persona Version] 🗑️ persona_id: ${bru.getEnvVar("persona_id")}, deleting new_version_id: ${bru.getEnvVar("new_version_id")} (non-current after set_current restored v1)`);
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+}

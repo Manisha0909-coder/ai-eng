@@ -1,0 +1,35 @@
+meta {
+  name: Create User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/users/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user_ids": [
+      "{{test_email}}"
+    ],
+    "roles": []
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

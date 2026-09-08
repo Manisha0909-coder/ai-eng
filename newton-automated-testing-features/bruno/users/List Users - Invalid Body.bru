@@ -1,0 +1,48 @@
+meta {
+  name: List Users - Invalid Body
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{base_url}}/api/mid/users/list
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[List Users - Invalid Body] Running negative test: invalid field types");
+}
+
+body:json {
+  {
+    "limit": "not-a-number",
+    "offset": "invalid"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [List Users - Invalid Body] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [List Users - Invalid Body] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

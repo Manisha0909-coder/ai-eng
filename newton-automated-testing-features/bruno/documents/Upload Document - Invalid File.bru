@@ -1,0 +1,45 @@
+meta {
+  name: Upload Document - Missing File
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/api/core/documents/upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  datasource_name: Missing File Test
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Upload Document - Missing File] Running negative test: no file in request");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Upload Document - Missing File] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Upload Document - Missing File] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

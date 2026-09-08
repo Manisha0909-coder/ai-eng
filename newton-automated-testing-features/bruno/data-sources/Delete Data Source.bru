@@ -1,0 +1,36 @@
+meta {
+  name: Delete Data Source
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{base_url}}/api/core/api/data-sources/{{source_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  source_id:
+}
+
+script:pre-request {
+  const sid = bru.getVar("source_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

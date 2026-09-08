@@ -1,0 +1,53 @@
+meta {
+  name: Bulk Delete Users - Nonexistent IDs
+  type: http
+  seq: 31
+}
+
+post {
+  url: {{base_url}}/api/mid/users/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log("[Bulk Delete Users - Nonexistent IDs] Running edge case test: user IDs that do not exist");
+}
+
+body:json {
+  {
+    "user_ids": [
+      "nonexistent_user_1@invalid.xyz",
+      "nonexistent_user_2@invalid.xyz"
+    ]
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  if (status !== 200) {
+    console.error(`❌ [Bulk Delete Users - Nonexistent IDs] Expected 200 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(body)}`);
+  } else {
+    console.log(`✅ [Bulk Delete Users - Nonexistent IDs] Got 200 with total_deleted: ${body?.data?.total_deleted}`);
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("total_deleted is 0 for nonexistent users", function() {
+    expect(res.getBody().data.total_deleted).to.equal(0);
+  });
+
+  test("total_failed equals number of IDs sent", function() {
+    expect(res.getBody().data.total_failed).to.equal(2);
+  });
+}

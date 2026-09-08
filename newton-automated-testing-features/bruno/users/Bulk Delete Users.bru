@@ -1,0 +1,49 @@
+meta {
+  name: Bulk Delete Users
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/api/mid/users/bulk_delete
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+  const bulkEmail = "test_automation_bulk@gotalk.dev";
+
+  await bru.sendRequest({
+    url: `${baseUrl}/api/mid/users/`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: { user_ids: [bulkEmail], roles: [] }
+  });
+
+  req.setBody({ user_ids: [bulkEmail] });
+}
+
+body:json {
+  {
+    "user_ids": []
+  }
+}
+
+tests {
+  test("Status is 200 or 204", function() {
+    expect([200, 204]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

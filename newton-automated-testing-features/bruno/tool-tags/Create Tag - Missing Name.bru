@@ -1,0 +1,48 @@
+meta {
+  name: Create Tag - Missing Name
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-tags/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create Tag - Missing Name] Running negative test: body has no name field");
+}
+
+body:json {
+  {
+    "tool_names": ["addition_tool"],
+    "description": "tag without a name"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 422];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Create Tag - Missing Name] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create Tag - Missing Name] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 422", function() {
+    expect([400, 422]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

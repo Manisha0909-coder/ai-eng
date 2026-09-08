@@ -1,0 +1,21 @@
+meta {
+  name: List Archived Sessions
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/mid/session/list_archived_chat_sessions
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+params:query {
+  ~persona_id: 
+  ~offset: 
+  ~limit: 
+}

@@ -1,0 +1,42 @@
+meta {
+  name: Get User List - No Token
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{base_url}}/api/mid/users/user_list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Get User List - No Token] Running negative test: missing auth cookie");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Get User List - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Get User List - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

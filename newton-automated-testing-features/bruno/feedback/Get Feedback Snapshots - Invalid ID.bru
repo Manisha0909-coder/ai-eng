@@ -1,0 +1,35 @@
+meta {
+  name: Get Feedback Snapshots - Invalid ID
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{base_url}}/api/mid/feedback/999999999/snapshots
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  console.log("[Get Feedback Snapshots - Invalid ID] Running negative test: non-existent feedback id");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  console.log(`[Get Feedback Snapshots - Invalid ID] Status: ${status}, snapshots: ${JSON.stringify(body?.data?.snapshots)}`);
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Snapshots array is empty for non-existent ID", function() {
+    expect(res.getBody().data.snapshots).to.be.an('array').that.is.empty;
+  });
+}

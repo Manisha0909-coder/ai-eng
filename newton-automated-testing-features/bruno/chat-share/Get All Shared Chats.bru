@@ -1,0 +1,42 @@
+meta {
+  name: Get All Shared Chats
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/mid/chat_share/all
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:post-response {
+  const body = res.getBody();
+  if (body && body.data && Array.isArray(body.data.shared_chats) && body.data.shared_chats.length > 0) {
+    const sessionId = body.data.shared_chats[0].session_id;
+    if (sessionId) {
+      bru.setVar("session_id", sessionId);
+      console.log("session_id captured from existing shared chat:", sessionId);
+    }
+  } else {
+    console.log("WARNING: no existing shared chats — Create Shared Chat will skip");
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains shared_chats array", function() {
+    expect(res.getBody().data.shared_chats).to.be.an('array');
+  });
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Create Csv Data Source
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/core/api/data-sources/csv
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  datasource_name: Bruno Test CSV {{$timestamp}}
+  file: @file(../test-data/test_data.csv)
+}
+
+script:post-response {
+  const body = res.getBody();
+  console.log("CSV upload response:", JSON.stringify(body));
+  if (body && body.data && body.data.source && body.data.source.id) {
+    bru.setVar("source_id", body.data.source.id);
+    console.log("source_id captured from CSV upload:", body.data.source.id);
+  } else {
+    console.log("WARNING: source_id not found in CSV upload response");
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains source id", function() {
+    expect(res.getBody().data.source.id).to.be.a('string');
+  });
+}

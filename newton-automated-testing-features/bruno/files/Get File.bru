@@ -1,0 +1,32 @@
+meta {
+  name: Get File
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/mid/files/{{file_name}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  file_name:
+}
+
+script:pre-request {
+  const fn = bru.getVar("file_name");
+  if (!fn || fn.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

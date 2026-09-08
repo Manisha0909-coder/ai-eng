@@ -1,0 +1,38 @@
+meta {
+  name: Get Session Status
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{base_url}}/api/mid/chat/sessions/{{session_id}}/status
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  session_id:
+}
+
+script:pre-request {
+  const sid = bru.getVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response contains status field", function() {
+    const body = res.getBody();
+    const hasStatus = body && (body.status !== undefined || body.data !== undefined);
+    expect(hasStatus).to.equal(true);
+  });
+}

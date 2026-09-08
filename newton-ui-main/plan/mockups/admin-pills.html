@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Admin Pills — Reference Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+          'status-info':    'rgb(var(--c-info) / <alpha-value>)',
+          entity: {
+            role:       'rgb(var(--c-entity-role) / <alpha-value>)',
+            persona:    'rgb(var(--c-entity-persona) / <alpha-value>)',
+            'doc-tag':  'rgb(var(--c-entity-doc-tag) / <alpha-value>)',
+            'tool-tag': 'rgb(var(--c-entity-tool-tag) / <alpha-value>)',
+            server:     'rgb(var(--c-entity-server) / <alpha-value>)',
+            datasource: 'rgb(var(--c-entity-datasource) / <alpha-value>)',
+          },
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift: '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+    --c-info:       62 124 177;
+
+    /* Entity hues — proposed tokens */
+    --c-entity-role:       100 116 139;
+    --c-entity-persona:     59 130 246;
+    --c-entity-doc-tag:    147  51 234;
+    --c-entity-tool-tag:    16 185 129;
+    --c-entity-server:      23 112  92;
+    --c-entity-datasource:   6 182 212;
+
+    /* Pill structure tokens */
+    --pill-radius: 0.375rem;
+    --pill-px: 0.5rem;
+    --pill-py: 0.125rem;
+    --pill-font-size: 0.75rem;
+    --pill-bg-alpha: 0.10;
+    --pill-border-alpha: 0.22;
+    --pill-status-bg-alpha: 0.12;
+    --pill-status-border-alpha: 0.28;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+
+    --c-entity-role:       148 163 184;
+    --c-entity-persona:     96 165 250;
+    --c-entity-doc-tag:    192 132 252;
+    --c-entity-tool-tag:    52 211 153;
+    --c-entity-server:      61 185 149;
+    --c-entity-datasource:  34 211 238;
+  }
+
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.35); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  .spec-label { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; color: rgb(var(--c-text-muted)); letter-spacing: 0.04em; }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; height: 5px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+
+  /* ── Pill base (maps to DashboardPill CVA) ── */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    max-width: 100%;
+    font-size: var(--pill-font-size);
+    font-weight: 500;
+    line-height: 1.25;
+    padding: var(--pill-py) var(--pill-px);
+    border-radius: var(--pill-radius);
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .pill--truncate { overflow: hidden; text-overflow: ellipsis; }
+
+  /* Intent: neutral */
+  .pill--neutral {
+    background: rgb(var(--c-surface));
+    border-color: rgb(var(--c-border));
+    color: rgb(var(--c-text-muted));
+  }
+
+  /* Intent: entity — generated via data-entity attribute */
+  .pill--entity {
+    background: rgb(var(--entity-hue) / var(--pill-bg-alpha));
+    border-color: rgb(var(--entity-hue) / var(--pill-border-alpha));
+    color: rgb(var(--entity-hue));
+  }
+  .pill--entity[data-entity="role"]       { --entity-hue: var(--c-entity-role); }
+  .pill--entity[data-entity="persona"]    { --entity-hue: var(--c-entity-persona); }
+  .pill--entity[data-entity="doc-tag"]    { --entity-hue: var(--c-entity-doc-tag); }
+  .pill--entity[data-entity="tool-tag"]   { --entity-hue: var(--c-entity-tool-tag); }
+  .pill--entity[data-entity="server"]     { --entity-hue: var(--c-entity-server); }
+  .pill--entity[data-entity="datasource"] { --entity-hue: var(--c-entity-datasource); }
+  .pill--mono { font-family: "Spline Sans Mono", ui-monospace, monospace; font-size: 0.6875rem; }
+
+  /* Persona type avatar — NOT a pill (chat-welcome.html language) */
+  .persona-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .persona-avatar--sm { width: 2.25rem; height: 2.25rem; font-size: 0.6875rem; }
+  .persona-avatar--md { width: 2.25rem; height: 2.25rem; font-size: 0.75rem; }
+  .persona-avatar--lg { width: 2.75rem; height: 2.75rem; font-size: 0.875rem; }
+  .persona-avatar--chat {
+    color: rgb(var(--c-primary));
+    background: linear-gradient(135deg, rgb(var(--c-primary) / 0.15), rgb(var(--c-primary) / 0.08));
+    box-shadow: inset 0 0 0 1px rgb(var(--c-primary) / 0.18);
+  }
+  .persona-avatar--dashboard {
+    color: rgb(var(--c-accent));
+    background: linear-gradient(135deg, rgb(var(--c-accent) / 0.15), rgb(var(--c-accent) / 0.08));
+    box-shadow: inset 0 0 0 1px rgb(var(--c-accent) / 0.18);
+  }
+  .persona-avatar svg { flex-shrink: 0; }
+
+  /* User avatar — neutral, all human users (not hash-colored) */
+  .user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1;
+    background: rgb(var(--c-surface-2));
+    border: 1px solid rgb(var(--c-border));
+    color: rgb(var(--c-text-main));
+  }
+  .user-avatar--sm { width: 2rem; height: 2rem; font-size: 0.625rem; }
+  .user-avatar--md { width: 2.25rem; height: 2.25rem; font-size: 0.75rem; }
+
+  /* Legacy — deprecated patterns */
+  .user-avatar--legacy-hash { border: none; }
+  .user-avatar--legacy-icon { border-radius: 9999px; background: rgb(var(--c-primary) / 0.10); border: none; color: rgb(var(--c-primary)); }
+
+  /* Intent: status */
+  .pill--status {
+    background: rgb(var(--status-hue) / var(--pill-status-bg-alpha));
+    border-color: rgb(var(--status-hue) / var(--pill-status-border-alpha));
+    color: rgb(var(--status-hue));
+  }
+  .pill--status[data-status="success"] { --status-hue: var(--c-success); }
+  .pill--status[data-status="error"]   { --status-hue: var(--c-error); }
+  .pill--status[data-status="warning"] { --status-hue: var(--c-warning); }
+  .pill--status[data-status="info"]    { --status-hue: var(--c-info); }
+  .pill--status[data-status="pending"] { --status-hue: var(--c-primary); }
+  .pill--status[data-status="neutral"] {
+    --status-hue: var(--c-text-muted);
+    background: rgb(var(--c-surface-2));
+    border-color: rgb(var(--c-border));
+  }
+
+  /* Intent: count */
+  .pill--count {
+    background: rgb(var(--c-surface));
+    border-color: rgb(var(--c-border));
+    color: rgb(var(--c-text-main));
+    gap: 0.375rem;
+  }
+  .pill--count strong { font-weight: 600; }
+  .pill--count span { color: rgb(var(--c-text-muted)); font-weight: 400; }
+
+  /* Table helpers */
+  .th-col { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  .tbl-gutter { width: 2.25rem; text-align: center; font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; color: rgb(var(--c-text-muted) / 0.5); }
+
+  /* Legacy callout — what we're replacing */
+  .pill--legacy-solid { background: rgb(var(--c-primary)); color: white; border-color: transparent; }
+  .pill--legacy-outline { background: transparent; border-color: rgb(var(--c-border)); color: rgb(var(--c-text-main)); }
+  .pill--legacy-full-round { border-radius: 9999px; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen flex flex-col">
+
+<div class="spectrum-rule"></div>
+
+<!-- Top bar -->
+<div class="h-12 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 shrink-0 sticky top-0 z-20">
+  <div class="flex items-center gap-2.5">
+    <svg width="20" height="20" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+      <path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/>
+    </svg>
+    <span class="font-display font-semibold text-sm">Newton</span>
+    <span class="text-border-main text-sm">·</span>
+    <span class="text-xs text-text-muted font-medium">Admin Pills — Reference</span>
+  </div>
+  <div class="flex-1"></div>
+  <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Toggle theme">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+  </button>
+</div>
+
+<main class="flex-1 overflow-y-auto scroll-quiet">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+
+    <!-- Intro -->
+    <header>
+      <h1 class="font-display text-2xl font-semibold tracking-tight">Admin chips &amp; avatars</h1>
+      <p class="mt-2 text-sm text-text-muted max-w-2xl leading-relaxed">
+        Canonical reference for admin table chips and identity avatars.
+        Pills: <strong class="text-text-main font-medium">neutral · entity · status · count</strong>.
+        Avatars: <strong class="text-text-main font-medium">PersonaTypeAvatar</strong> (green chat / yellow dashboard) and
+        <strong class="text-text-main font-medium">UserAvatar</strong> (neutral humans — no hash colors, no generic icon).
+        See <code class="font-mono text-2xs bg-surface-2 px-1 py-0.5 rounded">plan/admin-pills-standardization.md</code>.
+      </p>
+    </header>
+
+    <!-- ═══ 1. NEUTRAL ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">intent · neutral — categorical metadata</span>
+      <h2 class="font-display font-semibold text-base mt-3">Neutral</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">Tool type, file format, generic enums. No domain color.</p>
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="pill pill--neutral">mcp</span>
+        <span class="pill pill--neutral">builtin</span>
+        <span class="pill pill--neutral">custom</span>
+        <span class="pill pill--neutral uppercase">pdf</span>
+        <span class="pill pill--neutral uppercase">csv</span>
+        <span class="pill pill--neutral">User Admin</span>
+      </div>
+      <p class="spec-label mt-4">CSS · <code>intent="neutral"</code> → bg-surface, border-border-main, text-text-muted</p>
+    </section>
+
+    <!-- ═══ 2. ENTITY ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">intent · entity — domain identity</span>
+      <h2 class="font-display font-semibold text-base mt-3">Entity</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">Named RBAC objects. Tinted bg + border from <code class="font-mono text-2xs">--color-entity-*</code> tokens.</p>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <p class="spec-label">role</p>
+          <span class="pill pill--entity" data-entity="role">analyst</span>
+        </div>
+        <div class="space-y-2">
+          <p class="spec-label">persona</p>
+          <span class="pill pill--entity" data-entity="persona">Newton Default</span>
+        </div>
+        <div class="space-y-2">
+          <p class="spec-label">doc-tag</p>
+          <span class="pill pill--entity" data-entity="doc-tag">finance</span>
+        </div>
+        <div class="space-y-2">
+          <p class="spec-label">tool-tag</p>
+          <span class="pill pill--entity" data-entity="tool-tag">web-tools</span>
+        </div>
+        <div class="space-y-2">
+          <p class="spec-label">server · mono</p>
+          <span class="pill pill--entity pill--mono pill--truncate max-w-[10rem]" data-entity="server" title="brave-search">brave-search</span>
+        </div>
+        <div class="space-y-2">
+          <p class="spec-label">datasource</p>
+          <span class="pill pill--entity" data-entity="datasource">postgresql</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 2b. PERSONA TYPE AVATAR (not a pill) ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">persona type · avatar chip — not a pill</span>
+      <h2 class="font-display font-semibold text-base mt-3">PersonaTypeAvatar</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">
+        Replaces <code class="font-mono text-2xs">PersonaTypeBadge</code> and chat/dashboard entity pills.
+        Matches <code class="font-mono text-2xs">chat-welcome.html</code>: <strong class="text-primary font-medium">green (primary)</strong> = chat,
+        <strong class="text-accent font-medium">yellow (accent)</strong> = dashboard. No new tokens — reuses <code class="font-mono text-2xs">--color-primary</code> / <code class="font-mono text-2xs">--color-accent</code>.
+      </p>
+
+      <div class="flex flex-wrap items-end gap-8 mb-6">
+        <div class="text-center space-y-2">
+          <span class="persona-avatar persona-avatar--lg persona-avatar--chat" aria-label="Research Strategist, chat persona">RS</span>
+          <p class="spec-label">chat · primary</p>
+        </div>
+        <div class="text-center space-y-2">
+          <span class="persona-avatar persona-avatar--lg persona-avatar--dashboard" aria-label="Data Analyst, dashboard persona">DA</span>
+          <p class="spec-label">dashboard · accent</p>
+        </div>
+        <div class="text-center space-y-2">
+          <span class="persona-avatar persona-avatar--sm persona-avatar--chat" aria-label="Strategy Manager, chat persona">SM</span>
+          <p class="spec-label">sm · table row</p>
+        </div>
+        <div class="text-center space-y-2">
+          <span class="persona-avatar persona-avatar--sm persona-avatar--dashboard" aria-label="Ops Monitor, dashboard persona">OM</span>
+          <p class="spec-label">sm · table row</p>
+        </div>
+      </div>
+
+      <!-- Header legend (PersonasSection) -->
+      <p class="spec-label mb-2">Section header legend</p>
+      <div class="flex flex-wrap items-center gap-4 text-xs text-text-muted mb-6">
+        <span class="inline-flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary"></span> 12 chat
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-accent"></span> 4 dashboard
+        </span>
+      </div>
+
+      <!-- Deprecated pills callout -->
+      <div class="p-3 rounded-lg border border-status-error/25 bg-status-error/5 text-xs text-text-muted">
+        <span class="font-mono text-2xs uppercase tracking-wider text-status-error">Deprecated</span>
+        <div class="mt-2 flex flex-wrap gap-2 items-center opacity-60 line-through">
+          <span class="pill pill--legacy-full-round text-2xs" style="background:rgb(224 242 254);color:rgb(3 105 161);border-color:transparent">● Chat</span>
+          <span class="pill pill--legacy-full-round text-2xs" style="background:rgb(224 231 255);color:rgb(67 56 202);border-color:transparent">● Dashboard</span>
+        </div>
+        <p class="mt-2 text-2xs">Remove TYPE column pill · encode type on avatar only</p>
+      </div>
+    </section>
+
+    <!-- ═══ 3. STATUS ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">intent · status — operational state</span>
+      <h2 class="font-display font-semibold text-base mt-3">Status</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">Health, upload progress, resolution. Uses existing <code class="font-mono text-2xs">--color-success|error|warning|info</code>.</p>
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="pill pill--status" data-status="success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Healthy
+        </span>
+        <span class="pill pill--status" data-status="error">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+          Unhealthy
+        </span>
+        <span class="pill pill--status" data-status="warning">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Unresolved
+        </span>
+        <span class="pill pill--status" data-status="pending">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="animate-spin" style="animation-duration:1.2s"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          42%
+        </span>
+        <span class="pill pill--status" data-status="info">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Private
+        </span>
+        <span class="pill pill--status" data-status="success">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Public
+        </span>
+        <span class="pill pill--status" data-status="neutral">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Queued
+        </span>
+        <span class="pill pill--status uppercase" data-status="error">ERROR</span>
+        <span class="pill pill--status uppercase" data-status="warning">WARNING</span>
+        <span class="pill pill--status uppercase" data-status="success">INFO</span>
+      </div>
+      <p class="spec-label mt-4">Note · <code>rounded-md</code> not <code>rounded-full</code> (replaces current StatusBadge in tables)</p>
+    </section>
+
+    <!-- ═══ 4. COUNT ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">intent · count — numeric access summary</span>
+      <h2 class="font-display font-semibold text-base mt-3">Count</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">Users table Access column. Not color-coded.</p>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="pill pill--count"><strong>2</strong><span>roles</span></span>
+        <span class="pill pill--count"><strong>3</strong><span>personas</span></span>
+        <span class="pill pill--count"><strong>5</strong><span>tags</span></span>
+      </div>
+    </section>
+
+    <!-- ═══ 5b. IN CONTEXT — Personas table ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">in context · Personas tab — type on avatar, no TYPE column</span>
+      <h2 class="font-display font-semibold text-base mt-3">Personas table row</h2>
+      <div class="mt-4 bg-surface border border-border-main rounded-xl overflow-hidden shadow-lift">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-2 border-b border-border-main">
+              <th class="tbl-gutter py-2.5"></th>
+              <th class="th-col text-left pl-2 px-3 py-2.5">PERSONA</th>
+              <th class="th-col text-left px-3 py-2.5">MODEL</th>
+              <th class="th-col text-left px-4 py-2.5">UPDATED</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-main">
+            <tr class="hover:bg-surface-2/40">
+              <td class="tbl-gutter py-3">01</td>
+              <td class="pl-2 px-3 py-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="persona-avatar persona-avatar--sm persona-avatar--chat" aria-label="Research Strategist, chat persona">RS</span>
+                  <div class="min-w-0">
+                    <div class="font-semibold text-text-main truncate">Research Strategist</div>
+                    <p class="text-xs text-text-muted truncate mt-0.5">Search the web for real-time information…</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="text-2xs font-mono text-text-muted border border-border-main rounded-md px-1.5 py-0.5">gpt-4o</code></td>
+              <td class="px-4 py-3 text-sm text-text-muted tabular-nums">2h ago</td>
+            </tr>
+            <tr class="hover:bg-surface-2/40">
+              <td class="tbl-gutter py-3">02</td>
+              <td class="pl-2 px-3 py-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <span class="persona-avatar persona-avatar--sm persona-avatar--dashboard" aria-label="Data Analyst, dashboard persona">DA</span>
+                  <div class="min-w-0">
+                    <div class="font-semibold text-text-main truncate">Data Analyst</div>
+                    <p class="text-xs text-text-muted truncate mt-0.5">Analytics and SQL-powered insights…</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-3 py-3"><code class="text-2xs font-mono text-text-muted border border-border-main rounded-md px-1.5 py-0.5">claude-sonnet</code></td>
+              <td class="px-4 py-3 text-sm text-text-muted tabular-nums">1d ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="spec-label mt-3">TYPE column removed · filter toolbar unchanged</p>
+    </section>
+
+    <!-- ═══ 2c. USER AVATAR (not a pill) ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">user avatar · neutral — human users only</span>
+      <h2 class="font-display font-semibold text-base mt-3">UserAvatar</h2>
+      <p class="text-xs text-text-muted mt-1 mb-4">
+        One neutral style for all human users in admin tables. Replaces hash-random colors (Admin users tab),
+        generic <code class="font-mono text-2xs">UserIcon</code> circles (Users tab), and hardcoded teal (access graph).
+        Personas keep semantic green/yellow — users do not.
+      </p>
+
+      <div class="flex flex-wrap items-end gap-8 mb-6">
+        <div class="text-center space-y-2">
+          <span class="user-avatar user-avatar--md" aria-label="User: Alice Johnson">AJ</span>
+          <p class="spec-label">md · Admin users</p>
+        </div>
+        <div class="text-center space-y-2">
+          <span class="user-avatar user-avatar--sm" aria-label="User: alice@corp.com">AL</span>
+          <p class="spec-label">sm · Users tab</p>
+        </div>
+        <div class="text-center space-y-2">
+          <span class="user-avatar user-avatar--md" aria-label="User: bob@corp.com">BO</span>
+          <p class="spec-label">md · access graph</p>
+        </div>
+      </div>
+
+      <p class="spec-label mb-2">Before (deprecated)</p>
+      <div class="flex flex-wrap items-center gap-4 mb-6 p-3 rounded-lg bg-surface-2/60 border border-border-main opacity-80">
+        <div class="text-center space-y-1">
+          <span class="user-avatar user-avatar--md user-avatar--legacy-hash text-violet-300" style="background:rgb(139 92 246 / 0.2)">AJ</span>
+          <p class="spec-label">hash color</p>
+        </div>
+        <div class="text-center space-y-1">
+          <span class="user-avatar user-avatar--sm user-avatar--legacy-icon flex items-center justify-center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <p class="spec-label">generic icon</p>
+        </div>
+        <div class="text-center space-y-1">
+          <span class="user-avatar user-avatar--md user-avatar--legacy-hash font-bold" style="background:rgb(204 251 241);color:rgb(15 118 110);border:none">BO</span>
+          <p class="spec-label">hardcoded teal</p>
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="bg-surface border border-border-main rounded-xl p-4">
+          <p class="spec-label mb-3">Admin → Admin users</p>
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="user-avatar user-avatar--md">AJ</span>
+            <div class="min-w-0">
+              <div class="font-semibold text-sm truncate">Alice Johnson</div>
+              <p class="text-xs text-text-muted truncate">alice@corp.com</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-surface border border-border-main rounded-xl p-4">
+          <p class="spec-label mb-3">Admin → Users</p>
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="user-avatar user-avatar--sm">AL</span>
+            <span class="text-sm font-medium truncate">alice@corp.com</span>
+          </div>
+        </div>
+      </div>
+      <p class="spec-label mt-4">Tokens · surface-2 + border-main + text-main (existing, no new hues)</p>
+    </section>
+
+    <!-- ═══ 6. IN CONTEXT — Tools table ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">in context · Tools tab (fixes TYPE vs SERVER mismatch)</span>
+      <h2 class="font-display font-semibold text-base mt-3">Tools table row</h2>
+      <div class="mt-4 bg-surface border border-border-main rounded-xl overflow-hidden shadow-lift">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-surface-2 border-b border-border-main">
+              <th class="tbl-gutter py-2.5"></th>
+              <th class="th-col text-left pl-2 px-3 py-2.5">TOOL</th>
+              <th class="th-col text-left px-3 py-2.5">TYPE</th>
+              <th class="th-col text-left px-3 py-2.5">SERVER</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-border-main hover:bg-surface-2/40">
+              <td class="tbl-gutter py-3">01</td>
+              <td class="pl-2 px-3 py-3 font-semibold">Web Search</td>
+              <td class="px-3 py-3"><span class="pill pill--neutral">mcp</span></td>
+              <td class="px-3 py-3"><span class="pill pill--entity pill--mono" data-entity="server">brave-search</span></td>
+            </tr>
+            <tr class="hover:bg-surface-2/40">
+              <td class="tbl-gutter py-3">02</td>
+              <td class="pl-2 px-3 py-3 font-semibold">Read Document</td>
+              <td class="px-3 py-3"><span class="pill pill--neutral">builtin</span></td>
+              <td class="px-3 py-3 text-xs text-text-muted">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ 6. IN CONTEXT — mixed columns ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">in context · cross-tab sample row</span>
+      <h2 class="font-display font-semibold text-base mt-3">Mixed admin columns</h2>
+      <div class="mt-4 bg-surface border border-border-main rounded-xl overflow-hidden shadow-lift overflow-x-auto">
+        <table class="w-full text-sm min-w-[640px]">
+          <thead>
+            <tr class="bg-surface-2 border-b border-border-main">
+              <th class="th-col text-left px-4 py-2.5">Section</th>
+              <th class="th-col text-left px-3 py-2.5">Column</th>
+              <th class="th-col text-left px-3 py-2.5">Pill</th>
+              <th class="th-col text-left px-3 py-2.5">Intent</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-main text-xs">
+            <tr><td class="px-4 py-2.5 text-text-muted">Servers</td><td class="px-3 py-2.5">Name</td><td class="px-3 py-2.5"><span class="pill pill--entity" data-entity="server">mcp-gateway</span></td><td class="px-3 py-2.5 spec-label">entity · server</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Servers</td><td class="px-3 py-2.5">Type</td><td class="px-3 py-2.5"><span class="pill pill--status" data-status="info">mcp-http</span></td><td class="px-3 py-2.5 spec-label">status · info</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Servers</td><td class="px-3 py-2.5">Health</td><td class="px-3 py-2.5"><span class="pill pill--status" data-status="success">Healthy</span></td><td class="px-3 py-2.5 spec-label">status · success</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Data Sources</td><td class="px-3 py-2.5">Kind</td><td class="px-3 py-2.5"><span class="pill pill--entity" data-entity="datasource">postgresql</span></td><td class="px-3 py-2.5 spec-label">entity · datasource</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Tool Tags</td><td class="px-3 py-2.5">Name</td><td class="px-3 py-2.5"><span class="pill pill--entity" data-entity="tool-tag">web-tools</span></td><td class="px-3 py-2.5 spec-label">entity · tool-tag</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Personas</td><td class="px-3 py-2.5">Avatar</td><td class="px-3 py-2.5"><span class="persona-avatar persona-avatar--sm persona-avatar--chat">RS</span> <span class="persona-avatar persona-avatar--sm persona-avatar--dashboard">DA</span></td><td class="px-3 py-2.5 spec-label">PersonaTypeAvatar</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Admin users</td><td class="px-3 py-2.5">User</td><td class="px-3 py-2.5"><span class="user-avatar user-avatar--md">AJ</span></td><td class="px-3 py-2.5 spec-label">UserAvatar · neutral</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Users</td><td class="px-3 py-2.5">User</td><td class="px-3 py-2.5"><span class="user-avatar user-avatar--sm">AL</span></td><td class="px-3 py-2.5 spec-label">UserAvatar · neutral</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Roles</td><td class="px-3 py-2.5">Personas</td><td class="px-3 py-2.5"><span class="pill pill--entity" data-entity="persona">Support Bot</span></td><td class="px-3 py-2.5 spec-label">entity · persona</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Documents</td><td class="px-3 py-2.5">Format</td><td class="px-3 py-2.5"><span class="pill pill--neutral uppercase">pdf</span></td><td class="px-3 py-2.5 spec-label">neutral</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Documents</td><td class="px-3 py-2.5">Status</td><td class="px-3 py-2.5"><span class="pill pill--status" data-status="pending">67%</span></td><td class="px-3 py-2.5 spec-label">status · pending</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Users</td><td class="px-3 py-2.5">Access</td><td class="px-3 py-2.5"><span class="pill pill--count"><strong>2</strong><span>roles</span></span> <span class="pill pill--count"><strong>1</strong><span>personas</span></span></td><td class="px-3 py-2.5 spec-label">count</td></tr>
+            <tr><td class="px-4 py-2.5 text-text-muted">Overview</td><td class="px-3 py-2.5">Log level</td><td class="px-3 py-2.5"><span class="pill pill--status uppercase" data-status="error">ERROR</span></td><td class="px-3 py-2.5 spec-label">status · error</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ 7. BEFORE / AFTER ═══ -->
+    <section class="anno p-5">
+      <span class="anno-tag">migration · before → after</span>
+      <h2 class="font-display font-semibold text-base mt-3">What changes</h2>
+      <div class="mt-4 grid sm:grid-cols-2 gap-6">
+        <div>
+          <p class="spec-label mb-2 text-status-error">Before (current)</p>
+          <div class="space-y-3 p-4 rounded-lg bg-surface-2/60 border border-border-main">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">TYPE</span>
+              <span class="pill pill--legacy-outline text-2xs">mcp</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">SERVER</span>
+              <span class="pill pill--legacy-full-round text-2xs" style="background:rgb(219 234 254);color:rgb(29 78 216);border-color:transparent">brave-search</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">Tag name</span>
+              <span class="pill pill--legacy-solid text-2xs">web-tools</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">DS kind</span>
+              <span class="pill text-2xs" style="background:rgb(var(--c-error));color:white">postgresql</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-20">Persona type</span>
+              <span class="pill pill--legacy-full-round text-2xs" style="background:rgb(224 242 254);color:rgb(3 105 161);border-color:transparent">● Chat</span>
+              <span class="w-9 h-9 rounded-lg bg-surface-2 text-text-muted text-2xs font-semibold flex items-center justify-center opacity-70" title="hash-colored, type-agnostic">RS</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">Health</span>
+              <span class="pill pill--legacy-full-round text-2xs" style="background:rgb(var(--c-success)/0.15);color:rgb(var(--c-success));border-color:rgb(var(--c-success)/0.3)">Healthy</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="spec-label mb-2 text-status-success">After (proposed)</p>
+          <div class="space-y-3 p-4 rounded-lg bg-surface-2/60 border border-border-main">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">TYPE</span>
+              <span class="pill pill--neutral">mcp</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">SERVER</span>
+              <span class="pill pill--entity pill--mono" data-entity="server">brave-search</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">Tag name</span>
+              <span class="pill pill--entity" data-entity="tool-tag">web-tools</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-14">DS kind</span>
+              <span class="pill pill--entity" data-entity="datasource">postgresql</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-20">Persona type</span>
+              <span class="persona-avatar persona-avatar--sm persona-avatar--chat">RS</span>
+              <span class="persona-avatar persona-avatar--sm persona-avatar--dashboard">DA</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-2xs text-text-muted w-20">Health</span>
+              <span class="pill pill--status" data-status="success">Healthy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 8. TOKEN REFERENCE ═══ -->
+    <section class="p-5 rounded-xl border border-border-main bg-surface">
+      <h2 class="font-display font-semibold text-base">Token checklist</h2>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-2xs font-mono">
+          <thead>
+            <tr class="text-left text-text-muted border-b border-border-main">
+              <th class="py-2 pr-4">Token</th>
+              <th class="py-2 pr-4">Purpose</th>
+              <th class="py-2">New?</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-main text-text-main">
+            <tr><td class="py-2 pr-4">--color-entity-role … datasource (6 hues)</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">Entity pill tints</td><td class="py-2 text-status-warning">Yes</td></tr>
+            <tr><td class="py-2 pr-4">--color-primary / --color-accent</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">PersonaTypeAvatar (chat / dashboard)</td><td class="py-2 text-text-muted">Existing</td></tr>
+            <tr><td class="py-2 pr-4">--color-surface-2, --color-border, --color-text</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">UserAvatar (neutral humans)</td><td class="py-2 text-text-muted">Existing</td></tr>
+            <tr><td class="py-2 pr-4">--pill-radius, --pill-px, --pill-py …</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">Shared pill structure</td><td class="py-2 text-status-warning">Yes</td></tr>
+            <tr><td class="py-2 pr-4">--color-success / error / warning / info</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">Status intent</td><td class="py-2 text-text-muted">Existing</td></tr>
+            <tr><td class="py-2 pr-4">--color-surface, --color-border, --color-text-muted</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">Neutral + count</td><td class="py-2 text-text-muted">Existing</td></tr>
+            <tr><td class="py-2 pr-4">entity.* in tailwind.config.js</td><td class="py-2 pr-4 text-text-muted font-sans text-xs">Tailwind alpha support</td><td class="py-2 text-status-warning">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  function newtonToggleTheme() {
+    const root = document.documentElement;
+    const next = root.classList.toggle('dark') ? 'dark' : 'light';
+    localStorage.setItem('newton-mock-theme', next);
+  }
+</script>
+</body>
+</html>

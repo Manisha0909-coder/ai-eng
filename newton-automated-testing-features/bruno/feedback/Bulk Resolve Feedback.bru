@@ -1,0 +1,47 @@
+meta {
+  name: Bulk Resolve Feedback
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{base_url}}/api/mid/feedback/bulk/resolve
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "feedbacks": [
+      {
+        "feedback_id": "{{bulk_feedback_id}}",
+        "resolution_comment": "Bulk resolved via Bruno test."
+      }
+    ]
+  }
+}
+
+vars:pre-request {
+  bulk_feedback_id:
+}
+
+script:pre-request {
+  const fid = bru.getVar("bulk_feedback_id");
+  if (!fid || fid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+tests {
+  test("Status is 200 or 207", function() {
+    expect([200, 207]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

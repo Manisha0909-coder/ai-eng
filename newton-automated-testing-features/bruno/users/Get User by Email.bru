@@ -1,0 +1,33 @@
+meta {
+  name: Get User by Email
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/mid/users/by_email/{{user_email}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+vars:pre-request {
+  user_email: {{test_email}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains user object", function() {
+    expect(res.getBody().data.user).to.be.an('object');
+  });
+}

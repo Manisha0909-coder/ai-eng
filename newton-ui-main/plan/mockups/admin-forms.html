@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Admin Forms — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+          'status-error':   'rgb(var(--c-error) / <alpha-value>)',
+          'status-success': 'rgb(var(--c-success) / <alpha-value>)',
+          'status-warning': 'rgb(var(--c-warning) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+    --c-error:      204 75 61;
+    --c-success:    47 142 87;
+    --c-warning:    201 127 27;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); display: block; margin-bottom: 0.75rem; }
+  .field-label { font-size: 0.8rem; font-weight: 500; color: rgb(var(--c-text-main)); margin-bottom: 0.35rem; display: block; }
+  .field-input { width: 100%; height: 2.2rem; padding: 0 0.75rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.85rem; color: rgb(var(--c-text-main)); outline: none; }
+  .field-input:focus { border-color: rgb(var(--c-primary) / 0.5); box-shadow: 0 0 0 3px rgb(var(--c-primary) / 0.08); }
+  .field-textarea { width: 100%; padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid rgb(var(--c-border)); background: rgb(var(--c-input)); font-size: 0.85rem; color: rgb(var(--c-text-main)); outline: none; resize: none; font-family: inherit; }
+  .btn-primary { height: 2.25rem; padding: 0 1rem; border-radius: 0.6rem; background: rgb(var(--c-primary)); color: white; font-size: 0.8rem; font-weight: 500; border: none; cursor: pointer; }
+  .dark .btn-primary { color: #0d1411; }
+  .btn-ghost { height: 2.25rem; padding: 0 1rem; border-radius: 0.6rem; border: 1px solid rgb(var(--c-border)); background: transparent; color: rgb(var(--c-text-muted)); font-size: 0.8rem; cursor: pointer; }
+  .btn-danger { height: 2.25rem; padding: 0 1rem; border-radius: 0.6rem; background: rgb(var(--c-error)); color: white; font-size: 0.8rem; font-weight: 500; border: none; cursor: pointer; }
+  .toggle { width: 2.25rem; height: 1.25rem; border-radius: 9999px; background: rgb(var(--c-border)); position: relative; cursor: pointer; flex-shrink: 0; transition: background 0.2s; }
+  .toggle.on { background: rgb(var(--c-primary)); }
+  .toggle::after { content: ''; width: 1rem; height: 1rem; border-radius: 50%; background: white; position: absolute; top: 0.125rem; left: 0.125rem; transition: transform 0.2s; }
+  .toggle.on::after { transform: translateX(1rem); }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased min-h-screen">
+
+<!-- Admin top bar -->
+<div class="spectrum-rule"></div>
+<div class="h-12 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 shrink-0">
+  <div class="flex items-center gap-2.5">
+    <svg width="20" height="20" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+    <span class="font-display font-semibold text-sm">Newton</span>
+    <span class="text-border-main">·</span>
+    <span class="text-xs text-text-muted font-medium">Admin Console — CRUD Forms</span>
+  </div>
+  <div class="flex-1"></div>
+  <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+</div>
+
+<div class="max-w-5xl mx-auto px-6 py-10 space-y-12">
+
+  <!-- ── GROUP A: Simple entity dialogs ── -->
+  <div>
+    <h2 class="font-display font-semibold text-lg mb-6">A · Simple entity dialogs</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+
+      <!-- A1: Create Tag -->
+      <div>
+        <span class="anno-tag">A1 · Create Tag dialog — Name + color swatch picker</span>
+        <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-border-main">
+            <div class="flex items-center gap-2">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              <span class="font-display font-semibold text-sm">Create Tag</span>
+            </div>
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div class="px-5 py-4 space-y-4">
+            <div>
+              <label class="field-label">Tag name <span class="text-status-error">*</span></label>
+              <input class="field-input" type="text" placeholder="e.g. Finance" />
+            </div>
+            <div>
+              <label class="field-label">Color</label>
+              <div class="flex flex-wrap gap-2 mt-1">
+                <button class="w-7 h-7 rounded-full border-2 border-primary ring-2 ring-primary/30 ring-offset-1" style="background: rgb(23 112 92)" title="Viridian"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: rgb(168 123 45)" title="Brass"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #5b6af0" title="Indigo"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #c45c8a" title="Rose"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #e07a44" title="Amber"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #6b8cba" title="Slate blue"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #7c6fb0" title="Purple"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #5a8f6a" title="Sage"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: #8b6a5a" title="Brown"></button>
+                <button class="w-7 h-7 rounded-full border-2 border-transparent hover:border-border-main transition-colors" style="background: rgb(92 107 102)" title="Slate"></button>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 px-5 py-3.5 border-t border-border-main bg-surface-2/50">
+            <button class="btn-ghost">Cancel</button>
+            <button class="btn-primary">Create tag</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- A2: Create Role -->
+      <div>
+        <span class="anno-tag">A2 · Create Role dialog — Name + description + permissions list</span>
+        <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-border-main">
+            <div class="flex items-center gap-2">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+              <span class="font-display font-semibold text-sm">Create Role</span>
+            </div>
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div class="px-5 py-4 space-y-4">
+            <div>
+              <label class="field-label">Role name <span class="text-status-error">*</span></label>
+              <input class="field-input" type="text" placeholder="e.g. Data Viewer" />
+            </div>
+            <div>
+              <label class="field-label">Description</label>
+              <textarea class="field-textarea" rows="2" placeholder="What can this role do?"></textarea>
+            </div>
+            <div>
+              <label class="field-label">Permissions</label>
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface-2 transition-colors">
+                  <div><p class="text-sm font-medium">Manage Users</p><p class="text-2xs text-text-muted">Add, edit, and remove users</p></div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface-2 transition-colors">
+                  <div><p class="text-sm font-medium">View Analytics</p><p class="text-2xs text-text-muted">Access usage dashboards</p></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface-2 transition-colors">
+                  <div><p class="text-sm font-medium">Edit Personas</p><p class="text-2xs text-text-muted">Create and modify AI personas</p></div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-surface-2 transition-colors">
+                  <div><p class="text-sm font-medium">Manage Documents</p><p class="text-2xs text-text-muted">Upload and tag documents</p></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 px-5 py-3.5 border-t border-border-main bg-surface-2/50">
+            <button class="btn-ghost">Cancel</button>
+            <button class="btn-primary">Create role</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- A3: Delete confirmation -->
+      <div class="md:col-span-2">
+        <span class="anno-tag">A3 · Delete confirmation modal — consistent pattern across all CRUD entities (Tag / Role / Persona / Tool / User)</span>
+        <div class="flex justify-center">
+          <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden w-full" style="max-width: 22rem;">
+            <div class="px-6 pt-6 pb-0 flex flex-col items-center text-center">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center mb-3" style="background: rgb(var(--c-error) / 0.1);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color: rgb(var(--c-error))"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+              </div>
+              <h2 class="font-display font-semibold text-base mb-1">Delete Tag?</h2>
+              <p class="text-sm text-text-muted mb-4">This action cannot be undone.</p>
+              <div class="w-full px-3 py-2 rounded-lg font-mono text-sm text-center mb-1" style="border: 1px solid rgb(var(--c-error) / 0.3); background: rgb(var(--c-error) / 0.05);">Finance</div>
+              <p class="text-2xs text-text-muted mb-1">3 tools and 2 personas use this tag.</p>
+            </div>
+            <div class="px-6 pb-5 pt-4 flex gap-3">
+              <button class="flex-1 btn-ghost">Cancel</button>
+              <button class="flex-1 btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GROUP B: User admin form ── -->
+  <div>
+    <h2 class="font-display font-semibold text-lg mb-6">B · User admin form</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+
+      <!-- B1: Add User -->
+      <div>
+        <span class="anno-tag">B1 · Add User — user picker combobox + role radio cards</span>
+        <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-border-main">
+            <div class="flex items-center gap-2">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span class="font-display font-semibold text-sm">Add User</span>
+            </div>
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div class="px-5 py-4 space-y-4">
+            <!-- User picker combobox -->
+            <div>
+              <label class="field-label">Users <span class="text-status-error">*</span></label>
+              <div class="relative">
+                <svg width="14" height="14" class="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input class="field-input pl-8" type="text" placeholder="Search by name or email…" />
+              </div>
+              <!-- Dropdown open -->
+              <div class="mt-1 bg-surface border border-border-main rounded-xl shadow-lift overflow-hidden">
+                <div class="divide-y divide-border-main">
+                  <div class="flex items-center gap-2.5 px-3 py-2.5 hover:bg-surface-2 cursor-pointer">
+                    <div class="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center text-xs font-semibold text-primary shrink-0">JD</div>
+                    <div><p class="text-sm font-medium">Jane Doe</p><p class="text-2xs text-text-muted">jane.doe@optioai.com</p></div>
+                  </div>
+                  <div class="flex items-center gap-2.5 px-3 py-2.5 hover:bg-surface-2 cursor-pointer bg-primary/4 border-l-2 border-primary">
+                    <div class="w-7 h-7 rounded-full bg-accent/15 flex items-center justify-center text-xs font-semibold text-accent shrink-0">KP</div>
+                    <div><p class="text-sm font-medium">Kim Park</p><p class="text-2xs text-text-muted">kim.park@optioai.com</p></div>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="text-primary ml-auto shrink-0"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div class="flex items-center gap-2.5 px-3 py-2.5 hover:bg-surface-2 cursor-pointer">
+                    <div class="w-7 h-7 rounded-full bg-surface-2 flex items-center justify-center text-xs font-semibold text-text-muted shrink-0">SL</div>
+                    <div><p class="text-sm font-medium">Sam Lee</p><p class="text-2xs text-text-muted">sam.lee@optioai.com</p></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Selected chips -->
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <div class="flex items-center gap-1.5 h-6 px-2 rounded-full border border-border-main bg-surface-2 text-xs text-text-main">
+                  Kim Park
+                  <button class="text-text-muted hover:text-text-main ml-0.5"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <!-- Role radio cards -->
+            <div>
+              <label class="field-label">Role <span class="text-status-error">*</span></label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-primary bg-primary/4 cursor-pointer">
+                  <div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center shrink-0"><div class="w-2 h-2 rounded-full bg-primary"></div></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">User Admin</p><p class="text-2xs text-text-muted">Manage users and roles within the organisation</p></div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl border border-border-main hover:border-primary/30 cursor-pointer transition-colors">
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main shrink-0"></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">Super Admin</p><p class="text-2xs text-text-muted">Full access to all settings and admin console features</p></div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl border border-border-main hover:border-primary/30 cursor-pointer transition-colors">
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main shrink-0"></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">System Admin</p><p class="text-2xs text-text-muted">Manage infrastructure, integrations, and servers</p></div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 px-5 py-3.5 border-t border-border-main bg-surface-2/50">
+            <button class="btn-ghost">Cancel</button>
+            <button class="btn-primary">Add user</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- B2: Edit User -->
+      <div>
+        <span class="anno-tag">B2 · Edit User — email locked (Zitadel identity), role editable</span>
+        <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-4 border-b border-border-main">
+            <div class="flex items-center gap-2">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span class="font-display font-semibold text-sm">Edit User</span>
+            </div>
+            <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div class="px-5 py-4 space-y-4">
+            <!-- Locked email -->
+            <div>
+              <label class="field-label">Email</label>
+              <div class="relative">
+                <input class="field-input pr-8 opacity-60 cursor-not-allowed" type="email" value="kim.park@optioai.com" disabled />
+                <svg width="13" height="13" class="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <p class="text-2xs text-text-muted mt-1">Identity managed by Zitadel — cannot be changed here.</p>
+            </div>
+            <!-- Role (editable) -->
+            <div>
+              <label class="field-label">Role</label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-primary bg-primary/4 cursor-pointer">
+                  <div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center shrink-0"><div class="w-2 h-2 rounded-full bg-primary"></div></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">User Admin</p><p class="text-2xs text-text-muted">Current role</p></div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl border border-border-main hover:border-primary/30 cursor-pointer transition-colors">
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main shrink-0"></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">Super Admin</p><p class="text-2xs text-text-muted">Full access</p></div>
+                </label>
+                <label class="flex items-center gap-3 p-3 rounded-xl border border-border-main hover:border-primary/30 cursor-pointer transition-colors">
+                  <div class="w-4 h-4 rounded-full border-2 border-border-main shrink-0"></div>
+                  <div class="flex-1 min-w-0"><p class="text-sm font-medium">System Admin</p><p class="text-2xs text-text-muted">Infrastructure access</p></div>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center px-5 py-3.5 border-t border-border-main bg-surface-2/50">
+            <button class="flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs border border-status-error/30 text-status-error hover:bg-status-error/5 transition-colors">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="8" x2="23" y2="14"/><line x1="23" y1="8" x2="17" y2="14"/></svg>
+              Remove user
+            </button>
+            <div class="flex-1"></div>
+            <div class="flex gap-2">
+              <button class="btn-ghost">Cancel</button>
+              <button class="btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── GROUP C: Tool edit form ── -->
+  <div>
+    <h2 class="font-display font-semibold text-lg mb-6">C · Tool edit form</h2>
+    <span class="anno-tag">C · ToolEditForm — based on src/features/dashboard/components/Forms/ToolEditForm.tsx — shows tool metadata, display name, icon picker, tags, toggles</span>
+    <div class="bg-surface border border-border-main rounded-2xl shadow-dialog overflow-hidden" style="max-width: 36rem;">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-border-main">
+        <div class="flex items-center gap-2">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <span class="font-display font-semibold text-sm">Edit Tool</span>
+        </div>
+        <button class="w-7 h-7 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <!-- Read-only metadata strip -->
+      <div class="px-5 pt-3 pb-0 flex items-center gap-4 flex-wrap">
+        <div class="flex items-center gap-1.5"><span class="text-2xs text-text-muted">Tool ID</span><span class="text-2xs font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-border-main text-text-main">web_search</span></div>
+        <div class="flex items-center gap-1.5"><span class="text-2xs text-text-muted">Type</span><span class="text-2xs font-mono bg-surface-2 px-1.5 py-0.5 rounded border border-border-main text-text-main">builtin</span></div>
+      </div>
+      <div class="px-5 py-4 space-y-4">
+        <!-- Display name -->
+        <div>
+          <label class="field-label">Display name</label>
+          <input class="field-input" type="text" value="Web Search" />
+        </div>
+        <!-- Tags combobox -->
+        <div>
+          <label class="field-label">Tool tags</label>
+          <div class="field-input flex items-center gap-1.5 flex-wrap h-auto py-1 cursor-text" style="min-height: 2.2rem;">
+            <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-primary/10 border border-primary/25 text-2xs text-primary">Search<button class="ml-0.5 text-primary/70 hover:text-primary">✕</button></span>
+            <span class="flex items-center gap-1 h-5 px-2 rounded-full bg-primary/10 border border-primary/25 text-2xs text-primary">Web<button class="ml-0.5 text-primary/70 hover:text-primary">✕</button></span>
+            <input type="text" placeholder="Add tag…" class="flex-1 min-w-16 text-xs bg-transparent outline-none placeholder:text-text-muted" />
+          </div>
+        </div>
+        <!-- Toggles -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between py-2.5 px-3 rounded-xl bg-surface-2/60">
+            <div><p class="text-sm font-medium">Enabled</p><p class="text-2xs text-text-muted">Allow personas to use this tool</p></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="flex items-center justify-between py-2.5 px-3 rounded-xl bg-surface-2/60">
+            <div><p class="text-sm font-medium">Requires approval</p><p class="text-2xs text-text-muted">User must confirm before each use</p></div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+        <!-- Description (read-only) -->
+        <div>
+          <label class="field-label">Description <span class="text-2xs text-text-muted font-normal">(read-only)</span></label>
+          <div class="px-3 py-2.5 rounded-lg bg-surface-2 border border-border-main text-sm text-text-muted" style="min-height: 3rem;">Performs live web searches and returns structured results with titles, snippets, and URLs.</div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between px-5 py-3.5 border-t border-border-main bg-surface-2/50">
+        <p class="text-2xs text-text-muted">Updated 2 days ago</p>
+        <div class="flex gap-2">
+          <button class="btn-ghost">Cancel</button>
+          <button class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

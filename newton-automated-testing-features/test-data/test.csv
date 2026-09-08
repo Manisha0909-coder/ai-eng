@@ -1,0 +1,16 @@
+employee_id,first_name,last_name,department,role,email,phone,location,salary,join_date,manager,status
+E001,John,Doe,Engineering,Software Developer,john.doe@company.com,+1-555-0201,New York,95000,2023-01-15,Mike Johnson,Active
+E002,Jane,Smith,Marketing,Marketing Manager,jane.smith@company.com,+1-555-0202,San Francisco,88000,2022-06-01,Sarah Lee,Active
+E003,Robert,Brown,Finance,Financial Analyst,robert.b@company.com,+1-555-0203,Chicago,82000,2023-03-20,Lisa Park,Active
+E004,Emily,Davis,HR,HR Specialist,emily.d@company.com,+1-555-0204,Austin,75000,2021-09-10,Karen White,Active
+E005,Michael,Wilson,Engineering,DevOps Engineer,michael.w@company.com,+1-555-0205,Seattle,105000,2022-11-05,Mike Johnson,Active
+E006,Sarah,Taylor,Product,Product Manager,sarah.t@company.com,+1-555-0206,New York,115000,2020-04-15,CEO,Active
+E007,David,Anderson,Engineering,Senior Engineer,david.a@company.com,+1-555-0207,Boston,125000,2019-08-20,Mike Johnson,Active
+E008,Lisa,Thomas,Design,UX Designer,lisa.t@company.com,+1-555-0208,Los Angeles,90000,2023-07-01,Sarah Taylor,Active
+E009,James,Jackson,Sales,Account Executive,james.j@company.com,+1-555-0209,Miami,80000,2022-02-14,Tom Harris,Active
+E010,Amanda,White,Engineering,QA Engineer,amanda.w@company.com,+1-555-0210,Denver,85000,2023-05-30,Mike Johnson,Active
+E011,Chris,Martin,Legal,Legal Counsel,chris.m@company.com,+1-555-0211,New York,130000,2021-01-10,CEO,Active
+E012,Nancy,Garcia,Finance,CFO,nancy.g@company.com,+1-555-0212,New York,200000,2018-03-01,CEO,Active
+E013,Kevin,Martinez,Engineering,Engineering Manager,kevin.m@company.com,+1-555-0213,San Francisco,140000,2020-07-15,CTO,Active
+E014,Patricia,Robinson,Marketing,Content Writer,patricia.r@company.com,+1-555-0214,Remote,65000,2024-01-08,Jane Smith,Active
+E015,Thomas,Clark,IT,IT Support Specialist,thomas.c@company.com,+1-555-0215,Chicago,70000,2022-09-20,Kevin Martinez,Active

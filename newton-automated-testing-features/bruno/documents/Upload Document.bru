@@ -1,0 +1,47 @@
+meta {
+  name: Upload Document
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/core/documents/upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  file: @file(../test-data/test.pdf)
+}
+
+script:post-response {
+  const body = res.getBody();
+  if (body && body.data && body.data.document_id) {
+    bru.setVar("document_id", String(body.data.document_id));
+    console.log("document_id captured:", body.data.document_id);
+  } else {
+    console.log("WARNING: document_id not found in response");
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains document_id", function() {
+    expect(res.getBody().data.document_id).to.be.a('number');
+  });
+
+  test("Response contains document name", function() {
+    expect(res.getBody().data.name).to.be.a('string');
+  });
+}

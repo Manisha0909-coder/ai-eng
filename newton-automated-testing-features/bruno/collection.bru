@@ -1,0 +1,21 @@
+auth {
+  mode: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  X-API-Key: {{api_key}}
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const url = req.getUrl();
+  const isNegativeTest = bru.getVar("negative_test");
+  bru.setVar("negative_test", false);
+
+  if (isNegativeTest) return;
+
+  if (status >= 400) {
+    throw new Error(`🔴 HTTP ${status} — ${url}`);
+  }
+}

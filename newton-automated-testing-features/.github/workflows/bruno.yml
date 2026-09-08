@@ -1,0 +1,110 @@
+name: Bruno API Tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "API folder to test"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - admin
+          - auth
+          - chat
+          - chat-share
+          - documents
+          - feedback
+          - files
+          - personas
+          - queue
+          - roles
+          - session
+          - shared-memory
+          - users
+
+jobs:
+  bruno-api-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dependencies
+        run: |
+          pip install playwright python-dotenv
+          playwright install chromium --with-deps
+
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      - name: Get access token via browser login
+        env:
+          GOTALK_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          GOTALK_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          python bruno/get_token.py
+          TOKEN=$(grep "^access_token=" bruno/.env | cut -d'=' -f2-)
+          echo "::add-mask::$TOKEN"
+          echo "BRUNO_ACCESS_TOKEN=$TOKEN" >> $GITHUB_ENV
+          echo "✅ Access token acquired"
+
+      - name: Run Bruno API tests
+        working-directory: bruno
+        run: |
+          FOLDER="${{ github.event.inputs.folder || 'all' }}"
+          # Ensure repository-level results directory exists
+          mkdir -p ../results
+
+          if [ "$FOLDER" = "all" ]; then
+            bru run \
+              --env production \
+              -r \
+              --env-var access_token="$BRUNO_ACCESS_TOKEN" \
+              --env-var api_key="${{ secrets.MIDDLEWARE_API_KEY }}" \
+              --env-var test_email="${{ secrets.ADMIN_EMAIL }}" \
+              --env-var session_id="${{ secrets.BRUNO_TEST_SESSION_ID }}" \
+              --env-var test_file_name="${{ secrets.BRUNO_TEST_FILE_NAME }}" \
+              --env-var search_query="${{ secrets.BRUNO_SEARCH_QUERY }}" \
+              --env-var upload_document_path="$GITHUB_WORKSPACE/test-data/test.csv" \
+              --env-var upload_image_path="$GITHUB_WORKSPACE/test-data/test.jpg" \
+              --reporter-json ../results/bruno-results.json \
+              --reporter-html ../results/bruno-report.html
+          else
+            bru run "$FOLDER" \
+              --env production \
+              -r \
+              --env-var access_token="$BRUNO_ACCESS_TOKEN" \
+              --env-var api_key="${{ secrets.MIDDLEWARE_API_KEY }}" \
+              --env-var test_email="${{ secrets.ADMIN_EMAIL }}" \
+              --env-var session_id="${{ secrets.BRUNO_TEST_SESSION_ID }}" \
+              --env-var test_file_name="${{ secrets.BRUNO_TEST_FILE_NAME }}" \
+              --env-var search_query="${{ secrets.BRUNO_SEARCH_QUERY }}" \
+              --env-var upload_document_path="$GITHUB_WORKSPACE/test-data/test.csv" \
+              --env-var upload_image_path="$GITHUB_WORKSPACE/test-data/test.jpg" \
+              --reporter-json ../results/bruno-results.json \
+              --reporter-html ../results/bruno-report.html
+          fi
+
+      - name: Upload Bruno results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bruno-api-results
+          path: results/
+          retention-days: 7

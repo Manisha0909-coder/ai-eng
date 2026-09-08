@@ -1,0 +1,32 @@
+meta {
+  name: Update Persona Version
+  type: http
+  seq: 13
+}
+
+patch {
+  url: {{base_url}}/api/mid/personas/{{persona_id}}/versions/{{new_version_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "persona": null,
+    "model_id": null
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

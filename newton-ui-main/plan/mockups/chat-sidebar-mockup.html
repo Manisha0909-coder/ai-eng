@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Chat Sidebar — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: 14px; }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .scroll-quiet::-webkit-scrollbar { width: 4px; }
+  .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+  .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased">
+
+<!-- Theme toggle -->
+<div class="fixed top-4 right-4 z-50">
+  <button onclick="document.documentElement.classList.toggle('dark'); localStorage.setItem('newton-mock-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light')"
+    class="flex h-8 w-8 items-center justify-center rounded-md border border-border-main bg-surface text-text-muted hover:text-text-main transition-colors text-xs">
+    ☀︎
+  </button>
+</div>
+
+<div class="flex gap-12 p-8 flex-wrap">
+
+  <!-- ── Expanded ──────────────────────────────────────────────────────── -->
+  <div>
+    <p class="text-2xs text-text-muted font-mono uppercase tracking-[0.1em] mb-3">Expanded</p>
+
+    <div class="flex h-[600px] overflow-hidden rounded-xl border border-border-main shadow-sm">
+
+      <!-- Sidebar -->
+      <div class="flex w-52 shrink-0 flex-col border-r border-border-main bg-surface">
+
+        <!-- Header: wordmark + new-chat + search + collapse -->
+        <div class="flex h-12 shrink-0 items-center border-b border-border-main px-3 gap-1">
+          <div class="flex flex-1 items-center gap-2 overflow-hidden">
+            <svg width="15" height="15" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+              <path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-text-main))" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/>
+            </svg>
+            <span class="font-display font-semibold text-sm text-text-main leading-none whitespace-nowrap">Newton</span>
+          </div>
+          <!-- New Chat -->
+          <button title="New chat" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <!-- Search -->
+          <button title="Search chats" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          </button>
+          <!-- Collapse -->
+          <button title="Collapse sidebar" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M16 15l-3-3 3-3"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Session list -->
+        <nav class="flex-1 overflow-y-auto scroll-quiet py-2 px-2 space-y-0.5">
+
+          <!-- Pinned group -->
+          <div class="pt-1 pb-1 px-2">
+            <span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Pinned</span>
+          </div>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 truncate">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="rgb(var(--c-primary))" class="shrink-0 opacity-70"><path d="M12 2l2.09 6.26L21 10l-5.09 3.74L17.18 21 12 17.77 6.82 21l2.27-7.26L4 10l6.91-1.74L12 2z"/></svg>
+                <span class="truncate text-text-main text-xs">Q2 Revenue Analysis</span>
+              </div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <span class="truncate">Analyst Pro</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <!-- Divider + Recent group -->
+          <div class="my-1 mx-1 border-t border-border-main/60"></div>
+          <div class="pt-1 pb-1 px-2">
+            <span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Recent</span>
+          </div>
+
+          <!-- Active session -->
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 bg-primary/10 border border-primary/20 text-primary text-sm font-medium group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-xs font-medium">Summarise board deck for Friday</div>
+              <div class="flex items-center gap-1 mt-0.5 text-primary/60" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span class="truncate">General</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-text-main text-xs">Draft email to Sanjay re: API access</div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span class="truncate">General</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-text-main text-xs">Compare Python vs Go for the service</div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <span class="truncate">Analyst Pro</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-text-main text-xs">Onboarding checklist for new hires</div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span class="truncate">General</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-text-main text-xs">User growth chart — last 6 months</div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+                <span class="truncate">Analyst Pro</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <a href="#" class="flex items-center gap-1 rounded-lg py-2 pl-3 pr-1.5 hover:bg-surface-2 text-text-muted hover:text-text-main text-sm transition-colors group">
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-text-main text-xs">GDPR compliance summary</div>
+              <div class="flex items-center gap-1 mt-0.5 text-text-muted" style="font-size:10.5px">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <span class="truncate">General</span>
+              </div>
+            </div>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-text-muted"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+          </a>
+
+          <!-- Archived toggle -->
+          <div class="my-1 mx-1 border-t border-border-main/60"></div>
+          <button class="flex w-full items-center gap-1.5 rounded-lg py-2 px-3 hover:bg-surface-2 transition-colors">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="text-text-muted -rotate-90">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+            <span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted">Archived</span>
+          </button>
+
+        </nav>
+
+        <!-- Footer -->
+        <div class="shrink-0 border-t border-border-main px-2 py-2 flex items-center gap-1">
+          <button title="Admin console" aria-label="Admin console" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </button>
+          <button title="Settings" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+          <button title="Log out" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div><!-- /sidebar -->
+
+      <!-- Page stub -->
+      <div class="flex flex-1 items-center justify-center bg-background">
+        <span class="text-sm text-text-muted">Chat area</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Collapsed ─────────────────────────────────────────────────────── -->
+  <div>
+    <p class="text-2xs text-text-muted font-mono uppercase tracking-[0.1em] mb-3">Collapsed</p>
+
+    <div class="flex h-[600px] overflow-hidden rounded-xl border border-border-main shadow-sm">
+
+      <!-- Sidebar (collapsed) -->
+      <div class="flex w-12 shrink-0 flex-col border-r border-border-main bg-surface">
+
+        <!-- Header: logo mark only -->
+        <div class="flex h-12 shrink-0 items-center justify-center border-b border-border-main">
+          <button title="Expand sidebar" class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="15" height="15" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+              <path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-text-main))" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Icon strip -->
+        <nav class="flex-1 overflow-y-auto scroll-quiet py-2 px-1.5 space-y-0.5">
+          <button title="New chat" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button title="Search chats" class="flex w-full items-center justify-center rounded-lg p-2 text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          </button>
+
+          <div class="my-1.5 mx-1 border-t border-border-main/60"></div>
+
+          <!-- Active session indicator -->
+          <button title="Summarise board deck for Friday" class="flex w-full items-center justify-center rounded-lg p-2 bg-primary/10 border border-primary/20 text-primary transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+        </nav>
+
+        <!-- Footer -->
+        <div class="shrink-0 border-t border-border-main px-1.5 py-2 flex flex-col items-center gap-0.5">
+          <button title="Admin console" class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </button>
+          <button title="Settings" class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+          <button title="Log out" class="flex h-7 w-7 items-center justify-center rounded-md text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+
+      </div><!-- /sidebar -->
+
+      <!-- Page stub -->
+      <div class="flex flex-1 items-center justify-center bg-background">
+        <span class="text-sm text-text-muted">Chat area</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flex wrapper -->
+</body>
+</html>

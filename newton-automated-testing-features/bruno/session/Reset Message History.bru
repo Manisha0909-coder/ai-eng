@@ -1,0 +1,30 @@
+meta {
+  name: Reset Message History
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/mid/session/reset
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+script:pre-request {
+  const sid = bru.getEnvVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+    return;
+  }
+  req.setBody({ session_id: sid });
+}

@@ -1,0 +1,51 @@
+meta {
+  name: Create User - No Token
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{base_url}}/api/mid/users/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Create User - No Token] Running negative test: missing auth cookie");
+}
+
+body:json {
+  {
+    "user_ids": [
+      "should_not_be_created@test.com"
+    ],
+    "roles": []
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Create User - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Create User - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

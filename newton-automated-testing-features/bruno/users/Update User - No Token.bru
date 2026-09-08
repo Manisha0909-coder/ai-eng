@@ -1,0 +1,52 @@
+meta {
+  name: Update User - No Token
+  type: http
+  seq: 26
+}
+
+patch {
+  url: {{base_url}}/api/mid/users/{{user_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+vars:pre-request {
+  user_id: {{test_email}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Update User - No Token] Running negative test: missing auth cookie");
+}
+
+body:json {
+  {
+    "roles": null
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Update User - No Token] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Update User - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

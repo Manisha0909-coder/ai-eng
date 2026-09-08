@@ -1,0 +1,91 @@
+meta {
+  name: Create Persona
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/personas/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "persona_name": "My Persona",
+    "persona": "You are a helpful assistant.",
+    "model_id": null,
+    "greeting_message": null,
+    "type": "chat",
+    "supports_documents": false,
+    "temperature": 0.7,
+    "context_window_limit": 4096
+  }
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  const modelsRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/models`,
+    method: "GET",
+    headers: { "Cookie": `access_token=${token}` }
+  });
+
+  const models = modelsRes.data?.data?.models ?? [];
+  const modelId = models.length > 0 ? String(models[0].id) : null;
+  console.log(`[Create Persona] Using model_id: ${modelId}`);
+
+  const testName = `Bruno Test Persona ${Date.now()}`;
+  console.log(`[Create Persona] Using name: ${testName}`);
+  req.setBody({
+    persona_name: testName,
+    persona: "You are a helpful assistant.",
+    model_id: modelId,
+    greeting_message: null,
+    type: "chat",
+    supports_documents: false,
+    temperature: 0.7,
+    context_window_limit: 4096
+  });
+}
+
+script:post-response {
+  const body = res.getBody();
+  const persona = body?.data?.persona;
+  const personaId = persona?.id;
+  const versionId = persona?.current_version_id;
+  if (personaId) {
+    bru.setEnvVar("persona_id", String(personaId));
+    console.log(`[Create Persona] ✅ persona_id saved: ${personaId}`);
+  } else {
+    console.log(`[Create Persona] ⚠️ persona_id not found in response: ${JSON.stringify(body)}`);
+  }
+  if (versionId) {
+    bru.setEnvVar("version_id", String(versionId));
+    console.log(`[Create Persona] ✅ initial version_id saved: ${versionId}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains persona id", function() {
+    expect(res.getBody().data.persona.id).to.be.a('number');
+  });
+
+  test("Response contains version id", function() {
+    expect(res.getBody().data.persona.current_version_id).to.be.a('number');
+  });
+}

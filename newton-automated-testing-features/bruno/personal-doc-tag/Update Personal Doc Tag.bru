@@ -1,0 +1,32 @@
+meta {
+  name: Update Personal Doc Tag
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/api/mid/personal-doc-tag/{{tag_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": "Updated Personal Tag",
+    "description": null
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

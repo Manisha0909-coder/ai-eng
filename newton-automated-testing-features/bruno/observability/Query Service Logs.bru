@@ -1,0 +1,77 @@
+meta {
+  name: Query Service Logs
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/mid/observability/logs
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "service_name": "middleware",
+    "limit": 50,
+    "search": null,
+    "level": null,
+    "sort_order": "desc"
+  }
+}
+
+script:pre-request {
+  // Step 1: trigger a traced middleware request so a fresh trace_id appears in logs
+  const axios = require("axios");
+  const baseUrl = bru.getEnvVar("base_url");
+  const token = bru.getEnvVar("access_token");
+  try {
+    await axios.get(`${baseUrl}/api/mid/profile/me`, {
+      headers: { Cookie: `access_token=${token}` },
+      timeout: 8000
+    });
+    console.log("Traced request triggered via /api/mid/profile/me");
+  } catch (e) {
+    console.log("Trigger request failed (continuing):", e.message);
+  }
+
+  // Step 2: wait 5s for OTel BatchLogRecordProcessor to flush
+  await new Promise(r => setTimeout(r, 5000));
+  console.log("Waited 5s — querying logs now");
+}
+
+script:post-response {
+  const body = res.getBody();
+  const logs = (body && body.data && body.data.logs) || [];
+  console.log("Total logs returned:", logs.length);
+  if (logs.length > 0) {
+    console.log("First log keys:", Object.keys(logs[0]).join(", "));
+    console.log("First log sample:", JSON.stringify(logs[0]).substring(0, 300));
+  }
+  const logWithTrace = logs.find(l => l.trace_id);
+  if (logWithTrace) {
+    bru.setVar("trace_id", logWithTrace.trace_id);
+    console.log("trace_id captured:", logWithTrace.trace_id);
+  } else {
+    bru.setVar("trace_id", "");
+    console.log("No trace_id found in logs — Get Trace will be skipped");
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains logs array", function() {
+    expect(res.getBody().data.logs).to.be.an('array');
+  });
+}

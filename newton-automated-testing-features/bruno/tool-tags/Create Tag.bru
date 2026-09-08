@@ -1,0 +1,56 @@
+meta {
+  name: Create Tag
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/tool-tags/
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "name": "My Tag",
+    "tool_names": ["addition_tool"],
+    "description": null
+  }
+}
+
+script:pre-request {
+  const testName = `Bruno Test Tag ${Date.now()}`;
+  console.log(`[Create Tag] Using name: ${testName}`);
+  req.setBody({ name: testName, tool_names: ["addition_tool"], description: null });
+}
+
+script:post-response {
+  const body = res.getBody();
+  const tagId = body?.data?.tag?.id ?? body?.data?.id;
+  if (tagId) {
+    bru.setEnvVar("tag_id", String(tagId));
+    console.log(`[Create Tag] ✅ tag_id saved: ${tagId}`);
+  } else {
+    console.log(`[Create Tag] ⚠️ tag_id not found in response: ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains tag id", function() {
+    const body = res.getBody();
+    const tagId = body?.data?.tag?.id ?? body?.data?.id;
+    expect(tagId).to.be.a("number");
+  });
+}

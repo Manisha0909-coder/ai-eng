@@ -1,0 +1,58 @@
+meta {
+  name: Batch Upload Document
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/core/documents/batch-upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:multipart-form {
+  files: @file(../test-data/test.pdf)
+  files: @file(../test-data/test.docx)
+  files: @file(../test-data/test.pptx)
+  files: @file(../test-data/test.xlsx)
+  files: @file(../test-data/test.html)
+  metadata: [{"doc_title":"test.pdf"},{"doc_title":"test.docx"},{"doc_title":"test.pptx"},{"doc_title":"test.xlsx"},{"doc_title":"test.html"}]
+}
+
+script:post-response {
+  const body = res.getBody();
+  if (body && body.data && body.data.document_ids && body.data.document_ids.length > 0) {
+    bru.setVar("document_id", String(body.data.document_ids[0]));
+    console.log("document_ids captured:", body.data.document_ids);
+  } else {
+    console.log("WARNING: document_ids not found in response");
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains document_ids array", function() {
+    expect(res.getBody().data.document_ids).to.be.an('array');
+    expect(res.getBody().data.document_ids.length).to.be.greaterThan(0);
+  });
+
+  test("Response contains count", function() {
+    expect(res.getBody().data.count).to.be.a('number');
+    expect(res.getBody().data.count).to.be.greaterThan(0);
+  });
+
+  test("Response contains task_id", function() {
+    expect(res.getBody().data.task_id).to.be.a('string');
+  });
+}

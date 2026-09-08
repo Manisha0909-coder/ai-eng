@@ -1,0 +1,60 @@
+meta {
+  name: Update Tool
+  type: http
+  seq: 2
+}
+
+patch {
+  url: {{base_url}}/api/mid/tool_names/{{tool_name}}
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "display_name": "Bruno Updated"
+  }
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  const listRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/tool_names/list`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: { limit: 1, offset: 0, search: null, type: null, tool_server: null }
+  });
+
+  const tools = listRes.data?.data?.tools || listRes.data?.tools || [];
+  const toolName = tools.length > 0 ? tools[0].name : null;
+
+  if (!toolName) {
+    console.warn("[Update Tool] ⚠️ No tools available — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+
+  bru.setEnvVar("tool_name", toolName);
+  console.log(`[Update Tool] Using tool_name: ${toolName}`);
+  req.setUrl(`${baseUrl}/api/mid/tool_names/${toolName}`);
+  req.setBody({ display_name: "Bruno Updated" });
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

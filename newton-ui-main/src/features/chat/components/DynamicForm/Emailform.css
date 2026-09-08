@@ -1,0 +1,122 @@
+#emailForm {
+  @apply p-4 bg-gray-700/30 rounded-2xl flex flex-col; /* Removed gap-4 */
+}
+
+/* Remove <br> spacing completely */
+#emailForm br {
+  @apply hidden;
+}
+
+/* Add margin after all inputs and textarea */
+#emailForm input[type="email"],
+#emailForm input[type="text"],
+#emailForm textarea {
+  @apply mb-0; /* Add margin-bottom to inputs */
+}
+
+/* Labels - no bottom margin */
+#emailForm label {
+  @apply block text-sm font-medium text-gray-300 mb-0; /* Explicit mb-0 */
+}
+
+/* Input fields */
+#emailForm input[type="email"],
+#emailForm input[type="text"],
+#emailForm textarea {
+  @apply w-full p-2 bg-gray-700 rounded border border-border-main 
+           focus:border-purple-500 focus:ring-1 focus:ring-purple-500 
+           outline-none text-gray-200 placeholder-gray-400 transition-all;
+}
+
+/* Textarea specific styling */
+#emailForm textarea {
+  @apply min-h-[120px];
+}
+
+/* Submit button - remove float and add margin */
+#emailForm button[type="submit"] {
+  @apply px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded text-white 
+           transition-colors; /* Removed float, added margin-top */
+}
+
+/* Error message styling (for when you add validation) */
+#emailForm .error-message {
+  @apply text-red-500 text-sm mt-1;
+}
+
+/* Focus states */
+#emailForm input:focus,
+#emailForm textarea:focus {
+  @apply shadow-md;
+}
+
+/* Placeholder text */
+#emailForm ::placeholder {
+  @apply text-gray-400;
+}
+
+/* Quill Editor Styles */
+
+/* Custom animations for form submission */
+@keyframes slideOutUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(67, 107, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(67, 107, 255, 0);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.animate-slide-out-up {
+  animation: slideOutUp 0.5s ease-in-out forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+.animate-ripple {
+  animation: ripple 0.6s linear;
+}
+
+/* Field animation enhancements */
+.field-exit {
+  animation: slideOutUp 0.3s ease-in forwards;
+}

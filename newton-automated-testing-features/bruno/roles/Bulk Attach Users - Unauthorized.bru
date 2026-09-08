@@ -1,0 +1,48 @@
+meta {
+  name: Bulk Attach Users - Unauthorized
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/api/mid/roles/999999999/bulk_attach_users
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:json {
+  {
+    "user_ids": []
+  }
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Bulk Attach Users - Unauthorized] Running negative test: missing auth cookie");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [401];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Bulk Attach Users - Unauthorized] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Bulk Attach Users - Unauthorized] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response success is not true", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

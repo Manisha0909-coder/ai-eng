@@ -1,0 +1,26 @@
+meta {
+  name: Delete Persona Tool Rules
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{base_url}}/api/mid/tool-rules/personas/{{persona_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response indicates success", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+  });
+}

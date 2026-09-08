@@ -1,0 +1,70 @@
+meta {
+  name: List Messages
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/mid/session/list_message
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "session_id": "{{session_id}}"
+  }
+}
+
+vars:pre-request {
+  session_id:
+}
+
+script:pre-request {
+  const sid = bru.getVar("session_id");
+  if (!sid || sid.trim() === "") {
+    bru.runner.skipRequest();
+  }
+}
+
+script:post-response {
+  const body = res.getBody();
+  const messages = (body && body.data && body.data.messages) || [];
+
+  for (const msg of messages) {
+    const forms = (msg.json_data && msg.json_data.forms) || [];
+    for (const form of forms) {
+      const formId = form.form_id;
+      const messageId = form._metadata && form._metadata.message_id;
+      if (formId && messageId) {
+        bru.setVar("form_id", formId);
+        bru.setVar("message_id", messageId);
+        console.log("form_id captured:", formId);
+        console.log("message_id captured:", messageId);
+        break;
+      }
+    }
+    if (bru.getVar("form_id")) break;
+  }
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+
+  test("Response contains messages array", function() {
+    const body = res.getBody();
+    const messages = (body && body.data && body.data.messages) || [];
+    expect(messages).to.be.an('array');
+  });
+}

@@ -1,0 +1,109 @@
+meta {
+  name: Create Shared Memory
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/mid/shared-memory/create
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+body:json {
+  {
+    "persona_id": null,
+    "label": "bruno-test-memory",
+    "description": null,
+    "value": null
+  }
+}
+
+script:pre-request {
+  const token = bru.getEnvVar("access_token");
+  const baseUrl = bru.getEnvVar("base_url");
+
+  const personasRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/personas/list`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: { limit: 1, offset: 0 }
+  });
+
+  const personas = personasRes.data?.data?.personas || [];
+  const personaId = personas.length > 0 ? personas[0].id : null;
+
+  if (!personaId) {
+    console.warn("[Create Shared Memory] ⚠️ No personas available — skipping");
+    bru.runner.skipRequest();
+    return;
+  }
+
+  bru.setVar("shared_memory_persona_id", String(personaId));
+
+  const listRes = await bru.sendRequest({
+    url: `${baseUrl}/api/mid/shared-memory/list`,
+    method: "POST",
+    headers: {
+      "Cookie": `access_token=${token}`,
+      "Content-Type": "application/json"
+    },
+    data: { limit: 1, offset: 0, persona_id: personaId, search: null }
+  });
+
+  const rawData = listRes.data?.data || {};
+  console.log(`[Create Shared Memory] List response keys: ${JSON.stringify(Object.keys(rawData))}`);
+  console.log(`[Create Shared Memory] blocks count: ${rawData.blocks?.length}, first block: ${JSON.stringify(rawData.blocks?.[0])}`);
+  const existingBlocks = rawData.blocks || [];
+  const existing = Array.isArray(existingBlocks) ? existingBlocks[0] : null;
+
+  if (existing?.id) {
+    bru.setVar("shared_memory_block_id", String(existing.id));
+    console.log(`[Create Shared Memory] ♻️ Block already exists (id: ${existing.id}) — reusing, skipping create`);
+    bru.runner.skipRequest();
+    return;
+  }
+
+  const uniqueLabel = `bruno-test-memory-${Date.now()}`;
+  bru.setVar("shared_memory_label", uniqueLabel);
+  console.log(`[Create Shared Memory] Using persona_id: ${personaId}, label: ${uniqueLabel}`);
+  req.setBody({
+    persona_id: personaId,
+    label: uniqueLabel,
+    description: "Bruno test shared memory",
+    value: "test value"
+  });
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const body = res.getBody();
+  if (status === 200 || status === 201) {
+    const blockId = body?.data?.id;
+    if (blockId) {
+      bru.setVar("shared_memory_block_id", String(blockId));
+      console.log(`[Create Shared Memory] ✅ block_id saved: ${blockId}`);
+    } else {
+      console.warn("[Create Shared Memory] ⚠️ No block id in response — full body: " + JSON.stringify(body));
+    }
+  } else {
+    console.error(`[Create Shared Memory] ❌ ${status} — ${JSON.stringify(body)}`);
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Response success is true", function() {
+    expect(res.getBody().success).to.equal(true);
+  });
+}

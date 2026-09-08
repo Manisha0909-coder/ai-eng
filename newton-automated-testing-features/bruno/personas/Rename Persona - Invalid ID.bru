@@ -1,0 +1,47 @@
+meta {
+  name: Rename Persona - Invalid ID
+  type: http
+  seq: 35
+}
+
+patch {
+  url: {{base_url}}/api/mid/personas/999999999/rename
+  body: json
+  auth: none
+}
+
+headers {
+  Cookie: access_token={{access_token}}
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Rename Persona - Invalid ID] Running negative test: nonexistent persona_id 999999999");
+}
+
+body:json {
+  {
+    "persona_name": "Should Not Rename"
+  }
+}
+
+script:post-response {
+  const status = res.getStatus();
+  const expected = [400, 404];
+  if (!expected.includes(status)) {
+    console.error(`❌ [Rename Persona - Invalid ID] Expected ${expected.join(" or ")} — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Rename Persona - Invalid ID] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 400 or 404", function() {
+    expect([400, 404]).to.include(res.getStatus());
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

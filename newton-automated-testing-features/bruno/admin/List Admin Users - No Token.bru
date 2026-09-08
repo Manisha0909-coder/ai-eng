@@ -1,0 +1,40 @@
+meta {
+  name: List Admin Users - No Token
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/mid/admin/users/list
+  body: none
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[List Admin Users - No Token] Running negative test: missing auth cookie");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status === 401) {
+    console.log(`✅ [List Admin Users - No Token] Correctly rejected with 401`);
+  } else {
+    console.error(`❌ [List Admin Users - No Token] Expected 401 — got ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401 Unauthorized", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}

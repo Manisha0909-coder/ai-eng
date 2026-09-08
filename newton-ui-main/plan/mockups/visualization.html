@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newton · Visualization — Mockup</title>
+<!-- BEGIN shared-head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (localStorage.getItem('newton-mock-theme') === 'dark') document.documentElement.classList.add('dark');</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          background:    'rgb(var(--c-background) / <alpha-value>)',
+          surface:       'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2':   'rgb(var(--c-surface-2) / <alpha-value>)',
+          'text-main':   'rgb(var(--c-text-main) / <alpha-value>)',
+          'text-muted':  'rgb(var(--c-text-muted) / <alpha-value>)',
+          'border-main': 'rgb(var(--c-border) / <alpha-value>)',
+          primary:       'rgb(var(--c-primary) / <alpha-value>)',
+          accent:        'rgb(var(--c-accent) / <alpha-value>)',
+          'input-bg':    'rgb(var(--c-input) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          sans:    ['"Instrument Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"Spline Sans Mono"', 'ui-monospace', 'monospace'],
+        },
+        fontSize: { '2xs': ['0.625rem', { lineHeight: '0.875rem' }] },
+        boxShadow: {
+          lift:   '0 1px 2px rgb(16 24 20 / 0.05), 0 8px 24px -12px rgb(16 24 20 / 0.12)',
+          dialog: '0 24px 64px -16px rgb(8 14 11 / 0.35)',
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --c-background: 246 247 244;
+    --c-surface:    255 255 255;
+    --c-surface-2:  240 243 239;
+    --c-text-main:  26 34 31;
+    --c-text-muted: 92 107 102;
+    --c-border:     224 231 226;
+    --c-primary:    23 112 92;
+    --c-accent:     168 123 45;
+    --c-input:      255 255 255;
+  }
+  .dark {
+    --c-background: 13 20 17;
+    --c-surface:    22 32 27;
+    --c-surface-2:  29 42 36;
+    --c-text-main:  233 240 235;
+    --c-text-muted: 145 163 154;
+    --c-border:     42 56 50;
+    --c-primary:    61 185 149;
+    --c-accent:     212 169 95;
+    --c-input:      18 27 23;
+  }
+  html { font-size: clamp(14px, 1vw + 0.75rem, 16px); }
+  body { font-family: "Instrument Sans", system-ui, sans-serif; }
+  .spectrum-rule { height: 2px; background: linear-gradient(90deg, rgb(var(--c-primary)), #3fa98f 45%, rgb(var(--c-accent))); }
+  .anno { border: 1px dashed rgb(var(--c-text-muted) / 0.4); border-radius: 10px; }
+  .anno-tag { font-family: "Spline Sans Mono", monospace; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--c-text-muted)); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; } }
+  .scroll-quiet::-webkit-scrollbar { width: 5px; } .scroll-quiet::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; } .scroll-quiet::-webkit-scrollbar-track { background: transparent; }
+  :focus-visible { outline: 2px solid rgb(var(--c-primary)); outline-offset: 2px; }
+</style>
+<!-- END shared-head -->
+</head>
+<body class="bg-background text-text-main antialiased overflow-hidden h-screen flex flex-col">
+
+<!-- BEGIN shared-header (visualization variant: center pill active) -->
+<header class="h-14 border-b border-border-main bg-surface/80 backdrop-blur-md flex items-center px-4 gap-3 shrink-0 z-20">
+  <div class="flex items-center gap-1 min-w-0">
+    <button class="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-surface-2 transition-colors">
+      <svg width="22" height="22" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M17 4 L30 27 H4 Z" class="stroke-text-main" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" class="fill-primary" opacity="0.9"/></svg>
+      <span class="font-display font-semibold text-base">Newton</span>
+    </button>
+    <button class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-surface-2 transition-colors text-sm border border-border-main ml-1">
+      <span class="w-5 h-5 rounded-full bg-accent/20 text-accent font-semibold text-2xs flex items-center justify-center">DA</span>
+      <span class="font-medium">Data Analyst</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- Center: Dashboard | Data toggle (dashboard persona only) -->
+  <div class="absolute left-1/2 -translate-x-1/2 flex gap-0.5 bg-surface-2 p-0.5 rounded-xl border border-border-main">
+    <button class="flex items-center gap-1.5 px-3.5 h-8 rounded-lg bg-surface border border-border-main text-sm font-medium shadow-lift transition-all">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      Dashboard
+    </button>
+    <button class="flex items-center gap-1.5 px-3.5 h-8 rounded-lg text-sm text-text-muted hover:text-text-main transition-colors">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      Data
+    </button>
+  </div>
+
+  <div class="flex-1"></div>
+  <div class="flex items-center gap-0.5">
+    <button onclick="newtonToggleTheme()" class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Toggle theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></button>
+    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Settings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+    <button class="w-8 h-8 rounded-lg flex items-center justify-center text-text-muted hover:bg-surface-2 transition-colors" aria-label="Log out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+  </div>
+</header>
+<!-- END shared-header -->
+
+<!-- Split layout: narrow chat + dominant viz -->
+<div class="flex flex-1 overflow-hidden">
+
+  <!-- Chat panel (narrow, collapsible) -->
+  <div class="w-72 border-r border-border-main bg-surface flex flex-col shrink-0 overflow-hidden">
+    <div class="spectrum-rule"></div>
+    <div class="flex-1 overflow-y-auto scroll-quiet p-4 space-y-4">
+      <p class="text-xs text-text-muted text-center py-2">Dashboard chat session active</p>
+      <!-- Sample message stub -->
+      <div class="flex gap-2">
+        <div class="shrink-0 w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center">
+          <svg width="12" height="12" viewBox="0 0 34 34" fill="none"><path d="M17 4 L30 27 H4 Z" stroke="rgb(var(--c-primary))" stroke-width="2" stroke-linejoin="round"/><path d="M17 12 L23.5 23.5 H10.5 Z" fill="rgb(var(--c-primary))" opacity="0.9"/></svg>
+        </div>
+        <div class="bg-surface-2 rounded-xl px-3 py-2 text-xs text-text-muted flex-1">Here's the Q3 revenue breakdown across your selected regions.</div>
+      </div>
+    </div>
+    <!-- Chat input (compact) -->
+    <div class="border-t border-border-main p-3">
+      <div class="flex items-center gap-2 rounded-xl border border-border-main bg-input-bg px-3 h-9">
+        <input type="text" placeholder="Ask about the data…" class="flex-1 text-xs bg-transparent focus:outline-none placeholder:text-text-muted">
+        <button class="w-6 h-6 rounded-lg flex items-center justify-center bg-primary text-white dark:text-[#0d1411]" aria-label="Send">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drag handle -->
+  <div class="w-1 bg-border-main hover:bg-primary/40 transition-colors cursor-col-resize shrink-0" aria-label="Resize panels" role="separator"></div>
+
+  <!-- Visualization area -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Chart tab toolbar -->
+    <div class="border-b border-border-main bg-surface/80 px-5 py-2.5 flex items-center gap-3 shrink-0">
+      <span class="text-2xs font-mono uppercase tracking-[0.1em] text-text-muted font-semibold">Dashboard</span>
+      <div class="flex-1"></div>
+      <button class="flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs border border-border-main text-text-muted hover:bg-surface-2 transition-colors">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Reset layout
+      </button>
+      <button class="flex items-center gap-1.5 h-7 px-3 rounded-lg text-xs bg-primary text-white dark:text-[#0d1411] hover:opacity-90 transition-opacity">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit layout
+      </button>
+    </div>
+
+    <!-- Chart grid -->
+    <div class="flex-1 overflow-y-auto scroll-quiet p-5">
+      <div class="grid grid-cols-2 gap-4 h-full" style="grid-auto-rows: minmax(200px, 1fr);">
+
+        <!-- Chart card: bar chart -->
+        <div class="bg-surface border border-border-main rounded-xl shadow-lift overflow-hidden flex flex-col group">
+          <div class="px-4 pt-3.5 pb-2 flex items-center justify-between border-b border-border-main">
+            <div>
+              <div class="text-sm font-medium">Q3 Revenue by Region</div>
+              <div class="text-2xs text-text-muted mt-0.5">Jul – Sep 2025 · USD millions</div>
+            </div>
+            <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors opacity-0 group-hover:opacity-100" aria-label="Fullscreen">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+          <!-- SVG bar chart -->
+          <div class="flex-1 p-4">
+            <svg viewBox="0 0 320 160" class="w-full h-full">
+              <defs>
+                <linearGradient id="bar-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgb(var(--c-primary))" stop-opacity="0.85"/>
+                  <stop offset="100%" stop-color="rgb(var(--c-primary))" stop-opacity="0.5"/>
+                </linearGradient>
+              </defs>
+              <!-- Horizontal grid -->
+              <line x1="40" y1="20" x2="310" y2="20" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <line x1="40" y1="55" x2="310" y2="55" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <line x1="40" y1="90" x2="310" y2="90" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <line x1="40" y1="125" x2="310" y2="125" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <!-- Y labels -->
+              <text x="36" y="23" text-anchor="end" font-size="9" fill="rgb(var(--c-text-muted))">120</text>
+              <text x="36" y="58" text-anchor="end" font-size="9" fill="rgb(var(--c-text-muted))">90</text>
+              <text x="36" y="93" text-anchor="end" font-size="9" fill="rgb(var(--c-text-muted))">60</text>
+              <text x="36" y="128" text-anchor="end" font-size="9" fill="rgb(var(--c-text-muted))">30</text>
+              <!-- Bars -->
+              <rect x="50" y="35" width="32" height="90" rx="4" fill="url(#bar-grad)"/>
+              <rect x="100" y="50" width="32" height="75" rx="4" fill="url(#bar-grad)"/>
+              <rect x="150" y="25" width="32" height="100" rx="4" fill="url(#bar-grad)"/>
+              <rect x="200" y="65" width="32" height="60" rx="4" fill="url(#bar-grad)" opacity="0.6"/>
+              <rect x="250" y="45" width="32" height="80" rx="4" fill="url(#bar-grad)" opacity="0.7"/>
+              <!-- X labels -->
+              <text x="66" y="145" text-anchor="middle" font-size="9" fill="rgb(var(--c-text-muted))">APAC</text>
+              <text x="116" y="145" text-anchor="middle" font-size="9" fill="rgb(var(--c-text-muted))">EMEA</text>
+              <text x="166" y="145" text-anchor="middle" font-size="9" fill="rgb(var(--c-text-muted))">NA</text>
+              <text x="216" y="145" text-anchor="middle" font-size="9" fill="rgb(var(--c-text-muted))">LATAM</text>
+              <text x="266" y="145" text-anchor="middle" font-size="9" fill="rgb(var(--c-text-muted))">MEA</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Chart card: line chart -->
+        <div class="bg-surface border border-border-main rounded-xl shadow-lift overflow-hidden flex flex-col group">
+          <div class="px-4 pt-3.5 pb-2 flex items-center justify-between border-b border-border-main">
+            <div>
+              <div class="text-sm font-medium">Monthly Active Users</div>
+              <div class="text-2xs text-text-muted mt-0.5">12-month trend</div>
+            </div>
+            <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors opacity-0 group-hover:opacity-100" aria-label="Fullscreen">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+          <div class="flex-1 p-4">
+            <svg viewBox="0 0 320 160" class="w-full h-full">
+              <defs>
+                <linearGradient id="line-fill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgb(var(--c-accent))" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="rgb(var(--c-accent))" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="40" y1="20" x2="310" y2="20" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <line x1="40" y1="75" x2="310" y2="75" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <line x1="40" y1="130" x2="310" y2="130" stroke="rgb(var(--c-border))" stroke-width="0.5"/>
+              <path d="M50,110 C70,95 90,120 110,85 C130,50 150,70 170,55 C190,35 210,45 230,30 C250,18 270,28 290,22"
+                    fill="none" stroke="rgb(var(--c-accent))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M50,110 C70,95 90,120 110,85 C130,50 150,70 170,55 C190,35 210,45 230,30 C250,18 270,28 290,22 L290,130 L50,130 Z"
+                    fill="url(#line-fill)"/>
+              <circle cx="290" cy="22" r="3.5" fill="rgb(var(--c-accent))"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Chart card: edit-mode state (drag in progress) -->
+        <div class="anno p-3 col-span-2">
+          <span class="anno-tag">chart card · edit mode · drag in progress — drag handle (cursor-grabbing, top-left) · resize corner (cursor-se-resize, bottom-right) · drop zones on neighbors</span>
+          <div class="mt-3 grid grid-cols-3 gap-3">
+            <!-- Card being dragged (elevated + rotated) -->
+            <div class="bg-surface border border-primary/30 rounded-xl overflow-hidden flex flex-col relative"
+                 style="transform: rotate(1.5deg) translateY(-6px); box-shadow: 0 20px 48px -8px rgb(8 14 11 / 0.28), 0 0 0 2px rgb(var(--c-primary) / 0.25);">
+              <!-- Drag handle active -->
+              <div class="absolute top-2 left-2 z-10 w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center cursor-grabbing border border-primary/25">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" class="text-primary"><circle cx="9" cy="5" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="5" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="15" cy="19" r="1.5"/></svg>
+              </div>
+              <!-- Resize corner -->
+              <div class="absolute bottom-1.5 right-1.5 z-10 w-5 h-5 cursor-se-resize flex items-end justify-end opacity-60">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="text-primary"><path d="M9 1L1 9M9 5L5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="px-3 pt-9 pb-2 border-b border-border-main">
+                <div class="text-xs font-medium">Q3 Revenue</div>
+              </div>
+              <div class="flex-1 p-3 flex items-center justify-center" style="min-height: 80px;">
+                <svg viewBox="0 0 80 50" class="w-full h-12">
+                  <rect x="5" y="20" width="12" height="25" rx="2" fill="rgb(var(--c-primary) / 0.7)"/>
+                  <rect x="22" y="10" width="12" height="35" rx="2" fill="rgb(var(--c-primary) / 0.75)"/>
+                  <rect x="39" y="5" width="12" height="40" rx="2" fill="rgb(var(--c-primary))"/>
+                  <rect x="56" y="18" width="12" height="27" rx="2" fill="rgb(var(--c-primary) / 0.6)"/>
+                </svg>
+              </div>
+            </div>
+            <!-- Drop zone (valid drop target) -->
+            <div class="border-2 border-dashed border-primary/40 rounded-xl flex flex-col" style="min-height: 140px; background: rgb(var(--c-primary) / 0.03);">
+              <div class="flex-1 flex items-center justify-center">
+                <div class="text-center">
+                  <div class="w-8 h-8 rounded-lg border-2 border-dashed border-primary/35 flex items-center justify-center mx-auto mb-1.5">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-primary/40"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </div>
+                  <p class="text-2xs text-primary/40 font-mono">Drop here</p>
+                </div>
+              </div>
+            </div>
+            <!-- Stationary card (dimmed) -->
+            <div class="bg-surface border border-border-main rounded-xl overflow-hidden flex flex-col opacity-60" style="min-height: 140px;">
+              <div class="px-3 pt-3 pb-2 border-b border-border-main">
+                <div class="text-xs font-medium text-text-muted">Monthly Users</div>
+              </div>
+              <div class="flex-1 p-3 flex items-center justify-center">
+                <svg viewBox="0 0 80 50" class="w-full h-12">
+                  <path d="M5,42 C20,32 35,46 50,26 C65,10 72,20 80,14" fill="none" stroke="rgb(var(--c-accent))" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2.5 flex flex-wrap gap-x-5 gap-y-1">
+            <span class="text-2xs text-text-muted font-mono">↖ Dragged card: elevated shadow + 1.5° rotation + cursor-grabbing</span>
+            <span class="text-2xs text-text-muted font-mono">↑ Drop zone: dashed border + primary/3 tint</span>
+            <span class="text-2xs text-text-muted font-mono">↗ Neighboring cards: 60% opacity while drag active</span>
+            <span class="text-2xs text-text-muted font-mono">↘ Resize corner: cursor-se-resize, grip lines bottom-right</span>
+          </div>
+        </div>
+
+        <!-- Fullscreen modal annotation -->
+        <div class="anno p-3">
+          <span class="anno-tag">fullscreen modal overlay</span>
+          <div class="mt-2 bg-background/90 rounded-xl flex flex-col overflow-hidden" style="height: 180px;">
+            <div class="bg-surface border-b border-border-main px-4 py-2.5 flex items-center justify-between">
+              <span class="text-sm font-medium">Q3 Revenue by Region</span>
+              <button class="w-7 h-7 rounded-md flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-text-main transition-colors">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="flex-1 flex items-center justify-center bg-surface text-text-muted text-xs">[Chart fills full viewport]</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Data tab section (shown below chart tab as second full section) -->
+    <div class="border-t-2 border-dashed border-border-main bg-surface/30">
+      <div class="px-5 py-3 flex items-center gap-2">
+        <div class="flex gap-0.5 bg-surface-2 p-0.5 rounded-lg border border-border-main">
+          <button class="flex items-center gap-1.5 px-3 h-7 rounded-md text-xs font-medium text-text-muted">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            Data
+          </button>
+        </div>
+        <span class="text-2xs text-text-muted font-mono uppercase tracking-wider">Data tab — source list + schema</span>
+      </div>
+      <div class="flex border-t border-border-main" style="height: 200px;">
+        <!-- Source list -->
+        <div class="w-48 border-r border-border-main p-3 space-y-1 overflow-y-auto scroll-quiet">
+          <div class="px-2.5 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-xs font-medium text-primary">sales_db</div>
+          <div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-2 text-xs text-text-muted cursor-pointer transition-colors">crm_export</div>
+          <div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-2 text-xs text-text-muted cursor-pointer transition-colors">analytics_prod</div>
+          <div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-2 text-xs text-text-muted cursor-pointer transition-colors">marketing_dw</div>
+        </div>
+        <!-- Details: Schema/Preview tabs -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <div class="flex gap-0 border-b border-border-main px-4 pt-2">
+            <button class="px-3 pb-2 text-xs font-medium border-b-2 border-primary text-primary">Schema</button>
+            <button class="px-3 pb-2 text-xs text-text-muted border-b-2 border-transparent hover:text-text-main transition-colors">Preview</button>
+          </div>
+          <div class="flex-1 overflow-auto scroll-quiet p-3">
+            <table class="w-full text-2xs border-collapse">
+              <thead><tr class="text-text-muted uppercase tracking-wider"><th class="text-left pb-1.5 pr-3 font-medium">Column</th><th class="text-left pb-1.5 pr-3 font-medium">Type</th><th class="text-left pb-1.5 font-medium">Nullable</th></tr></thead>
+              <tbody class="divide-y divide-border-main">
+                <tr><td class="py-1 pr-3 font-mono text-primary">id</td><td class="py-1 pr-3 text-text-muted">integer</td><td class="py-1 text-text-muted">No</td></tr>
+                <tr><td class="py-1 pr-3 font-mono text-primary">region</td><td class="py-1 pr-3 text-text-muted">varchar</td><td class="py-1 text-text-muted">No</td></tr>
+                <tr><td class="py-1 pr-3 font-mono text-primary">revenue</td><td class="py-1 pr-3 text-text-muted">decimal</td><td class="py-1 text-text-muted">Yes</td></tr>
+                <tr><td class="py-1 pr-3 font-mono text-primary">period</td><td class="py-1 pr-3 text-text-muted">date</td><td class="py-1 text-text-muted">No</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /viz area -->
+</div>
+
+<!-- Floating toggle: hide/show chat -->
+<button class="fixed bottom-5 left-[17.5rem] z-30 w-10 h-10 rounded-full bg-surface border border-border-main shadow-lift flex items-center justify-center text-text-muted hover:bg-surface-2 hover:text-primary hover:border-primary/30 transition-all" aria-label="Hide chat panel">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<!-- BEGIN theme-toggle -->
+<button onclick="newtonToggleTheme()"
+        class="fixed bottom-4 right-4 z-[9999] h-9 px-3.5 rounded-full bg-text-main text-background text-xs font-mono uppercase tracking-wider flex items-center gap-2 shadow-dialog hover:opacity-90 transition-opacity"
+        aria-label="Toggle light and dark mode">
+  <span class="w-3 h-3 rounded-full border-2 border-current" style="background: linear-gradient(90deg, currentColor 50%, transparent 50%);" aria-hidden="true"></span>
+  <span>Theme</span>
+</button>
+<script>
+  function newtonToggleTheme() {
+    const dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('newton-mock-theme', dark ? 'dark' : 'light');
+  }
+</script>
+<!-- END theme-toggle -->
+
+</body>
+</html>

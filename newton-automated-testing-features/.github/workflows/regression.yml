@@ -1,0 +1,67 @@
+name: Regression Tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      persona:
+        description: "Persona to test"
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - graph
+          - asset_manager
+          - tender
+          - hr
+          - sales_dashboard
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install aiohttp pandas openpyxl python-dotenv selenium webdriver-manager playwright requests urllib3
+
+      - name: Install Playwright browsers
+        run: playwright install chromium --with-deps
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Run regression tests
+        env:
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          GOTALK_HEADLESS: "true"
+        run: |
+          PERSONA="${{ github.event.inputs.persona || 'all' }}"
+          PERSONA_ARG=""
+          if [ "$PERSONA" != "all" ]; then
+            PERSONA_ARG="--persona $PERSONA"
+          fi
+          pytest regression/test_regression.py \
+            $PERSONA_ARG \
+            -v \
+            --junit-xml=regression/results_regression/regression.xml
+
+      - name: Upload regression results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-results
+          path: regression/results_regression/
+          retention-days: 7

@@ -1,0 +1,45 @@
+meta {
+  name: Upload Image - No Token
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/mid/files/images/upload
+  body: multipartForm
+  auth: none
+}
+
+headers {
+  Cookie:
+  X-API-Key:
+}
+
+body:multipart-form {
+  file: @file(../test-data/test.jpg)
+}
+
+script:pre-request {
+  bru.setVar("negative_test", true);
+  console.log("[Upload Image - No Token] Running negative test: missing auth");
+}
+
+script:post-response {
+  const status = res.getStatus();
+  if (status !== 401) {
+    console.error(`❌ [Upload Image - No Token] Expected 401 — got ${status}`);
+    console.error(`Response: ${JSON.stringify(res.getBody())}`);
+  } else {
+    console.log(`✅ [Upload Image - No Token] Correctly rejected with ${status}`);
+  }
+}
+
+tests {
+  test("Status is 401", function() {
+    expect(res.getStatus()).to.equal(401);
+  });
+
+  test("Response does not indicate success", function() {
+    expect(res.getBody().success).to.not.equal(true);
+  });
+}
