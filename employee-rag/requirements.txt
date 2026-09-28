@@ -5,6 +5,11 @@ langchain-huggingface==0.3.1
 langchain-openai==0.3.35
 langchain-text-splitters==0.3.11
 langchain-chroma==0.2.6
+# chromadb depends on kubernetes>=28.1.0 with no upper bound, which makes pip
+# backtrack through ~9 releases (each needing its own metadata fetch) to find
+# one compatible with everything else. Pinning it directly collapses that to
+# a single resolution and avoids intermittent PyPI read-timeouts mid-build.
+kubernetes==35.0.0
 chromadb==1.5.9
 sentence-transformers==5.1.2
 rank-bm25==0.2.2
