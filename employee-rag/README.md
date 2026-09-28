@@ -49,7 +49,6 @@ eval/
                           accuracy, latency; --fail-under for CI gating
 documents/        - source policy .txt files (edit/add freely, ingest picks up any *.txt)
 Dockerfile, docker-compose.yml, .dockerignore
-app.py, app2.py, app3.py - original exploratory scripts, kept as-is
 ```
 
 ## Setup
