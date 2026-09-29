@@ -1,0 +1,21 @@
+{
+  "n_answerable": 38,
+  "results": {
+    "vector_only": {
+      "hit_rate": 0.947,
+      "mrr": 0.93
+    },
+    "bm25_only": {
+      "hit_rate": 0.895,
+      "mrr": 0.851
+    },
+    "hybrid_rrf": {
+      "hit_rate": 0.974,
+      "mrr": 0.943
+    },
+    "hybrid_rerank": {
+      "hit_rate": 0.974,
+      "mrr": 0.943
+    }
+  }
+}

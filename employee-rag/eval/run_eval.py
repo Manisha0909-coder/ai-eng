@@ -23,6 +23,7 @@ import argparse
 import json
 import statistics
 import sys
+import time
 from pathlib import Path
 
 from rag.pipeline import NO_ANSWER, get_pipeline
@@ -30,6 +31,10 @@ from rag.pipeline import NO_ANSWER, get_pipeline
 EVAL_DIR = Path(__file__).resolve().parent
 DATASET_PATH = EVAL_DIR / "golden_dataset.json"
 REPORT_PATH = EVAL_DIR / "report.json"
+
+# openrouter/free enforces a 20-requests-per-minute cap. A dataset of this size
+# exceeds that run back-to-back, so pace requests to stay comfortably under it.
+REQUEST_PACING_SECONDS = 3.5
 
 
 def _abstained(answer: str) -> bool:
@@ -45,8 +50,31 @@ def run(dataset) -> dict:
     pipeline = get_pipeline()
     results = []
 
-    for item in dataset:
-        result = pipeline.answer(item["question"])
+    for i, item in enumerate(dataset):
+        if i > 0:
+            time.sleep(REQUEST_PACING_SECONDS)
+
+        try:
+            result = pipeline.answer(item["question"])
+        except Exception as exc:  # pragma: no cover - network/rate-limit errors
+            # One flaky call shouldn't abort scoring of the other N-1 questions --
+            # record it as a failure (never counts as correct) and move on.
+            print(f"WARNING: {item['id']} failed: {exc!r}")
+            results.append({
+                "id": item["id"],
+                "question": item["question"],
+                "category": item["category"],
+                "answerable": item["answerable"],
+                "expected_source": item["expected_source"],
+                "retrieved_sources": [],
+                "retrieval_hit": False if item["answerable"] else None,
+                "answer": f"ERROR: {exc}",
+                "correct": False,
+                "errored": True,
+                "timings_ms": {"retrieval": 0.0, "rerank": 0.0, "generation": 0.0, "total": 0.0},
+            })
+            continue
+
         sources_hit = [s["source"] for s in result["sources"]]
 
         if item["answerable"]:
@@ -66,6 +94,7 @@ def run(dataset) -> dict:
             "retrieval_hit": retrieval_hit,
             "answer": result["answer"],
             "correct": correct,
+            "errored": False,
             "timings_ms": result["timings_ms"],
         })
 
@@ -73,8 +102,17 @@ def run(dataset) -> dict:
 
 
 def summarize(results) -> dict:
-    answerable = [r for r in results if r["answerable"]]
-    unanswerable = [r for r in results if not r["answerable"]]
+    # A request that errored out (network/rate-limit) never got a real answer --
+    # it's "not evaluated", not "wrong". Keeping it in the accuracy denominators
+    # would conflate infra flakiness with actual model/retrieval quality, so every
+    # accuracy metric below is computed over evaluated results only. It's still
+    # counted (n_errors, errored_ids) so a partial run is visibly incomplete
+    # rather than silently reported as a worse score than the model earned.
+    evaluated = [r for r in results if not r["errored"]]
+    errored_ids = [r["id"] for r in results if r["errored"]]
+
+    answerable = [r for r in evaluated if r["answerable"]]
+    unanswerable = [r for r in evaluated if not r["answerable"]]
 
     retrieval_hit_rate = (
         sum(1 for r in answerable if r["retrieval_hit"]) / len(answerable)
@@ -88,12 +126,15 @@ def summarize(results) -> dict:
         sum(1 for r in unanswerable if r["correct"]) / len(unanswerable)
         if unanswerable else None
     )
-    overall_accuracy = sum(1 for r in results if r["correct"]) / len(results)
+    overall_accuracy = (
+        sum(1 for r in evaluated if r["correct"]) / len(evaluated)
+        if evaluated else None
+    )
 
-    total_latencies = [r["timings_ms"]["total"] for r in results]
+    total_latencies = [r["timings_ms"]["total"] for r in evaluated]
 
     by_category = {}
-    for r in results:
+    for r in evaluated:
         by_category.setdefault(r["category"], []).append(r["correct"])
 
     category_accuracy = {
@@ -103,16 +144,18 @@ def summarize(results) -> dict:
 
     return {
         "n_examples": len(results),
+        "n_errors": len(errored_ids),
+        "errored_ids": errored_ids,
         "retrieval_hit_rate": retrieval_hit_rate,
         "answer_accuracy": answer_accuracy,
         "abstention_accuracy": abstention_accuracy,
         "overall_accuracy": overall_accuracy,
-        "avg_latency_ms": round(statistics.mean(total_latencies), 1),
+        "avg_latency_ms": round(statistics.mean(total_latencies), 1) if total_latencies else None,
         "p95_latency_ms": round(
             statistics.quantiles(total_latencies, n=20)[18]
             if len(total_latencies) >= 20 else max(total_latencies),
             1,
-        ),
+        ) if total_latencies else None,
         "category_accuracy": category_accuracy,
         "results": results,
     }
@@ -129,6 +172,9 @@ def print_report(summary: dict) -> None:
             print(f"         -> got: {r['answer']!r}")
 
     print(f"\n{'-'*70}")
+    if summary["n_errors"]:
+        print(f"WARNING: {summary['n_errors']} question(s) errored out (never scored, "
+              f"excluded from the metrics below): {', '.join(summary['errored_ids'])}")
     print(f"Retrieval hit rate   : {_fmt_pct(summary['retrieval_hit_rate'])}")
     print(f"Answer accuracy      : {_fmt_pct(summary['answer_accuracy'])}")
     print(f"Abstention accuracy  : {_fmt_pct(summary['abstention_accuracy'])}")
@@ -162,7 +208,11 @@ def main() -> int:
     REPORT_PATH.write_text(json.dumps(summary, indent=2))
     print(f"Full report written to {REPORT_PATH}")
 
-    if args.fail_under is not None and summary["overall_accuracy"] < args.fail_under:
+    if (
+        args.fail_under is not None
+        and summary["overall_accuracy"] is not None
+        and summary["overall_accuracy"] < args.fail_under
+    ):
         print(f"FAIL: overall_accuracy {summary['overall_accuracy']:.3f} < --fail-under {args.fail_under}")
         return 1
 
