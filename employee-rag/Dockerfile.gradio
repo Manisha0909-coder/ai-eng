@@ -1,0 +1,44 @@
+# Employee Policy RAG: Gradio demo (LangGraph agent + hybrid search + reranking)
+# Built for Google Cloud Run: listens on $PORT, models and index baked in.
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# libgomp1: required at runtime by torch on Debian slim images.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV HF_HOME=/app/.cache/huggingface \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8080
+
+# CPU-only torch first: avoids pulling multi-GB CUDA wheels, so the image is
+# smaller and cold starts are faster. requirements.txt then sees torch as
+# already satisfied.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY rag/ ./rag/
+COPY agent/ ./agent/
+COPY documents/ ./documents/
+COPY app.py api.py ./
+
+# Bake the embedding + reranker models into the image so the first request
+# never downloads from the HuggingFace Hub.
+RUN python -c "from rag.ingest import get_embeddings; get_embeddings()" && \
+    python -c "from rag.reranker import get_reranker; get_reranker()"
+
+# Build the Chroma index at build time so container startup doesn't re-embed.
+RUN python -m rag.ingest
+
+RUN useradd --create-home --uid 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8080
+
+# Gradio chat UI. app.py reads $PORT (Cloud Run sets it; defaults to 8080 here).
+CMD ["python", "app.py"]

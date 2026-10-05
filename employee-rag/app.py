@@ -1,9 +1,12 @@
 """Gradio chat UI in front of the LangGraph agent -- the live demo front end.
 
-Local run:   python app.py
-Deployed to: Hugging Face Spaces (native Gradio SDK, see README).
+Local run:    python app.py
+Deployed to:  Google Cloud Run (see Dockerfile.gradio) -- Cloud Run injects
+              $PORT and routes traffic to whatever port the container listens
+              on, so this must bind to it rather than Gradio's 7860 default.
 """
 
+import os
 from typing import Any, Dict, List
 
 import gradio as gr
@@ -57,4 +60,4 @@ if __name__ == "__main__":
     # message. Guarded here (not at module level) so importing this module --
     # e.g. to test _history_to_messages -- doesn't pull in the whole stack.
     get_pipeline()
-    demo.launch(server_name="0.0.0.0")
+    demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
