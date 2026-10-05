@@ -7,7 +7,7 @@ class _FakePipeline:
     def __init__(self, result):
         self._result = result
 
-    def answer(self, question):
+    def answer(self, question, source="api"):
         return self._result
 
 

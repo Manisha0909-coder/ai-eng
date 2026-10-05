@@ -26,6 +26,8 @@ import sys
 import time
 from pathlib import Path
 
+from langfuse import get_client
+
 from rag.pipeline import NO_ANSWER, get_pipeline
 
 EVAL_DIR = Path(__file__).resolve().parent
@@ -55,7 +57,7 @@ def run(dataset) -> dict:
             time.sleep(REQUEST_PACING_SECONDS)
 
         try:
-            result = pipeline.answer(item["question"])
+            result = pipeline.answer(item["question"], source="eval")
         except Exception as exc:  # pragma: no cover - network/rate-limit errors
             # One flaky call shouldn't abort scoring of the other N-1 questions --
             # record it as a failure (never counts as correct) and move on.
@@ -207,6 +209,8 @@ def main() -> int:
     print_report(summary)
     REPORT_PATH.write_text(json.dumps(summary, indent=2))
     print(f"Full report written to {REPORT_PATH}")
+
+    get_client().flush()  # short-lived script -- make sure traces are sent before exit
 
     if (
         args.fail_under is not None

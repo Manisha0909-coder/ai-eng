@@ -40,6 +40,7 @@ class AgentState(TypedDict):
 
 
 _llm = None
+_langfuse_handler = None
 
 
 def _get_llm():
@@ -58,6 +59,18 @@ def _get_llm():
     return _llm
 
 
+def _get_langfuse_handler():
+    """Lazy singleton, same reasoning as _get_llm(): no Langfuse credentials
+    needed just to import/test this module."""
+
+    global _langfuse_handler
+    if _langfuse_handler is None:
+        from langfuse.langchain import CallbackHandler
+
+        _langfuse_handler = CallbackHandler()
+    return _langfuse_handler
+
+
 def router_node(state: AgentState) -> AgentState:
     steps = state.get("steps", 0) + 1
 
@@ -65,7 +78,9 @@ def router_node(state: AgentState) -> AgentState:
         return {"messages": [AIMessage(content=STEP_LIMIT_MESSAGE)], "steps": steps}
 
     try:
-        response = _get_llm().invoke(state["messages"])
+        response = _get_llm().invoke(
+            state["messages"], config={"callbacks": [_get_langfuse_handler()]}
+        )
     except Exception as exc:  # pragma: no cover - defensive, mirrors pipeline.py
         print(f"WARNING: agent LLM call failed: {exc!r}")
         response = AIMessage(content=LLM_ERROR_MESSAGE)

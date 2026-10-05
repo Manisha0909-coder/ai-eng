@@ -12,7 +12,7 @@ from agent.graph import MAX_STEPS, STEP_LIMIT_MESSAGE, get_agent
 class _AlwaysCallsToolLLM:
     """Simulates a runaway loop: every call asks for the tool again."""
 
-    def invoke(self, messages):
+    def invoke(self, messages, config=None):
         return AIMessage(
             content="",
             tool_calls=[
@@ -22,7 +22,7 @@ class _AlwaysCallsToolLLM:
 
 
 class _FakePipeline:
-    def answer(self, question):
+    def answer(self, question, source="api"):
         return {"answer": "canned answer", "sources": []}
 
 

@@ -11,11 +11,18 @@ from typing import Any, Dict, List
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+from langfuse import get_client, observe
+from langfuse.langchain import CallbackHandler
 
 from rag import config
 from rag.ingest import build_vectorstore
 from rag.reranker import rerank
 from rag.retrieval import HybridRetriever
+
+# get_client() reads LANGFUSE_PUBLIC_KEY/LANGFUSE_SECRET_KEY/LANGFUSE_BASE_URL from
+# the environment. If they're unset, the client silently disables itself (logs a
+# warning, never raises) -- tracing is additive, not a hard dependency to run this.
+_langfuse = get_client()
 
 NO_ANSWER = "I don't have enough information to answer that."
 GENERATION_ERROR = "The answer service is temporarily unavailable. Please try again."
@@ -63,6 +70,7 @@ class RAGPipeline:
             api_key=config.OPENROUTER_API_KEY,
         )
         self.chain = _PROMPT | self.llm | StrOutputParser()
+        self._langfuse_handler = CallbackHandler()
 
     @staticmethod
     def _is_valid_response(text: str) -> bool:
@@ -79,7 +87,10 @@ class RAGPipeline:
         last_response = ""
 
         for attempt in range(config.GENERATION_MAX_RETRIES):
-            last_response = self.chain.invoke({"context": context, "question": question})
+            last_response = self.chain.invoke(
+                {"context": context, "question": question},
+                config={"callbacks": [self._langfuse_handler]},
+            )
 
             if self._is_valid_response(last_response):
                 return last_response
@@ -90,22 +101,38 @@ class RAGPipeline:
         print(f"WARNING: generation kept returning invalid responses; last one: {last_response!r}")
         return GENERATION_ERROR
 
-    def answer(self, question: str) -> Dict[str, Any]:
+    @observe()
+    def answer(self, question: str, source: str = "api") -> Dict[str, Any]:
+        _langfuse.update_current_trace(tags=[source])
+
         t0 = time.perf_counter()
 
-        candidates = self.retriever.retrieve(question)
+        with _langfuse.start_as_current_span(
+            name="retrieval", input={"question": question}
+        ) as span:
+            candidates = self.retriever.retrieve(question)
+            span.update(output={"n_candidates": len(candidates)})
         retrieval_ms = (time.perf_counter() - t0) * 1000
 
         t1 = time.perf_counter()
         shortlist = candidates[: config.RERANK_CANDIDATES]
-        reranked = rerank(question, shortlist)
-        rerank_ms = (time.perf_counter() - t1) * 1000
 
-        relevant = [
-            (candidate, score)
-            for candidate, score in reranked
-            if score > config.RERANK_SCORE_THRESHOLD
-        ][: config.FINAL_TOP_K]
+        with _langfuse.start_as_current_span(
+            name="rerank", input={"n_candidates": len(shortlist)}
+        ) as span:
+            reranked = rerank(question, shortlist)
+
+            relevant = [
+                (candidate, score)
+                for candidate, score in reranked
+                if score > config.RERANK_SCORE_THRESHOLD
+            ][: config.FINAL_TOP_K]
+
+            span.update(output={
+                "surviving_sources": [c.source for c, _ in relevant],
+                "scores": [round(score, 4) for _, score in relevant],
+            })
+        rerank_ms = (time.perf_counter() - t1) * 1000
 
         sources = [
             {

@@ -2,9 +2,9 @@
 
 A retrieval-augmented Q&A service over employee policy documents (leave,
 IT/security, expenses, code of conduct), with hybrid search, cross-encoder
-reranking, a FastAPI endpoint, a LangGraph agent, an eval suite with a
-52-example golden dataset and a retrieval ablation table, and a Docker
-image ready to deploy.
+reranking, a FastAPI endpoint, a LangGraph agent, Langfuse tracing with
+cost/latency logging, an eval suite with a 52-example golden dataset and a
+retrieval ablation table, and a Docker image ready to deploy.
 
 ## Architecture
 
@@ -60,7 +60,8 @@ rag/
   ingest.py       - loads documents/, chunks, embeds, persists to Chroma (idempotent)
   retrieval.py    - HybridRetriever: vector + BM25 fused with RRF
   reranker.py     - cross-encoder reranking
-  pipeline.py     - retrieve -> rerank -> generate, with retry on flaky LLM responses
+  pipeline.py     - retrieve -> rerank -> generate, with retry on flaky LLM responses,
+                    and Langfuse tracing (spans + cost/latency per call)
 api.py            - FastAPI service (/health, /ask)
 agent/
   tools.py        - wraps rag/pipeline.py as a LangChain tool
@@ -94,6 +95,9 @@ Add your OpenRouter key to `.env`:
 ```
 OPENROUTER_API_KEY=sk-or-v1-...
 ```
+
+Optionally add Langfuse credentials for tracing (see "Tracing" below) — the app
+runs fine without them, tracing just stays disabled.
 
 ## Running the API
 
@@ -149,6 +153,35 @@ python -m agent.cli
 A LangGraph agent that decides whether a question needs the employee-rag
 tool or can be answered directly, with a hard step limit. See `agent/`
 above and `tests/agent/` for the (offline, mocked) routing tests.
+
+## Tracing
+
+Every call to `RAGPipeline.answer()` — from the API, the agent, or the eval
+suite — produces a [Langfuse](https://langfuse.com) trace: `retrieval` and
+`rerank` spans (latency + what each stage returned), and the generation step
+as a nested LLM observation (prompt, completion, token usage, cost, latency),
+via `langfuse.langchain.CallbackHandler`. Traces are tagged by where they came
+from (`api` / `agent` / `eval`) so you can filter production traffic from
+eval runs and manual testing in the dashboard.
+
+Setup (free tier, ~2 minutes): sign up at
+[langfuse.com/cloud](https://langfuse.com/cloud), create a project, copy its
+public/secret keys from Project Settings → API Keys, and add to `.env`:
+
+```
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_BASE_URL=https://cloud.langfuse.com   # or https://us.cloud.langfuse.com for the US region
+```
+
+No credentials set → tracing silently disables itself (the SDK logs a
+warning, never raises) — it's additive, not a hard dependency to run the app.
+
+Note on cost: `openrouter/free` isn't a model string Langfuse's pricing table
+recognizes, so generation cost will likely show as $0/unresolved rather than a
+real figure — latency and token counts are still real. Worth knowing going in
+rather than assuming cost tracking is fully proven out on this particular
+model string.
 
 ## Running with Docker
 

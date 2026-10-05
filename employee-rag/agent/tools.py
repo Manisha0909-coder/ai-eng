@@ -15,7 +15,7 @@ def search_employee_policies(question: str) -> str:
     employee's question. Use this for any question about company policy --
     do not guess at policy specifics from general knowledge."""
 
-    result = get_pipeline().answer(question)
+    result = get_pipeline().answer(question, source="agent")
 
     sources = sorted({s["source"] for s in result["sources"]})
     if not sources:

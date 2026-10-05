@@ -24,9 +24,9 @@ jobs:
         working-directory: employee-rag
         run: pip install -r requirements.txt
 
-      - name: Run agent tests
+      - name: Run tests
         working-directory: employee-rag
-        run: pytest tests/agent -v
+        run: pytest tests/ -v
 
   build-and-push:
     needs: test
