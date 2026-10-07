@@ -101,14 +101,19 @@ class RAGPipeline:
         print(f"WARNING: generation kept returning invalid responses; last one: {last_response!r}")
         return GENERATION_ERROR
 
-    @observe()
+    @observe(name="answer-question", as_type="chain")
     def answer(self, question: str, source: str = "api") -> Dict[str, Any]:
+        # @observe captures all args (self, question, source) as this
+        # observation's input by default -- override with just the question,
+        # the thing a reviewer actually needs. See langfuse/skills
+        # references/instrumentation.md "Common Mistakes".
         _langfuse.update_current_trace(tags=[source])
+        _langfuse.update_current_span(input=question)
 
         t0 = time.perf_counter()
 
-        with _langfuse.start_as_current_span(
-            name="retrieval", input={"question": question}
+        with _langfuse.start_as_current_observation(
+            as_type="retriever", name="retrieve-context", input={"question": question}
         ) as span:
             candidates = self.retriever.retrieve(question)
             span.update(output={"n_candidates": len(candidates)})
@@ -118,7 +123,7 @@ class RAGPipeline:
         shortlist = candidates[: config.RERANK_CANDIDATES]
 
         with _langfuse.start_as_current_span(
-            name="rerank", input={"n_candidates": len(shortlist)}
+            name="rerank-candidates", input={"n_candidates": len(shortlist)}
         ) as span:
             reranked = rerank(question, shortlist)
 
@@ -146,6 +151,7 @@ class RAGPipeline:
         ]
 
         if not relevant:
+            _langfuse.update_current_span(output=NO_ANSWER)
             return {
                 "answer": NO_ANSWER,
                 "sources": [],
@@ -162,6 +168,7 @@ class RAGPipeline:
         t2 = time.perf_counter()
         generated = self._generate(context, question)
         generation_ms = (time.perf_counter() - t2) * 1000
+        _langfuse.update_current_span(output=generated)
 
         return {
             "answer": generated,

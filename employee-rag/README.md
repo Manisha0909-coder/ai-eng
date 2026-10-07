@@ -157,12 +157,28 @@ above and `tests/agent/` for the (offline, mocked) routing tests.
 ## Tracing
 
 Every call to `RAGPipeline.answer()` — from the API, the agent, or the eval
-suite — produces a [Langfuse](https://langfuse.com) trace: `retrieval` and
-`rerank` spans (latency + what each stage returned), and the generation step
-as a nested LLM observation (prompt, completion, token usage, cost, latency),
-via `langfuse.langchain.CallbackHandler`. Traces are tagged by where they came
-from (`api` / `agent` / `eval`) so you can filter production traffic from
-eval runs and manual testing in the dashboard.
+suite — produces a [Langfuse](https://langfuse.com) trace, instrumented
+against Langfuse's own best-practices guide (verb-first stable names,
+explicit clean input/output rather than raw function args, and the most
+specific correct [observation type](https://langfuse.com/docs/observability/features/observation-types)
+for each step):
+
+- `retrieve-context` (`retriever`) and `rerank-candidates` (`span`) — latency
+  + what each stage returned.
+- The generation step as a nested `generation` observation (prompt,
+  completion, token usage, cost, latency) via
+  `langfuse.langchain.CallbackHandler`.
+- When called through the agent, `search_employee_policies` shows up as a
+  `tool` observation (set automatically by the LangChain integration), and
+  the whole agent turn is wrapped as an `agent` observation (`run-agent`) in
+  `app.py`/`agent/cli.py` — so a tool-using turn reads as one coherent tree:
+  agent → router generation → tool → retriever/rerank → generation.
+
+Traces are tagged by where they came from (`api` / `agent` / `eval` /
+`gradio-demo` / `cli`) so you can filter production traffic from eval runs
+and manual testing in the dashboard. The Gradio demo and CLI also set a
+`session_id` (the browser tab's `session_hash`, or a per-REPL-run UUID) so a
+multi-turn conversation groups into one session in the Langfuse UI.
 
 Setup (free tier, ~2 minutes): sign up at
 [langfuse.com/cloud](https://langfuse.com/cloud), create a project, copy its
@@ -172,6 +188,7 @@ public/secret keys from Project Settings → API Keys, and add to `.env`:
 LANGFUSE_PUBLIC_KEY=pk-lf-...
 LANGFUSE_SECRET_KEY=sk-lf-...
 LANGFUSE_BASE_URL=https://cloud.langfuse.com   # or https://us.cloud.langfuse.com for the US region
+LANGFUSE_TRACING_ENVIRONMENT=development       # set to "production" on the deployed Cloud Run service
 ```
 
 No credentials set → tracing silently disables itself (the SDK logs a

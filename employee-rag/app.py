@@ -7,13 +7,28 @@ Deployed to:  Google Cloud Run (see Dockerfile.gradio) -- Cloud Run injects
 """
 
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import gradio as gr
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+from langfuse import get_client
+from langfuse.langchain import CallbackHandler
 
 from agent.graph import get_agent
 from rag.pipeline import get_pipeline
+
+_langfuse = get_client()
+_agent_handler = None
+
+
+def _get_agent_handler():
+    """Lazy singleton, same reasoning as agent/graph.py's _get_llm(): no
+    Langfuse credentials needed just to import this module."""
+
+    global _agent_handler
+    if _agent_handler is None:
+        _agent_handler = CallbackHandler()
+    return _agent_handler
 
 DESCRIPTION = """
 Ask about company leave, IT/security, expenses, or code-of-conduct policy.
@@ -43,9 +58,24 @@ def _history_to_messages(history: List[Dict[str, Any]], message: str) -> List[Ba
     return messages
 
 
-def respond(message: str, history: List[Dict[str, Any]]) -> str:
-    result = get_agent().invoke({"messages": _history_to_messages(history, message), "steps": 0})
-    return result["messages"][-1].content
+def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Request] = None) -> str:
+    # request.session_hash is stable for one browser tab's whole visit, so it
+    # groups every turn of a conversation into one Langfuse session -- see
+    # "Group related traces with session IDs" in the best-practices guide.
+    session_id = request.session_hash if request else None
+
+    with _langfuse.start_as_current_observation(
+        as_type="agent", name="run-agent", input=message
+    ) as obs:
+        _langfuse.update_current_trace(tags=["gradio-demo"], session_id=session_id)
+
+        result = get_agent().invoke(
+            {"messages": _history_to_messages(history, message), "steps": 0},
+            config={"callbacks": [_get_agent_handler()]},
+        )
+        answer = result["messages"][-1].content
+        obs.update(output=answer)
+        return answer
 
 
 demo = gr.ChatInterface(
