@@ -17,7 +17,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
-from rag import config
+from rag import config, quota
 from agent.tools import search_employee_policies
 
 MAX_STEPS = 4
@@ -55,6 +55,7 @@ def _get_llm():
             model=config.LLM_MODEL,
             base_url=config.LLM_BASE_URL,
             api_key=config.OPENROUTER_API_KEY,
+            timeout=config.LLM_REQUEST_TIMEOUT_SECONDS,
         ).bind_tools(_tools)
     return _llm
 
@@ -76,6 +77,11 @@ def router_node(state: AgentState) -> AgentState:
 
     if steps > MAX_STEPS:
         return {"messages": [AIMessage(content=STEP_LIMIT_MESSAGE)], "steps": steps}
+
+    try:
+        quota.check_and_increment()
+    except quota.QuotaExceededError:
+        return {"messages": [AIMessage(content=quota.QUOTA_MESSAGE)], "steps": steps}
 
     try:
         response = _get_llm().invoke(

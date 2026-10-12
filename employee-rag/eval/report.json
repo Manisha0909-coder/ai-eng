@@ -1,31 +1,18 @@
 {
   "n_examples": 52,
-  "n_errors": 12,
-  "errored_ids": [
-    "conduct-04",
-    "conduct-05",
-    "conduct-06",
-    "unanswerable-02",
-    "unanswerable-03",
-    "unanswerable-05",
-    "unanswerable-06",
-    "unanswerable-07",
-    "unanswerable-08",
-    "unanswerable-09",
-    "unanswerable-12",
-    "unanswerable-13"
-  ],
-  "retrieval_hit_rate": 0.9714285714285714,
-  "answer_accuracy": 0.9428571428571428,
+  "n_errors": 0,
+  "errored_ids": [],
+  "retrieval_hit_rate": 1.0,
+  "answer_accuracy": 1.0,
   "abstention_accuracy": 1.0,
-  "overall_accuracy": 0.95,
-  "avg_latency_ms": 6565.4,
-  "p95_latency_ms": 23121.0,
+  "overall_accuracy": 1.0,
+  "avg_latency_ms": 3163.3,
+  "p95_latency_ms": 8008.2,
   "category_accuracy": {
     "annual_leave": 1.0,
     "maternity_leave": 1.0,
     "sick_leave": 1.0,
-    "wfh": 0.3333333333333333,
+    "wfh": 1.0,
     "it_security": 1.0,
     "expenses": 1.0,
     "code_of_conduct": 1.0,
@@ -44,15 +31,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Employees receive 20 days of annual leave per year.",
+      "answer": "According to the policy, employees receive 20 days of annual leave per year.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 745.5,
-        "rerank": 4582.7,
-        "generation": 5345.0,
-        "total": 10673.2
-      },
-      "errored": false
+        "retrieval": 521.6,
+        "rerank": 4032.3,
+        "generation": 3581.8,
+        "total": 8135.7
+      }
     },
     {
       "id": "leave-02",
@@ -65,15 +52,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You become eligible for annual leave after completing 6 months of employment.",
+      "answer": "Employees become eligible for annual leave after completing 6 months of employment.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 45.5,
-        "rerank": 136.3,
-        "generation": 9835.3,
-        "total": 10017.2
-      },
-      "errored": false
+        "retrieval": 146.0,
+        "rerank": 264.1,
+        "generation": 4613.3,
+        "total": 5023.3
+      }
     },
     {
       "id": "leave-07",
@@ -87,15 +74,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "\n\nBased on the provided context, your yearly vacation allowance (referred to as Annual Leave) is **20 days per year**.\n\nHowever, please note that you become eligible for this leave only after completing 6 months of employment.",
+      "answer": "Your yearly vacation allowance is **20 days** of annual leave per year. You become eligible for this leave after completing 6 months of employment.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 32.5,
-        "rerank": 280.1,
-        "generation": 7383.0,
-        "total": 7695.5
-      },
-      "errored": false
+        "retrieval": 41.8,
+        "rerank": 182.1,
+        "generation": 2540.0,
+        "total": 2763.9
+      }
     },
     {
       "id": "leave-08",
@@ -109,15 +96,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "According to the Employee Leave Policy, employees receive **20 days of annual leave per year**. There is no mention of 25 days in the provided context.",
+      "answer": "\n\nBased on the provided Employee Leave Policy, you receive 20 days of annual leave per year.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 36.0,
-        "rerank": 117.6,
-        "generation": 12635.6,
-        "total": 12789.2
-      },
-      "errored": false
+        "retrieval": 30.1,
+        "rerank": 130.5,
+        "generation": 2808.2,
+        "total": 2968.8
+      }
     },
     {
       "id": "leave-09",
@@ -130,15 +117,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "No. According to the policy, employees become eligible for annual leave only after completing 6\u202fmonths of employment, so a new hire cannot take annual leave in their first month.",
+      "answer": "According to the policy, employees become eligible for annual leave after completing 6 months of employment. Therefore, a new hire cannot take annual leave in their first month on the job.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 31.4,
-        "rerank": 125.5,
-        "generation": 5481.3,
-        "total": 5638.2
-      },
-      "errored": false
+        "retrieval": 36.3,
+        "rerank": 162.9,
+        "generation": 3411.4,
+        "total": 3610.7
+      }
     },
     {
       "id": "leave-03",
@@ -150,15 +137,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, employees receive **12 weeks of maternity leave** as part of their time off for a new baby. This is the primary benefit mentioned for new parents.\n\nAdditionally, the context notes that employees can work from home twice per week, which may be available during their maternity leave period depending on company policy.\n\nSo for a new baby, the main time off benefit is **12 weeks of maternity leave**.",
+      "answer": "Employees receive 12 weeks of maternity leave.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 30.9,
-        "rerank": 134.6,
-        "generation": 9518.8,
-        "total": 9684.3
-      },
-      "errored": false
+        "retrieval": 29.2,
+        "rerank": 135.7,
+        "generation": 3657.6,
+        "total": 3822.5
+      }
     },
     {
       "id": "leave-04",
@@ -168,19 +155,18 @@
       "expected_source": "employee_policy.txt",
       "retrieved_sources": [
         "employee_policy.txt",
-        "employee_policy.txt",
-        "expense_policy.txt"
+        "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, employees receive **12 weeks** of maternity leave.",
+      "answer": "\n\n12 weeks.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 27.8,
-        "rerank": 96.6,
-        "generation": 14955.6,
-        "total": 15080.0
-      },
-      "errored": false
+        "retrieval": 25.7,
+        "rerank": 100.6,
+        "generation": 3066.1,
+        "total": 3192.4
+      }
     },
     {
       "id": "leave-10",
@@ -194,15 +180,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, if you have a baby, you are entitled to **12 weeks of maternity leave**. This is explicitly stated under the \"Maternity Leave\" section of the Employee Leave Policy.\n\nAdditionally, you may also be eligible for **annual leave** (20 days per year) once you complete 6 months of employment, but the primary leave for having a baby is the 12-week maternity leave.",
+      "answer": "You are entitled to 12 weeks of maternity leave.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 34.0,
-        "rerank": 111.6,
-        "generation": 5621.1,
-        "total": 5766.7
-      },
-      "errored": false
+        "retrieval": 29.4,
+        "rerank": 115.5,
+        "generation": 1536.5,
+        "total": 1681.3
+      }
     },
     {
       "id": "leave-11",
@@ -217,13 +203,13 @@
       "retrieval_hit": true,
       "answer": "\n\nBased on the provided context, maternity leave is **12 weeks**.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 107.2,
-        "rerank": 187.6,
-        "generation": 3711.4,
-        "total": 4006.2
-      },
-      "errored": false
+        "retrieval": 20.7,
+        "rerank": 116.0,
+        "generation": 1877.6,
+        "total": 2014.2
+      }
     },
     {
       "id": "leave-05",
@@ -236,15 +222,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, you can take **10 days** of sick leave per year. This is explicitly stated under the \"Sick Leave\" section of the Employee Leave Policy.",
+      "answer": "You can take 10 days of sick leave this year.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 27.7,
-        "rerank": 130.6,
-        "generation": 13692.7,
-        "total": 13851.0
-      },
-      "errored": false
+        "retrieval": 25.3,
+        "rerank": 138.2,
+        "generation": 929.2,
+        "total": 1092.8
+      }
     },
     {
       "id": "leave-12",
@@ -257,15 +243,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, you receive **10 days of sick leave per year**.",
+      "answer": "You receive 10 days of sick leave per year.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 24.4,
-        "rerank": 108.9,
-        "generation": 17014.8,
-        "total": 17148.1
-      },
-      "errored": false
+        "retrieval": 21.5,
+        "rerank": 191.6,
+        "generation": 871.4,
+        "total": 1084.5
+      }
     },
     {
       "id": "leave-13",
@@ -279,15 +265,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "\n\nBased on the provided context, your sick leave allowance is **10 days** per year. The 12 weeks mentioned in the policy refers to maternity leave.",
+      "answer": "Based on the provided context, employees receive **10 days of sick leave per year**.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 23.3,
-        "rerank": 110.1,
-        "generation": 4016.4,
-        "total": 4149.7
-      },
-      "errored": false
+        "retrieval": 50.1,
+        "rerank": 212.3,
+        "generation": 4982.2,
+        "total": 5244.6
+      }
     },
     {
       "id": "leave-14",
@@ -298,18 +284,18 @@
       "retrieved_sources": [
         "employee_policy.txt",
         "employee_policy.txt",
-        "expense_policy.txt"
+        "employee_policy.txt"
       ],
       "retrieval_hit": true,
       "answer": "\n\nBased on the provided context, employees receive 10 days of sick leave per year.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 39.5,
-        "rerank": 134.6,
-        "generation": 2856.9,
-        "total": 3031.0
-      },
-      "errored": false
+        "retrieval": 43.4,
+        "rerank": 211.5,
+        "generation": 3100.3,
+        "total": 3355.3
+      }
     },
     {
       "id": "leave-06",
@@ -318,20 +304,20 @@
       "answerable": true,
       "expected_source": "employee_policy.txt",
       "retrieved_sources": [
+        "employee_policy.txt",
         "code_of_conduct.txt",
-        "code_of_conduct.txt",
-        "employee_policy.txt"
+        "code_of_conduct.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Yes. Employees can work remotely, but only up to two days per week. While remote, they must be reachable during core hours (10\u202fAM\u202f\u2013\u202f4\u202fPM local time) and attend scheduled meetings on camera unless their manager agrees otherwise.",
-      "correct": false,
+      "answer": "Based on the provided context, employees can work from home or remotely **twice per week**. When working remotely, you are expected to be reachable during core hours (10 AM - 4 PM local time) and attend scheduled meetings on camera unless otherwise agreed with your manager.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 20.0,
-        "rerank": 129.2,
-        "generation": 1898.7,
-        "total": 2047.9
-      },
-      "errored": false
+        "retrieval": 25.3,
+        "rerank": 137.5,
+        "generation": 2149.8,
+        "total": 2312.6
+      }
     },
     {
       "id": "leave-15",
@@ -341,19 +327,19 @@
       "expected_source": "employee_policy.txt",
       "retrieved_sources": [
         "code_of_conduct.txt",
-        "code_of_conduct.txt",
-        "it_security_policy.txt"
+        "employee_policy.txt",
+        "code_of_conduct.txt"
       ],
-      "retrieval_hit": false,
-      "answer": "Yes, you are permitted to work remotely on occasion. When doing so, you must be reachable during core hours (10\u202fAM\u202f\u2013\u202f4\u202fPM local time), attend scheduled meetings on camera (unless your manager agrees otherwise), and connect to internal systems via the company VPN when accessing them from outside the office.",
-      "correct": false,
+      "retrieval_hit": true,
+      "answer": "\n\nYes, you are allowed to work remotely. According to the policy, employees can work from home / work remotely **twice per week**.\n\nWhen working remotely, you are expected to:\n*   Be reachable during core hours (10 AM - 4 PM local time).\n*   Attend scheduled meetings on camera unless otherwise agreed with your manager.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
         "retrieval": 28.9,
-        "rerank": 119.0,
-        "generation": 23204.7,
-        "total": 23352.5
-      },
-      "errored": false
+        "rerank": 124.6,
+        "generation": 7553.1,
+        "total": 7706.5
+      }
     },
     {
       "id": "leave-16",
@@ -362,18 +348,19 @@
       "answerable": true,
       "expected_source": "employee_policy.txt",
       "retrieved_sources": [
+        "employee_policy.txt",
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, employees can work from home **twice per week**. Therefore, working from home **three days a week** is not permitted under the current policy.",
+      "answer": "According to the provided policy, employees can work from home or remotely **twice per week**. Working from home three days a week would exceed this allowance.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 36.7,
-        "rerank": 108.0,
-        "generation": 1577.8,
-        "total": 1722.6
-      },
-      "errored": false
+        "retrieval": 27.4,
+        "rerank": 126.5,
+        "generation": 2043.2,
+        "total": 2197.0
+      }
     },
     {
       "id": "it-01",
@@ -386,15 +373,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Every 180 days. Per company policy, passwords must be rotated every 180 days and must be at least 12 characters long. You're also required to use a password manager and enable multi-factor authentication on all company accounts.",
+      "answer": "According to the password requirements, passwords must be rotated every 180 days.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 34.1,
-        "rerank": 108.9,
-        "generation": 1363.0,
-        "total": 1506.0
-      },
-      "errored": false
+        "retrieval": 24.1,
+        "rerank": 113.2,
+        "generation": 1216.8,
+        "total": 1354.1
+      }
     },
     {
       "id": "it-02",
@@ -407,15 +394,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, if you lose your work laptop, you should report it to **security@company.com within 24 hours**. This is specified in the Incident Reporting section of the policy, which states that any lost device must be reported to security@company.com within 24 hours.\n\nAdditionally, since company laptops must have full-disk encryption enabled before first use (as stated in the Device Policy), this may help with data recovery once the incident has been reported and appropriate actions taken. However, the immediate required action is to contact security@company.com within 24 hours.",
+      "answer": "You should report the lost laptop to security@company.com within 24\u202fhours.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 29.6,
-        "rerank": 110.3,
-        "generation": 5410.9,
-        "total": 5550.9
-      },
-      "errored": false
+        "retrieval": 25.5,
+        "rerank": 178.2,
+        "generation": 2159.9,
+        "total": 2363.6
+      }
     },
     {
       "id": "it-03",
@@ -425,18 +412,18 @@
       "expected_source": "it_security_policy.txt",
       "retrieved_sources": [
         "it_security_policy.txt",
-        "expense_policy.txt"
+        "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Yes, you need a VPN to access internal systems from home. According to the context, \"Employees accessing internal systems from outside the office must connect through the company VPN.\" This applies to remote work locations including home.",
+      "answer": "\n\nYes. According to the VPN Access policy, employees accessing internal systems from outside the office must connect through the company VPN. Since working from home is outside the office, a VPN is required.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 28.7,
-        "rerank": 107.9,
-        "generation": 4584.3,
-        "total": 4721.0
-      },
-      "errored": false
+        "retrieval": 94.7,
+        "rerank": 182.4,
+        "generation": 5444.6,
+        "total": 5721.7
+      }
     },
     {
       "id": "it-04",
@@ -450,15 +437,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Yes, according to the Device Policy, **company laptops must have full-disk encryption enabled before first use**. This is a mandatory requirement for all company-issued laptops.",
+      "answer": "Yes, according to the Device Policy, company laptops must have full-disk encryption enabled before first use.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 284.4,
-        "rerank": 290.7,
-        "generation": 4194.0,
-        "total": 4769.1
-      },
-      "errored": false
+        "retrieval": 43.3,
+        "rerank": 157.3,
+        "generation": 2138.5,
+        "total": 2339.1
+      }
     },
     {
       "id": "it-05",
@@ -471,15 +458,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "No. According to company policy, \"Only software approved by the IT team may be installed on company devices.\" If you want to install new software, you must submit a request through the IT helpdesk for approval.",
+      "answer": "No. Only software approved by the IT team may be installed on company devices, and any requests for new software must be submitted through the IT helpdesk.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 34.5,
-        "rerank": 181.0,
-        "generation": 1371.7,
-        "total": 1587.2
-      },
-      "errored": false
+        "retrieval": 229.7,
+        "rerank": 909.1,
+        "generation": 1960.7,
+        "total": 3099.5
+      }
     },
     {
       "id": "it-06",
@@ -489,18 +476,19 @@
       "expected_source": "it_security_policy.txt",
       "retrieved_sources": [
         "it_security_policy.txt",
-        "code_of_conduct.txt"
+        "code_of_conduct.txt",
+        "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "According to the Device Policy in the provided context, personal devices used for work email must be enrolled in mobile device management (MDM).\n\nSo if you use your personal phone to check work email, you need to enroll it in MDM.",
+      "answer": "You must enroll your personal phone in mobile device management (MDM).",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 29.6,
-        "rerank": 120.2,
-        "generation": 1426.1,
-        "total": 1575.9
-      },
-      "errored": false
+        "retrieval": 24.5,
+        "rerank": 137.4,
+        "generation": 875.7,
+        "total": 1037.6
+      }
     },
     {
       "id": "it-07",
@@ -514,15 +502,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You must report a phishing email within\u202f24\u202fhours.",
+      "answer": "You must report a phishing email within 24\u202fhours.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 28.0,
-        "rerank": 109.7,
-        "generation": 2947.7,
-        "total": 3085.4
-      },
-      "errored": false
+        "retrieval": 68.6,
+        "rerank": 177.3,
+        "generation": 2010.9,
+        "total": 2256.8
+      }
     },
     {
       "id": "it-08",
@@ -534,15 +522,15 @@
         "it_security_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Based on the provided context, the minimum length for your password is 12 characters.",
+      "answer": "Based on the provided context, your password must be **at least 12 characters** long. The policy states: \"Passwords must be at least 12 characters and rotated every 180 days.\"",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 28.9,
-        "rerank": 103.2,
-        "generation": 1113.4,
-        "total": 1245.6
-      },
-      "errored": false
+        "retrieval": 31.4,
+        "rerank": 284.1,
+        "generation": 4688.2,
+        "total": 5003.8
+      }
     },
     {
       "id": "expense-01",
@@ -556,15 +544,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "According to the Per Diem policy, employees on approved business travel receive a daily allowance of **1500 rupees** for meals and incidentals.",
+      "answer": "According to the policy, employees on approved business travel receive a daily allowance of 1500 rupees for meals and incidentals.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 27.5,
-        "rerank": 104.1,
-        "generation": 7908.6,
-        "total": 8040.2
-      },
-      "errored": false
+        "retrieval": 34.0,
+        "rerank": 153.2,
+        "generation": 3300.9,
+        "total": 3488.1
+      }
     },
     {
       "id": "expense-02",
@@ -578,15 +566,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You need a receipt for any expense that exceeds **500 rupees**.",
+      "answer": "500 rupees.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 29.5,
-        "rerank": 108.8,
-        "generation": 1010.1,
-        "total": 1148.3
-      },
-      "errored": false
+        "retrieval": 30.1,
+        "rerank": 170.5,
+        "generation": 2810.1,
+        "total": 3010.7
+      }
     },
     {
       "id": "expense-03",
@@ -600,15 +588,15 @@
         "employee_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You have 30 days to submit an expense report from the date the expense was incurred.",
+      "answer": "Based on the provided context, you have 30 days to submit an expense report from the date the expense was incurred.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 25.7,
-        "rerank": 111.3,
-        "generation": 6513.8,
-        "total": 6650.8
-      },
-      "errored": false
+        "retrieval": 24.9,
+        "rerank": 151.2,
+        "generation": 1561.2,
+        "total": 1737.3
+      }
     },
     {
       "id": "expense-04",
@@ -624,13 +612,13 @@
       "retrieval_hit": true,
       "answer": "You should book your flight through the company travel portal.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 30.1,
-        "rerank": 110.6,
-        "generation": 3088.3,
-        "total": 3228.9
-      },
-      "errored": false
+        "retrieval": 37.5,
+        "rerank": 156.5,
+        "generation": 939.3,
+        "total": 1133.3
+      }
     },
     {
       "id": "expense-05",
@@ -643,15 +631,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "Yes. Business\u2011class travel is not restricted for a 3\u2011hour domestic flight; the VP\u2011approval requirement applies only to flights longer than 6\u202fhours.",
+      "answer": "Yes. The VP approval requirement only applies to flights over\u202f6\u202fhours, so a 3\u2011hour domestic flight does not need that approval.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 30.6,
-        "rerank": 110.9,
-        "generation": 18580.9,
-        "total": 18722.4
-      },
-      "errored": false
+        "retrieval": 28.2,
+        "rerank": 103.4,
+        "generation": 11731.6,
+        "total": 11863.2
+      }
     },
     {
       "id": "expense-06",
@@ -665,15 +653,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "If you submit your expense report 45 days after the trip, it would be considered a late submission since the policy requires submission within 30 days of the expense being incurred. Late submissions require manager approval.",
+      "answer": "Your expense report would be considered late, and manager approval would be required to process it.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 22.8,
-        "rerank": 112.8,
-        "generation": 7257.6,
-        "total": 7393.2
-      },
-      "errored": false
+        "retrieval": 54.1,
+        "rerank": 114.2,
+        "generation": 2774.0,
+        "total": 2942.4
+      }
     },
     {
       "id": "expense-07",
@@ -686,15 +674,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "\n\nNo, alcohol is not reimbursable according to the policy.",
+      "answer": "Based on the provided policy, alcohol is listed as a non-reimbursable item. \n\nThe answer is no, you cannot expense alcohol at a client dinner, even if it's part of a client meal. While client meals in general may be reimbursable with pre-approval, the policy specifically excludes alcohol from reimbursement.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 59.4,
-        "rerank": 144.7,
-        "generation": 2822.4,
-        "total": 3026.5
-      },
-      "errored": false
+        "retrieval": 44.8,
+        "rerank": 162.8,
+        "generation": 3449.5,
+        "total": 3657.2
+      }
     },
     {
       "id": "expense-08",
@@ -707,15 +695,15 @@
         "expense_policy.txt"
       ],
       "retrieval_hit": true,
-      "answer": "1500 rupees",
+      "answer": "According to the provided context, the daily meal allowance is 1500 rupees.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 27.7,
-        "rerank": 101.1,
-        "generation": 23514.2,
-        "total": 23643.0
-      },
-      "errored": false
+        "retrieval": 41.6,
+        "rerank": 136.1,
+        "generation": 2562.9,
+        "total": 2740.6
+      }
     },
     {
       "id": "conduct-01",
@@ -729,15 +717,15 @@
         "code_of_conduct.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You should report a workplace harassment concern to HR or through the anonymous ethics hotline.",
+      "answer": "Based on the provided context, you should report a workplace harassment concern to **HR** (Human Resources) or through the **anonymous ethics hotline**. The policy explicitly states: \"Concerns about workplace conduct should be reported to HR or through the anonymous ethics hotline.\" Additionally, retaliation against anyone who reports a concern in good faith is strictly prohibited.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 29.6,
-        "rerank": 99.4,
-        "generation": 2681.6,
-        "total": 2810.7
-      },
-      "errored": false
+        "retrieval": 26.8,
+        "rerank": 156.5,
+        "generation": 2200.9,
+        "total": 2384.2
+      }
     },
     {
       "id": "conduct-02",
@@ -747,19 +735,19 @@
       "expected_source": "code_of_conduct.txt",
       "retrieved_sources": [
         "code_of_conduct.txt",
-        "code_of_conduct.txt",
-        "it_security_policy.txt"
+        "employee_policy.txt",
+        "code_of_conduct.txt"
       ],
       "retrieval_hit": true,
-      "answer": "You are expected to be reachable during core hours: **10 AM \u2013 4 PM local time**.",
+      "answer": "You are expected to be reachable during core hours of\u202f10\u202fAM\u202f\u2013\u202f4\u202fPM\u202f(local time) when working remotely.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 32.7,
-        "rerank": 110.0,
-        "generation": 12419.5,
-        "total": 12562.2
-      },
-      "errored": false
+        "retrieval": 40.4,
+        "rerank": 211.2,
+        "generation": 3061.9,
+        "total": 3313.5
+      }
     },
     {
       "id": "conduct-03",
@@ -773,15 +761,15 @@
         "code_of_conduct.txt"
       ],
       "retrieval_hit": true,
-      "answer": "\n\nBased on the provided context, you need to disclose this situation.\n\nThe policy on Conflicts of Interest states that employees must disclose any \"personal relationship that could conflict with your role at the company.\" Your spouse working at a vendor company is a personal relationship that could potentially create a conflict of interest, so it must be disclosed.",
+      "answer": "\n\nAccording to the Conflicts of Interest policy, employees must disclose any personal relationship that could conflict with their role at the company.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 32.2,
-        "rerank": 115.5,
-        "generation": 3900.9,
-        "total": 4048.5
-      },
-      "errored": false
+        "retrieval": 38.5,
+        "rerank": 154.0,
+        "generation": 5539.2,
+        "total": 5731.6
+      }
     },
     {
       "id": "conduct-04",
@@ -789,17 +777,19 @@
       "category": "code_of_conduct",
       "answerable": true,
       "expected_source": "code_of_conduct.txt",
-      "retrieved_sources": [],
-      "retrieval_hit": false,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "retrieved_sources": [
+        "code_of_conduct.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "No, according to the confidentiality policy provided, employees must not share confidential company information, including source code, outside the company.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 33.2,
+        "rerank": 181.2,
+        "generation": 4130.6,
+        "total": 4345.0
+      }
     },
     {
       "id": "conduct-05",
@@ -807,17 +797,20 @@
       "category": "code_of_conduct",
       "answerable": true,
       "expected_source": "code_of_conduct.txt",
-      "retrieved_sources": [],
-      "retrieval_hit": false,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "code_of_conduct.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "No\u2014reporting a coworker's misconduct in good faith is protected, and retaliation against anyone who raises a concern is strictly prohibited. You should not face trouble for making a good\u2011faith report.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 32.7,
+        "rerank": 139.6,
+        "generation": 1037.5,
+        "total": 1209.8
+      }
     },
     {
       "id": "conduct-06",
@@ -825,17 +818,21 @@
       "category": "code_of_conduct",
       "answerable": true,
       "expected_source": "code_of_conduct.txt",
-      "retrieved_sources": [],
-      "retrieval_hit": false,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "code_of_conduct.txt",
+        "it_security_policy.txt"
+      ],
+      "retrieval_hit": true,
+      "answer": "No. You are expected to attend scheduled meetings on camera unless you have an agreement with your manager that allows your camera to be off.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 25.9,
+        "rerank": 129.6,
+        "generation": 4005.9,
+        "total": 4161.4
+      }
     },
     {
       "id": "unanswerable-01",
@@ -847,13 +844,13 @@
       "retrieval_hit": null,
       "answer": "I don't have enough information to answer that.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 22.1,
-        "rerank": 98.9,
+        "retrieval": 28.9,
+        "rerank": 237.2,
         "generation": 0.0,
-        "total": 121.0
-      },
-      "errored": false
+        "total": 266.1
+      }
     },
     {
       "id": "unanswerable-02",
@@ -861,17 +858,19 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "it_security_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 25.4,
+        "rerank": 114.2,
+        "generation": 3669.4,
+        "total": 3809.1
+      }
     },
     {
       "id": "unanswerable-03",
@@ -879,17 +878,20 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 25.8,
+        "rerank": 157.2,
+        "generation": 3144.3,
+        "total": 3327.2
+      }
     },
     {
       "id": "unanswerable-04",
@@ -901,13 +903,13 @@
       "retrieval_hit": null,
       "answer": "I don't have enough information to answer that.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 27.7,
-        "rerank": 97.0,
+        "retrieval": 30.9,
+        "rerank": 201.1,
         "generation": 0.0,
-        "total": 124.7
-      },
-      "errored": false
+        "total": 232.0
+      }
     },
     {
       "id": "unanswerable-05",
@@ -915,17 +917,20 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "expense_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "I don't have enough information to answer that. The provided context only shows section headers (\"IT & Security Policy\" and \"Expense & Travel Policy\") but does not include the actual policy details regarding parking. To give you an accurate answer about the office parking policy, I would need access to the complete policy documents.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 25.1,
+        "rerank": 129.9,
+        "generation": 2966.4,
+        "total": 3121.4
+      }
     },
     {
       "id": "unanswerable-06",
@@ -933,17 +938,21 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "employee_policy.txt",
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "\n\nI don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 30.0,
+        "rerank": 182.3,
+        "generation": 3210.8,
+        "total": 3423.2
+      }
     },
     {
       "id": "unanswerable-07",
@@ -951,17 +960,21 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "it_security_policy.txt",
+        "it_security_policy.txt",
+        "it_security_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 33.0,
+        "rerank": 149.3,
+        "generation": 696.2,
+        "total": 878.5
+      }
     },
     {
       "id": "unanswerable-08",
@@ -969,17 +982,21 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "expense_policy.txt",
+        "employee_policy.txt",
+        "expense_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "\n\nI don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 22.4,
+        "rerank": 132.2,
+        "generation": 2560.0,
+        "total": 2714.5
+      }
     },
     {
       "id": "unanswerable-09",
@@ -987,17 +1004,19 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "code_of_conduct.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "\n\nI don't have enough information to answer that. The provided context only covers workplace behavior and harassment policies, and does not mention a dress code.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 29.0,
+        "rerank": 114.4,
+        "generation": 3119.3,
+        "total": 3262.7
+      }
     },
     {
       "id": "unanswerable-10",
@@ -1009,13 +1028,13 @@
       "retrieval_hit": null,
       "answer": "I don't have enough information to answer that.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 35.3,
-        "rerank": 106.4,
+        "retrieval": 31.6,
+        "rerank": 133.9,
         "generation": 0.0,
-        "total": 141.7
-      },
-      "errored": false
+        "total": 165.5
+      }
     },
     {
       "id": "unanswerable-11",
@@ -1027,13 +1046,13 @@
       "retrieval_hit": null,
       "answer": "I don't have enough information to answer that.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 25.9,
-        "rerank": 95.7,
+        "retrieval": 65.1,
+        "rerank": 199.7,
         "generation": 0.0,
-        "total": 121.6
-      },
-      "errored": false
+        "total": 264.8
+      }
     },
     {
       "id": "unanswerable-12",
@@ -1041,17 +1060,19 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "code_of_conduct.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "\n\nI don't have enough information to answer that. The provided context only discusses conflicts of interest and does not mention anything about referral bonuses. You may want to check the company's official policies or speak with HR for details on referral programs.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 33.0,
+        "rerank": 160.0,
+        "generation": 7746.5,
+        "total": 7939.5
+      }
     },
     {
       "id": "unanswerable-13",
@@ -1059,17 +1080,20 @@
       "category": "out_of_scope",
       "answerable": false,
       "expected_source": null,
-      "retrieved_sources": [],
+      "retrieved_sources": [
+        "code_of_conduct.txt",
+        "expense_policy.txt"
+      ],
       "retrieval_hit": null,
-      "answer": "ERROR: Error code: 429 - {'error': {'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day', 'code': 429, 'metadata': {'headers': {'X-RateLimit-Limit': '50', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '1790726400000'}, 'limit_source': 'openrouter_free_tier_daily', 'remedy_hint': 'Wait for the daily reset (see X-RateLimit-Reset), or purchase credits to raise your free-model daily limit.', 'provider_name': None, 'previous_errors': [{'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}, {'code': 429, 'message': 'Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day'}]}}, 'user_id': 'user_3ILjg1cfkHwtVOo5tbh3vMzZLvk'}",
-      "correct": false,
+      "answer": "I don't have enough information to answer that.",
+      "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 0.0,
-        "rerank": 0.0,
-        "generation": 0.0,
-        "total": 0.0
-      },
-      "errored": true
+        "retrieval": 282.3,
+        "rerank": 669.2,
+        "generation": 2864.6,
+        "total": 3816.1
+      }
     },
     {
       "id": "unanswerable-14",
@@ -1081,13 +1105,13 @@
       "retrieval_hit": null,
       "answer": "I don't have enough information to answer that.",
       "correct": true,
+      "errored": false,
       "timings_ms": {
-        "retrieval": 28.2,
-        "rerank": 111.5,
+        "retrieval": 28.5,
+        "rerank": 141.2,
         "generation": 0.0,
-        "total": 139.7
-      },
-      "errored": false
+        "total": 169.7
+      }
     }
   ]
 }

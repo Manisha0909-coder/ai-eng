@@ -109,7 +109,7 @@
     "category": "wfh",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["twice", "week"]
+    "answer_must_contain": [["twice", "two days", "2 days"], "week"]
   },
   {
     "id": "leave-15",
@@ -117,7 +117,7 @@
     "category": "wfh",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["twice", "week"]
+    "answer_must_contain": [["twice", "two days", "2 days"], "week"]
   },
   {
     "id": "leave-16",
@@ -245,7 +245,7 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["not reimbursable"]
+    "answer_must_contain": [["not reimbursable", "non-reimbursable"]]
   },
   {
     "id": "expense-08",

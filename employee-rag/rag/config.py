@@ -39,6 +39,12 @@ FINAL_TOP_K = 3
 GENERATION_MAX_RETRIES = 3
 GENERATION_RETRY_BACKOFF_SECONDS = 1.0
 
+# Without an explicit timeout, a hung connection to OpenRouter (seen in
+# practice: a request that never got a response, no error, no timeout --
+# just blocked forever) can stall a request indefinitely, which both the
+# retry loop above and run_eval.py's error-recording assume can't happen.
+LLM_REQUEST_TIMEOUT_SECONDS = 30
+
 # Cross-encoder relevance scores below this are treated as irrelevant and dropped.
 # cross-encoder/ms-marco-MiniLM-L-6-v2 emits raw (unbounded, uncalibrated) logits,
 # not probabilities in [0, 1] -- 0.0 is not a meaningful cutoff for it. Spot-checking

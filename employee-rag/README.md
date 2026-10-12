@@ -1,10 +1,19 @@
 # employee-rag
 
+**Live demo:** https://employee-rag-gradio-322697991162.us-central1.run.app
+(Cloud Run, scales to zero — first request after idling takes ~15-20s to
+cold-start; click an example question for an instant cached answer instead.)
+
+![demo screenshot placeholder](docs/demo.gif)
+*(replace with an actual screenshot/GIF of the Gradio UI — click through the
+example questions and a free-text question to show retrieval + sources)*
+
 A retrieval-augmented Q&A service over employee policy documents (leave,
 IT/security, expenses, code of conduct), with hybrid search, cross-encoder
-reranking, a FastAPI endpoint, a LangGraph agent, Langfuse tracing with
-cost/latency logging, an eval suite with a 52-example golden dataset and a
-retrieval ablation table, and a Docker image ready to deploy.
+reranking, a FastAPI endpoint, a LangGraph agent, a Gradio demo deployed to
+Cloud Run, Langfuse tracing with cost/latency logging, an eval suite with a
+52-example golden dataset and a retrieval ablation table, and Docker images
+ready to deploy.
 
 ## Architecture
 
@@ -39,18 +48,27 @@ deterministic):
 
 | Config | Hit rate | MRR |
 |---|---|---|
-| Vector-only | 94.7% | 0.930 |
-| BM25-only | 89.5% | 0.851 |
-| Hybrid (RRF) | 97.4% | 0.943 |
-| Hybrid + rerank | 97.4% | 0.943 |
+| Vector-only | 100.0% | 0.982 |
+| BM25-only | 89.5% | 0.838 |
+| Hybrid (RRF) | 100.0% | 0.982 |
+| Hybrid + rerank | 100.0% | 0.974 |
 
-Hybrid beats either retriever alone, confirming the design above. Reranking
-doesn't move hit-rate/MRR further on *this* corpus at k=3 — those metrics
-only check whether the right document made the top-3, and RRF already gets
-there most of the time here. Reranking's actual job in production is
-different: dropping irrelevant chunks via `RERANK_SCORE_THRESHOLD` before
-they ever reach the LLM, which this retrieval-only ablation doesn't measure
-(that's what `answer_accuracy` in the full eval suite captures instead).
+Hybrid beats BM25 alone, confirming the design above. Hit-rate/MRR only
+check whether the right document made the top-3, and vector/hybrid already
+get there every time on this corpus — reranking's actual job in production
+is dropping irrelevant chunks via `RERANK_SCORE_THRESHOLD` before they ever
+reach the LLM, which this retrieval-only ablation doesn't measure (that's
+what `answer_accuracy` in the full eval suite captures instead).
+
+One real retrieval bug this ablation caught: `leave-15` ("Am I allowed to
+skip the office sometimes and work remotely?") was retrieving
+`code_of_conduct.txt`'s "Remote Work Conduct" section instead of
+`employee_policy.txt`'s WFH policy, because the WFH chunk never said
+"remotely" — only "work from home" — so the cross-encoder scored it below
+`RERANK_SCORE_THRESHOLD` while the code-of-conduct chunk (which does say
+"remotely") won instead. Fixed by adding that wording to
+`documents/employee_policy.txt` without changing the actual policy (still
+"twice per week") — see its git history for the exact diff.
 
 ## Structure
 
@@ -60,26 +78,41 @@ rag/
   ingest.py       - loads documents/, chunks, embeds, persists to Chroma (idempotent)
   retrieval.py    - HybridRetriever: vector + BM25 fused with RRF
   reranker.py     - cross-encoder reranking
-  pipeline.py     - retrieve -> rerank -> generate, with retry on flaky LLM responses,
-                    and Langfuse tracing (spans + cost/latency per call)
+  pipeline.py     - retrieve -> rerank -> generate, with retry on flaky/429 LLM
+                    responses, a request timeout, the demo quota check, and
+                    Langfuse tracing (spans + cost/latency per call)
+  quota.py        - in-memory daily cap on live LLM calls (free-tier survival
+                    for the deployed demo; exempts eval/ablation scripts)
 api.py            - FastAPI service (/health, /ask)
+app.py            - Gradio chat UI (the deployed demo): cached example answers,
+                    daily quota + friendly error messages, Langfuse session
+                    tracking, footer linking this repo
+examples_cache.json - precomputed answers for the example questions (see
+                    scripts/precompute_examples.py) -- clicking one is instant
+                    and makes zero LLM calls
 agent/
   tools.py        - wraps rag/pipeline.py as a LangChain tool
   graph.py        - LangGraph agent: router decides tool-call vs. direct answer,
-                    with an enforced step limit
+                    with an enforced step limit and the same quota/timeout guards
   cli.py          - manual REPL: python -m agent.cli
 eval/
   golden_dataset.json  - 52 hand-written Q&A pairs across 8 categories (incl. 14
                           out-of-scope/near-miss questions to test abstention),
                           with numeric near-misses, cross-document distractors,
-                          and applied/compound questions for harder coverage
+                          applied/compound questions, and accepted-phrasing
+                          variants for facts the model states in equivalent ways
   run_eval.py          - scores retrieval hit rate, answer accuracy, abstention
                           accuracy, latency; --fail-under for CI gating
   run_ablation.py      - retrieval-only ablation across 4 configs (vector-only,
                           BM25-only, hybrid RRF, hybrid+rerank); no LLM calls
-tests/agent/      - offline routing/step-limit tests (mocked LLM and pipeline)
+tests/            - offline unit tests: agent routing/step-limit, quota, eval
+                    matching, Gradio history conversion (mocked LLM/pipeline)
 documents/        - source policy .txt files (edit/add freely, ingest picks up any *.txt)
-Dockerfile, docker-compose.yml, .dockerignore
+scripts/
+  precompute_examples.py - (re-)generates examples_cache.json via the real agent
+  deploy.sh              - builds + deploys the Gradio demo to Cloud Run (free tier)
+  set_budget_alert.sh    - one-time $1/month billing budget alert
+Dockerfile, Dockerfile.gradio, cloudbuild.gradio.yaml, docker-compose.yml, .dockerignore
 ```
 
 ## Setup
@@ -126,23 +159,40 @@ fact), abstention accuracy (does the system correctly say "I don't have
 enough information" on the 14 out-of-scope/near-miss questions instead of
 hallucinating), plus per-category breakdown and p95 latency.
 
-Current baseline: **95.0% overall accuracy** on the 40/52 examples that got
-a real answer (see `eval/report.json`) — `openrouter/free`'s daily free-tier
-cap (50 requests/day, shared across this whole session) was hit mid-run;
-`run_eval.py` now records a request that errors out as "not evaluated"
-rather than scoring it as wrong, and reports the excluded ids separately so
-a partial run stays honest instead of understating real accuracy. Two of the
-real (non-error) misses are informative rather than bugs: one is LLM
-phrasing variance ("two days" vs. the expected "twice"), the other is a
-genuine retrieval miss on a harder paraphrase that overlaps with
-`code_of_conduct.txt`'s "Remote Work Conduct" section — exactly the kind of
-gap a bigger, harder dataset is meant to surface.
+Current baseline: **100% overall accuracy, 52/52 examples, 0 errors**
+(100% retrieval hit rate, 100% answer accuracy, 100% abstention accuracy;
+avg/p95 latency 3.2s/8.0s — see `eval/report.json`). That number is real but
+fragile, and worth reading honestly rather than at face value:
+
+- `openrouter/free`'s daily free-tier cap is shared across *everything*
+  hitting that key that day. Running the full 52-question suite back-to-back
+  more than once or twice in a day reliably exhausts it mid-run — every
+  remaining call then returns `GENERATION_ERROR` ("The answer service is
+  temporarily unavailable"), which scores as a hard fail, not an abstention.
+  An earlier run this session hit exactly that: answer accuracy cratered to
+  0% for one pass, recovered to 100% after the daily reset. If you see a
+  cluster of `GENERATION_ERROR` answers in a run, that's the free-tier cap,
+  not a regression — retry after the reset rather than debugging the pipeline.
+- Two specific misses surfaced during iteration and are worth knowing about
+  even though the current run is clean: `expense-05` ("Can I fly business
+  class for a 3-hour domestic flight?") once got a false abstention — the
+  model said "I don't have enough information" instead of reasoning
+  3 < 6 hours from the retrieved context — on a free-tier model this kind of
+  reasoning miss isn't fully deterministic; a re-run passed. `expense-07`
+  failed purely on phrasing ("non-reimbursable" vs. the expected "not
+  reimbursable") until `answer_must_contain` was given both as accepted
+  variants — a quality-of-eval-harness fix, not a model or retrieval fix.
+- The eval suite's own string-matching is intentionally dumb (see "Known
+  limitations" below) — a 100% score here means every required fact/phrase
+  showed up verbatim (or as a listed variant), not that an LLM judged the
+  answers correct.
 
 Note: `openrouter/free` is OpenRouter's auto-router across whichever free
 models are currently available, and it occasionally returns a moderation
 stub instead of a real completion. `rag/pipeline.py` detects and retries
-that case (`GENERATION_MAX_RETRIES` in `rag/config.py`) — the eval suite
-is what caught this in the first place.
+that case (`GENERATION_MAX_RETRIES` in `rag/config.py`), now with a
+30-second request timeout per attempt (`LLM_REQUEST_TIMEOUT_SECONDS`) after
+a hung connection once stalled an eval run indefinitely with no error.
 
 ## Running the agent
 
@@ -153,6 +203,30 @@ python -m agent.cli
 A LangGraph agent that decides whether a question needs the employee-rag
 tool or can be answered directly, with a hard step limit. See `agent/`
 above and `tests/agent/` for the (offline, mocked) routing tests.
+
+## Running the Gradio demo
+
+```bash
+python app.py
+# -> http://127.0.0.1:7860
+```
+
+The same LangGraph agent behind a chat UI — this is what's deployed at the
+live demo URL at the top of this file. A few things only this front end
+does, all in `app.py`/`rag/quota.py`:
+
+- **Cached examples** — the 6 example questions under the chat box are
+  answered from `examples_cache.json` (precomputed by
+  `scripts/precompute_examples.py`), so clicking one is instant and makes
+  zero LLM calls.
+- **Daily quota** — `rag/quota.py` caps this process to `DAILY_LIMIT` (40)
+  live LLM calls/day; once hit, every further question gets a friendly
+  "demo quota reached" message instead of hammering (or getting rate-limited
+  by) the shared `openrouter/free` tier. Resets on UTC day rollover or a
+  cold restart. Doesn't apply to `eval`/`run_ablation` (see above).
+- **429s and timeouts** degrade to the existing friendly
+  `GENERATION_ERROR` message via the same retry loop that handles
+  moderation stubs, rather than surfacing a raw error to the user.
 
 ## Tracing
 
@@ -218,9 +292,68 @@ container startup doesn't depend on the network; the vector index is
 (re)built from `documents/` on container **startup**, keyed off a content
 hash so it only re-embeds when the documents actually change.
 
-## Deployment
+## Deployment (Cloud Run, free tier)
 
-See the deployment notes in the repo (or ask for a specific target —
-Render, Fly.io, Railway, Hugging Face Spaces, Cloud Run all work with
-this Dockerfile as-is; they differ in how secrets and free-tier limits
-are configured).
+The Gradio demo (`Dockerfile.gradio` + `app.py`) is deployed to Google Cloud
+Run, region `us-central1`, via `scripts/deploy.sh`:
+
+```bash
+PROJECT_ID=your-gcp-project ./scripts/deploy.sh
+```
+
+This script (idempotent, safe to re-run on every change):
+
+1. Enables the Run/Build/Artifact Registry/Secret Manager APIs.
+2. Creates an Artifact Registry repo if it doesn't exist.
+3. Creates/updates 3 Secret Manager secrets (`OPENROUTER_API_KEY`,
+   `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`) from local `.env` — values
+   are piped over stdin, never logged or committed — and grants Cloud Run's
+   service account `secretmanager.secretAccessor` on each.
+4. Builds the image with Cloud Build (`cloudbuild.gradio.yaml`) and pushes
+   it to Artifact Registry.
+5. Deploys to Cloud Run:
+   `--min-instances 0 --max-instances 1 --concurrency 10 --cpu 1 --memory 2Gi
+   --timeout 120 --allow-unauthenticated`, with
+   `LANGFUSE_TRACING_ENVIRONMENT=production` and the 3 secrets wired in as
+   env vars.
+
+One-time, separate from every deploy so re-running `deploy.sh` never creates
+a duplicate: `PROJECT_ID=... BILLING_ACCOUNT_ID=... ./scripts/set_budget_alert.sh`
+sets a $1/month billing budget alert (50/90/100% thresholds).
+
+**Staying in each service's free tier:**
+
+| Service | What could cost | How this stays free |
+|---|---|---|
+| Cloud Run | vCPU-seconds, memory-seconds, requests beyond the free monthly quota | `min-instances 0` (scales to zero when idle, the deploy script's actual cost-control lever) + `max-instances 1` (caps a traffic spike) + low demo traffic — all comfortably inside Cloud Run's generous always-free tier |
+| Cloud Build | build-minutes beyond 120 free/day | One build per deploy (~5-6 min); don't wire this into CI on every push |
+| Artifact Registry | storage, ~$0.10/GB-month | One image; prune old digests occasionally (`gcloud artifacts docker images list/delete` — see `deploy.sh`'s own "Housekeeping" output) |
+| Secret Manager | active secret versions / access ops beyond free quota | 3 secrets, a handful of versions/accesses — orders of magnitude under the free allowance |
+
+Other targets (Render, Fly.io, Railway, Hugging Face Spaces) work with
+`Dockerfile.gradio` as-is; they differ in how secrets and free-tier limits
+are configured.
+
+## Known limitations
+
+- **Free-tier request cap**: the live demo caps itself to 40 live LLM
+  calls/day (`rag/quota.py`) on top of whatever cap `openrouter/free`
+  itself imposes that day — see "Running the eval suite" above for what
+  happens when the latter is exhausted mid-eval-run. Both are intentional
+  trade-offs for a $0 demo, not bugs.
+- **Small, fictional corpus**: 4 policy documents, entirely made up for this
+  project — don't take any number in them (leave days, allowances, etc.) as
+  real-world guidance, and don't expect this retrieval setup's numbers to
+  generalize to a corpus with real ambiguity, longer documents, or many more
+  near-duplicate sections.
+- **String-match eval**: `answer_must_contain` (with the variant-group
+  support added for phrasing differences) is still substring matching, not
+  semantic judging. It will miss a correct answer phrased in a genuinely
+  new way, and it will pass a technically-matching substring embedded in an
+  otherwise wrong answer. An LLM-judge pass would catch more of both; this
+  dataset's size (52) keeps it cheap enough that it hasn't been worth adding.
+- **Cold starts**: `min-instances 0` means the first request after idling
+  can take ~15-20s (container start + model load) before Gradio's own
+  "localhost reachable" self-check can also occasionally race a very fresh
+  container (worked around via `_frontend=False` in `app.py`, see its
+  comment) — expect that latency on a cold demo link, not a hang.

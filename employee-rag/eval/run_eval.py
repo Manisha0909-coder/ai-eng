@@ -44,8 +44,18 @@ def _abstained(answer: str) -> bool:
 
 
 def _contains_all(answer: str, must_contain) -> bool:
+    """Every entry in must_contain has to match. An entry can be a plain string
+    (must appear verbatim) or a list of acceptable phrasings (any one matching
+    is enough) -- e.g. ["twice", "two days", "2 days"] for a fact the model
+    may phrase several equivalent ways. Still pure string matching, so the
+    check stays deterministic."""
+
     lower = answer.lower()
-    return all(term.lower() in lower for term in must_contain)
+    for term in must_contain:
+        variants = term if isinstance(term, list) else [term]
+        if not any(variant.lower() in lower for variant in variants):
+            return False
+    return True
 
 
 def run(dataset) -> dict:

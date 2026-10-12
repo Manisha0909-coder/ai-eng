@@ -14,7 +14,7 @@ from langchain_openai import ChatOpenAI
 from langfuse import get_client, observe
 from langfuse.langchain import CallbackHandler
 
-from rag import config
+from rag import config, quota
 from rag.ingest import build_vectorstore
 from rag.reranker import rerank
 from rag.retrieval import HybridRetriever
@@ -68,6 +68,7 @@ class RAGPipeline:
             model=config.LLM_MODEL,
             base_url=config.LLM_BASE_URL,
             api_key=config.OPENROUTER_API_KEY,
+            timeout=config.LLM_REQUEST_TIMEOUT_SECONDS,
         )
         self.chain = _PROMPT | self.llm | StrOutputParser()
         self._langfuse_handler = CallbackHandler()
@@ -82,18 +83,23 @@ class RAGPipeline:
 
     def _generate(self, context: str, question: str) -> str:
         """Invoke the LLM, retrying if the free-tier router returns a
-        moderation stub instead of an actual answer."""
+        moderation stub instead of an actual answer, or raises outright
+        (e.g. a 429 from OpenRouter)."""
 
         last_response = ""
 
         for attempt in range(config.GENERATION_MAX_RETRIES):
-            last_response = self.chain.invoke(
-                {"context": context, "question": question},
-                config={"callbacks": [self._langfuse_handler]},
-            )
-
-            if self._is_valid_response(last_response):
-                return last_response
+            try:
+                last_response = self.chain.invoke(
+                    {"context": context, "question": question},
+                    config={"callbacks": [self._langfuse_handler]},
+                )
+            except Exception as exc:  # pragma: no cover - network/rate-limit errors
+                print(f"WARNING: generation call failed: {exc!r}")
+                last_response = ""
+            else:
+                if self._is_valid_response(last_response):
+                    return last_response
 
             if attempt < config.GENERATION_MAX_RETRIES - 1:
                 time.sleep(config.GENERATION_RETRY_BACKOFF_SECONDS)
@@ -109,6 +115,20 @@ class RAGPipeline:
         # references/instrumentation.md "Common Mistakes".
         _langfuse.update_current_trace(tags=[source])
         _langfuse.update_current_span(input=question)
+
+        # The daily cap protects the shared OpenRouter free tier from live
+        # (demo/API) traffic. Developer-run eval scripts are exempt -- they
+        # need to get through the whole golden dataset in one process.
+        if source != "eval":
+            try:
+                quota.check_and_increment()
+            except quota.QuotaExceededError:
+                _langfuse.update_current_span(output=quota.QUOTA_MESSAGE)
+                return {
+                    "answer": quota.QUOTA_MESSAGE,
+                    "sources": [],
+                    "timings_ms": {"retrieval": 0.0, "rerank": 0.0, "generation": 0.0, "total": 0.0},
+                }
 
         t0 = time.perf_counter()
 

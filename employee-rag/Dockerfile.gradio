@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY rag/ ./rag/
 COPY agent/ ./agent/
 COPY documents/ ./documents/
-COPY app.py api.py ./
+COPY app.py api.py examples_cache.json ./
 
 # Bake the embedding + reranker models into the image so the first request
 # never downloads from the HuggingFace Hub.
