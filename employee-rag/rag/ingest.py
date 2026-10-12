@@ -193,9 +193,7 @@ def get_embeddings() -> HuggingFaceEmbeddings:
     return HuggingFaceEmbeddings(model_name=config.EMBEDDING_MODEL)
 
 
-def build_vectorstore(force: bool = False) -> Chroma:
-    """Return a Chroma vectorstore over documents/, rebuilding only when needed."""
-
+def _build_chroma_store(force: bool) -> Chroma:
     config.CHROMA_DIR.mkdir(parents=True, exist_ok=True)
 
     embeddings = get_embeddings()
@@ -220,11 +218,61 @@ def build_vectorstore(force: bool = False) -> Chroma:
         vectorstore.add_documents(chunks)
         _HASH_FILE.write_text(current_hash)
 
-        print(f"Ingested {len(chunks)} chunks from {config.DOCUMENTS_DIR}")
+        print(f"Ingested {len(chunks)} chunks from {config.DOCUMENTS_DIR} (chroma)")
     else:
-        print(f"Reusing existing index ({vectorstore._collection.count()} chunks, unchanged)")
+        print(
+            f"Reusing existing index ({vectorstore._collection.count()} chunks, unchanged, chroma)"
+        )
 
     return vectorstore
+
+
+def _build_pgvector_store(force: bool):
+    # Local import: psycopg/pgvector are only needed for this backend,
+    # not the default (Chroma) path the deployed demo actually uses.
+    from rag.pgvector_store import PgVectorStore
+
+    embeddings = get_embeddings()
+    store = PgVectorStore(dsn=config.PGVECTOR_DSN, embeddings=embeddings)
+
+    current_hash = _source_hash()
+    with store._conn.cursor() as cur:
+        cur.execute("CREATE TABLE IF NOT EXISTS ingest_meta (key TEXT PRIMARY KEY, value TEXT);")
+        cur.execute("SELECT value FROM ingest_meta WHERE key = 'source_hash';")
+        row = cur.fetchone()
+    previous_hash = row[0] if row else None
+
+    needs_rebuild = force or current_hash != previous_hash or store.count() == 0
+
+    if needs_rebuild:
+        store.delete_all()
+        chunks = load_chunks()
+        store.add_documents(chunks)
+        with store._conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO ingest_meta (key, value) VALUES ('source_hash', %s) "
+                "ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;",
+                (current_hash,),
+            )
+        print(f"Ingested {len(chunks)} chunks from {config.DOCUMENTS_DIR} (pgvector)")
+    else:
+        print(f"Reusing existing index ({store.count()} chunks, unchanged, pgvector)")
+
+    return store
+
+
+def build_vectorstore(force: bool = False):
+    """Returns a vector store over documents/, rebuilding only when the
+    documents or chunking config have changed. Backend is chosen by
+    config.VECTOR_BACKEND ("chroma", the default used by the deployed
+    demo, or "pgvector", local-only -- see rag/pgvector_store.py). Both
+    satisfy rag/vectorstore_protocol.py's VectorStore protocol, so
+    everything downstream (HybridRetriever, RAGPipeline) works unchanged
+    regardless of which one this returns."""
+
+    if config.VECTOR_BACKEND == "pgvector":
+        return _build_pgvector_store(force)
+    return _build_chroma_store(force)
 
 
 if __name__ == "__main__":

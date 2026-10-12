@@ -1,0 +1,18 @@
+{
+  "chroma": {
+    "n_chunks": 239,
+    "ingest_ms": 11610.7,
+    "avg_query_ms": 361.7,
+    "p95_query_ms": 668.6,
+    "hit_at_3": 0.74,
+    "mrr": 0.8
+  },
+  "pgvector": {
+    "n_chunks": 239,
+    "ingest_ms": 10985.5,
+    "avg_query_ms": 336.1,
+    "p95_query_ms": 616.5,
+    "hit_at_3": 0.74,
+    "mrr": 0.8
+  }
+}

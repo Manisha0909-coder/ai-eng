@@ -13,6 +13,17 @@ DOCUMENTS_DIR = BASE_DIR / "documents"
 CHROMA_DIR = BASE_DIR / "chroma_db"
 COLLECTION_NAME = "employee_policy"
 
+# "chroma" (default, used by the deployed demo) or "pgvector" (local-only,
+# docker-compose.pgvector.yml -- see rag/pgvector_store.py). Both
+# implement the same minimal VectorStore protocol
+# (rag/vectorstore_protocol.py), so HybridRetriever's Python-side BM25 +
+# RRF logic works identically regardless of which one build_vectorstore()
+# returns.
+VECTOR_BACKEND = os.getenv("VECTOR_BACKEND", "chroma")
+PGVECTOR_DSN = os.getenv(
+    "PGVECTOR_DSN", "postgresql://postgres:postgres@localhost:5433/employee_rag"
+)
+
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
