@@ -5,9 +5,11 @@ Run in Docker:     see Dockerfile
 Interactive docs:  /docs
 """
 
-from typing import Any, Dict, List, Optional
+import json
+from typing import Any, Dict, Iterator, List, Optional
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from rag.pipeline import get_pipeline
@@ -56,3 +58,25 @@ def ask(request: AskRequest) -> Dict[str, Any]:
         return get_pipeline().answer(request.question)
     except Exception as exc:  # pragma: no cover - defensive, surfaced to the caller
         raise HTTPException(status_code=502, detail=f"Pipeline error: {exc}") from exc
+
+
+def _sse_event(data: Dict[str, Any]) -> str:
+    return f"data: {json.dumps(data)}\n\n"
+
+
+def _stream_events(question: str) -> Iterator[str]:
+    try:
+        for chunk in get_pipeline().answer_stream(question):
+            yield _sse_event({"chunk": chunk})
+    except Exception as exc:  # pragma: no cover - defensive, surfaced in-stream
+        yield _sse_event({"error": str(exc)})
+    yield _sse_event({"done": True})
+
+
+@app.post("/ask/stream")
+def ask_stream(request: AskRequest) -> StreamingResponse:
+    """Server-Sent Events: one `data: {"chunk": "..."}` event per token,
+    then a final `data: {"done": true}` event. Doesn't return sources
+    (see RAGPipeline.answer_stream()'s docstring) -- use /ask for that."""
+
+    return StreamingResponse(_stream_events(request.question), media_type="text/event-stream")

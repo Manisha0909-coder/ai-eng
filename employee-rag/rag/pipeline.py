@@ -6,7 +6,7 @@ gets evaluated is exactly what gets served.
 
 import re
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterator, List
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -200,6 +200,73 @@ class RAGPipeline:
                 "total": round(retrieval_ms + rerank_ms + generation_ms, 1),
             },
         }
+
+    @observe(name="answer-question-stream", as_type="chain")
+    def answer_stream(self, question: str, source: str = "api") -> Iterator[str]:
+        """Same retrieve -> rerank -> generate pipeline as answer(), but
+        yields the generated answer token-by-token for a streaming UI (SSE
+        endpoint, Gradio) instead of returning it whole.
+
+        Trade-off, stated plainly: _generate()'s moderation-stub retry
+        needs the complete response before deciding whether to retry --
+        that's fundamentally incompatible with showing tokens as they
+        arrive, since tokens already shown to the user can't be
+        un-shown. This path skips that retry. A moderation stub will
+        stream through as-is here rather than being silently retried;
+        rare in practice on this corpus, but a real, known behavioral
+        difference from answer(), not an oversight.
+
+        Doesn't return sources/timings (unlike answer()) -- callers that
+        need those should use answer() instead. Kept this way because
+        combining "stream text" and "return structured metadata after
+        the stream ends" from one generator is awkward in Python, and no
+        caller needs both at once yet.
+        """
+
+        _langfuse.update_current_trace(tags=[source])
+        _langfuse.update_current_span(input=question)
+
+        if source != "eval":
+            try:
+                quota.check_and_increment()
+            except quota.QuotaExceededError:
+                _langfuse.update_current_span(output=quota.QUOTA_MESSAGE)
+                yield quota.QUOTA_MESSAGE
+                return
+
+        candidates = self.retriever.retrieve(question)
+        shortlist = candidates[: config.RERANK_CANDIDATES]
+        reranked = rerank(question, shortlist)
+        relevant = [
+            (candidate, score)
+            for candidate, score in reranked
+            if score > config.RERANK_SCORE_THRESHOLD
+        ][: config.FINAL_TOP_K]
+
+        if not relevant:
+            _langfuse.update_current_span(output=NO_ANSWER)
+            yield NO_ANSWER
+            return
+
+        context = "\n\n".join(c.text for c, _ in relevant)
+        accumulated = ""
+
+        try:
+            for chunk in self.chain.stream(
+                {"context": context, "question": question},
+                config={"callbacks": [self._langfuse_handler]},
+            ):
+                accumulated += chunk
+                yield chunk
+        except Exception as exc:  # pragma: no cover - network/rate-limit errors
+            print(f"WARNING: streaming generation failed mid-stream: {exc!r}")
+            # Show what arrived plus a friendly error, rather than swallowing
+            # the partial answer the user already saw.
+            error_suffix = f"\n\n[{GENERATION_ERROR}]"
+            accumulated += error_suffix
+            yield error_suffix
+
+        _langfuse.update_current_span(output=accumulated)
 
 
 _pipeline = None
