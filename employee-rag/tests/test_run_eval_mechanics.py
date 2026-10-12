@@ -119,3 +119,36 @@ def test_repeats_makes_independent_calls_per_item(isolated_cache, fake_sleep, mo
 
     assert pipeline.calls == ["Q1?", "Q1?", "Q1?"]
     assert summary["calls_made"] == 3
+
+
+def test_rewrite_flag_rewrites_multi_turn_items_and_counts_two_calls(isolated_cache, fake_sleep, monkeypatch):
+    import rag.rewrite as rewrite_module
+
+    pipeline = _FakePipeline()
+    monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
+    monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-5")
+    monkeypatch.setattr(rewrite_module, "rewrite_query", lambda llm, q, h: "standalone question")
+
+    multi_turn_item = {
+        "id": "mt1", "question": "And how many sick days?", "category": "multi_turn", "answerable": True,
+        "expected_source": "employee_policy.txt", "answer_must_contain": ["20"],
+        "expected_chunk_substring": "20 days", "forbidden_substrings": [],
+        "history": [{"role": "user", "content": "How long is maternity leave?"}],
+    }
+
+    summary = run_eval.run([multi_turn_item], max_calls=40, rewrite=True)
+
+    assert pipeline.calls == ["standalone question"]  # answered the rewritten question
+    assert summary["calls_made"] == 2  # the rewrite call + the generation call
+    assert summary["results"][0]["question"] == "standalone question"
+
+
+def test_rewrite_flag_is_noop_for_items_without_history(isolated_cache, fake_sleep, monkeypatch):
+    pipeline = _FakePipeline()
+    monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
+    monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-6")
+
+    summary = run_eval.run([DATASET[0]], max_calls=40, rewrite=True)
+
+    assert pipeline.calls == ["Q1?"]  # no history -- unchanged, no rewrite call
+    assert summary["calls_made"] == 1

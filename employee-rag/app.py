@@ -120,11 +120,13 @@ def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Re
 
     session_id = request.session_hash if request else None
 
-    with _langfuse.start_as_current_observation(
-        as_type="agent", name="run-agent", input=message
-    ) as obs:
+    # input= is set after invoke(), not here -- agent/graph.py's
+    # input_guard_node computes a PII-redacted version of the message
+    # (redacted_input) specifically for what gets logged to Langfuse.
+    with _langfuse.start_as_current_observation(as_type="agent", name="run-agent") as obs:
         _langfuse.update_current_trace(tags=["gradio-demo"], session_id=session_id)
 
+        result = {}
         try:
             result = get_agent().invoke(
                 {"messages": _history_to_messages(history, message), "steps": 0},
@@ -135,7 +137,7 @@ def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Re
             print(f"WARNING: agent run failed: {exc!r}")
             answer = "The assistant is temporarily unavailable. Please try again."
 
-        obs.update(output=answer)
+        obs.update(input=result.get("redacted_input", message), output=answer)
 
     # Cloud Run throttles CPU once a request finishes, which can starve
     # Langfuse's background flush thread before it ever sends this trace.

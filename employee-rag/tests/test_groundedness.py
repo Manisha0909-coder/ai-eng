@@ -1,6 +1,6 @@
 """Offline: pure string matching, no pipeline/LLM involved."""
 
-from eval.groundedness import is_grounded, ungrounded_numbers
+from rag.groundedness import is_grounded, ungrounded_numbers
 
 
 def test_grounded_when_every_number_appears_in_context():

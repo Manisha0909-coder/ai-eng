@@ -24,7 +24,8 @@ def test_formats_answer_with_sources(monkeypatch):
     output = tools.search_employee_policies.invoke({"question": "How many annual leave days?"})
 
     assert "20 days of annual leave" in output
-    assert "Sources: employee_policy.txt" in output
+    assert "<summary>Sources</summary>" in output
+    assert "- employee_policy.txt" in output
 
 
 def test_no_sources_omits_sources_line(monkeypatch):

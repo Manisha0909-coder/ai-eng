@@ -13,6 +13,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from rag.pipeline import get_pipeline
+from rag.schema import AnswerPayload
 
 app = FastAPI(
     title="Employee Policy RAG",
@@ -80,3 +81,16 @@ def ask_stream(request: AskRequest) -> StreamingResponse:
     (see RAGPipeline.answer_stream()'s docstring) -- use /ask for that."""
 
     return StreamingResponse(_stream_events(request.question), media_type="text/event-stream")
+
+
+@app.post("/ask/structured", response_model=AnswerPayload)
+def ask_structured(request: AskRequest) -> AnswerPayload:
+    """Same question, validated structured output (answer + citations +
+    confidence + abstained) instead of a plain string -- see
+    RAGPipeline.answer_structured()'s docstring for the fallback behavior
+    when the model doesn't support structured output reliably."""
+
+    try:
+        return get_pipeline().answer_structured(request.question)
+    except Exception as exc:  # pragma: no cover - defensive, surfaced to the caller
+        raise HTTPException(status_code=502, detail=f"Pipeline error: {exc}") from exc

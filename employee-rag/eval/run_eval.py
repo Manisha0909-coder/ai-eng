@@ -54,8 +54,8 @@ from typing import Any, Dict, List, Optional
 from langfuse import get_client
 
 from eval import cache
-from eval.groundedness import is_grounded
 from rag import config
+from rag.groundedness import is_grounded
 from rag.pipeline import NO_ANSWER, get_pipeline
 
 EVAL_DIR = Path(__file__).resolve().parent
@@ -115,14 +115,44 @@ def _filter_split(dataset: List[Dict[str, Any]], split: str) -> List[Dict[str, A
     return [item for item in dataset if item.get("split") == split]
 
 
-def _run_one(pipeline, item: Dict[str, Any], repeat_index: int) -> Dict[str, Any]:
-    # "multi_turn" items carry a `history` field for Stage 4's query-rewriting
-    # work to consume later. rag/pipeline.py's answer() takes a single
-    # question with no conversation context, so for now these are scored
-    # against the bare follow-up question alone -- which should legitimately
-    # score poorly (the question is often ambiguous without its history).
-    # That low score *is* the honest "before" baseline Stage 4.4 asks for.
+_rewrite_llm = None
+
+
+def _get_rewrite_llm():
+    """Lazy singleton, same reasoning as agent/graph.py's _get_rewrite_llm():
+    no API key needed just to import this module."""
+
+    global _rewrite_llm
+    if _rewrite_llm is None:
+        from langchain_openai import ChatOpenAI
+
+        _rewrite_llm = ChatOpenAI(
+            model=config.LLM_MODEL,
+            base_url=config.LLM_BASE_URL,
+            api_key=config.OPENROUTER_API_KEY,
+            timeout=config.LLM_REQUEST_TIMEOUT_SECONDS,
+        )
+    return _rewrite_llm
+
+
+def _run_one(pipeline, item: Dict[str, Any], repeat_index: int, rewrite: bool = False) -> Dict[str, Any]:
+    # "multi_turn" items carry a `history` field. rag/pipeline.py's answer()
+    # takes a single question with no conversation context, so by default
+    # (rewrite=False) these are scored against the bare follow-up question
+    # alone -- which legitimately scores poorly (the question is often
+    # ambiguous without its history). That's the honest "before" baseline
+    # for Stage 4.4's query-rewriting work. With rewrite=True, the same
+    # rag/rewrite.rewrite_query() the live agent uses is applied first --
+    # one extra live call per multi-turn item, which is why this is a flag,
+    # not the default (see run()'s call-accounting for this flag's cost).
     question = item["question"]
+    rewrite_call_made = False
+
+    if rewrite and item.get("history"):
+        from rag.rewrite import rewrite_query
+
+        question = rewrite_query(_get_rewrite_llm(), question, item["history"])
+        rewrite_call_made = True
 
     result = pipeline.answer(question, source="eval")
 
@@ -158,6 +188,7 @@ def _run_one(pipeline, item: Dict[str, Any], repeat_index: int) -> Dict[str, Any
         "errored": False,
         "timings_ms": result["timings_ms"],
         "repeat_index": repeat_index,
+        "rewrite_call_made": rewrite_call_made,
     }
 
 
@@ -230,6 +261,7 @@ def run(
     max_calls: int = 40,
     repeats: int = 1,
     judge: bool = False,
+    rewrite: bool = False,
 ) -> Dict[str, Any]:
     pipeline = get_pipeline()
     items = _filter_split(dataset, split)
@@ -240,8 +272,15 @@ def run(
     skipped_due_to_max_calls: List[str] = []
 
     for item in items:
+        # --rewrite applies only to items with history, and makes an extra
+        # live call that --rewrite=False never would -- a separate cache
+        # key so a cached "before" (bare question) result is never served
+        # back for an "after" (rewrite=True) run of the same item, or vice
+        # versa.
+        cache_key = item["question"] + ("::rewrite" if rewrite and item.get("history") else "")
+
         for repeat_index in range(repeats):
-            cached = cache.get(config.LLM_MODEL, item["question"], repeat_index)
+            cached = cache.get(config.LLM_MODEL, cache_key, repeat_index)
 
             if cached is not None:
                 results.append(cached)
@@ -260,7 +299,12 @@ def run(
             calls_made += 1
 
             try:
-                result = _run_one(pipeline, item, repeat_index)
+                result = _run_one(pipeline, item, repeat_index, rewrite=rewrite)
+                if result["rewrite_call_made"]:
+                    # The rewrite itself was a second live call -- account
+                    # for its budget/pacing too.
+                    calls_made += 1
+                    time.sleep(REQUEST_PACING_SECONDS)
             except Exception as exc:  # pragma: no cover - network/rate-limit errors
                 print(f"WARNING: {item['id']} (repeat {repeat_index}) failed: {exc!r}")
                 if _is_rate_limit_error(exc):
@@ -281,10 +325,11 @@ def run(
                     "errored": True,
                     "timings_ms": {"retrieval": 0.0, "rerank": 0.0, "generation": 0.0, "total": 0.0},
                     "repeat_index": repeat_index,
+                    "rewrite_call_made": False,
                 }
 
             if not result["errored"]:
-                cache.put(config.LLM_MODEL, item["question"], result, repeat_index)
+                cache.put(config.LLM_MODEL, cache_key, result, repeat_index)
             results.append(result)
 
     if judge:
@@ -411,6 +456,10 @@ def main() -> int:
                          "intent is explicit in a command line.")
     parser.add_argument("--judge", action="store_true", help="Also run the LLM-judge pass "
                          "(extra live calls, off by default).")
+    parser.add_argument("--rewrite", action="store_true", help="Apply query rewriting "
+                         "(rag/rewrite.py) to multi_turn items before answering -- one extra "
+                         "live call per such item, off by default. Compare a --rewrite run's "
+                         "multi_turn category accuracy against a plain run's to measure its effect.")
     parser.add_argument(
         "--fail-under", type=float, default=None,
         help="Exit with status 1 if overall_accuracy is below this threshold (e.g. 0.9).",
@@ -419,7 +468,8 @@ def main() -> int:
 
     dataset = json.loads(DATASET_PATH.read_text())
     summary = run(
-        dataset, split=args.split, max_calls=args.max_calls, repeats=args.repeats, judge=args.judge
+        dataset, split=args.split, max_calls=args.max_calls, repeats=args.repeats,
+        judge=args.judge, rewrite=args.rewrite,
     )
 
     summary["meta"] = {
@@ -431,6 +481,7 @@ def main() -> int:
         "max_calls": args.max_calls,
         "repeats": args.repeats,
         "judge_run": args.judge,
+        "rewrite_run": args.rewrite,
     }
 
     print_report(summary)
