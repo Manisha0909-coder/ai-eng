@@ -176,6 +176,12 @@ def test_rewrite_flag_rewrites_multi_turn_items_and_counts_two_calls(
     pipeline = _FakePipeline()
     monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
     monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-5")
+    # rewrite_query itself is faked, but _run_one still calls
+    # run_eval._get_rewrite_llm() to build the (unused) argument -- a real
+    # ChatOpenAI(...) construction, which the OpenAI SDK validates
+    # credentials for at construction time. Fake this too so the test
+    # doesn't need a real API key (CI has none, by design).
+    monkeypatch.setattr(run_eval, "_get_rewrite_llm", lambda: None)
     monkeypatch.setattr(rewrite_module, "rewrite_query", lambda llm, q, h: "standalone question")
 
     multi_turn_item = {

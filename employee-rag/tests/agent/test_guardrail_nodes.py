@@ -81,6 +81,12 @@ def test_rewrite_node_noop_on_first_turn():
 
 
 def test_rewrite_node_calls_rewrite_query_and_replaces_last_message(monkeypatch):
+    # rewrite_query itself is faked, but rewrite_node still calls
+    # _get_rewrite_llm() to build the (unused) argument -- that's a real
+    # ChatOpenAI(...) construction, which the OpenAI SDK validates
+    # credentials for at construction time, not call time. Fake this too
+    # so the test doesn't need a real API key (CI has none, by design).
+    monkeypatch.setattr(graph_module, "_get_rewrite_llm", lambda: None)
     monkeypatch.setattr(graph_module, "rewrite_query", lambda llm, q, h: "standalone question")
 
     original = HumanMessage(content="And how many sick days?")
@@ -101,6 +107,7 @@ def test_rewrite_node_calls_rewrite_query_and_replaces_last_message(monkeypatch)
 
 
 def test_rewrite_node_noop_when_rewrite_returns_unchanged(monkeypatch):
+    monkeypatch.setattr(graph_module, "_get_rewrite_llm", lambda: None)
     monkeypatch.setattr(graph_module, "rewrite_query", lambda llm, q, h: q)
 
     state = {
