@@ -78,9 +78,7 @@ def test_mid_stream_error_yields_partial_plus_friendly_message(monkeypatch):
         pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist]
     )
 
-    chain = _FakeChain(
-        chunks=["Employees ", "receive ", "this should never arrive"], raise_after=2
-    )
+    chain = _FakeChain(chunks=["Employees ", "receive ", "this should never arrive"], raise_after=2)
     pipeline = _make_pipeline(chain, [_relevant_candidate()])
 
     chunks = list(pipeline.answer_stream("How many days of leave?", source="eval"))
@@ -108,9 +106,7 @@ def test_no_relevant_context_yields_no_answer_without_calling_chain(monkeypatch)
 def test_quota_exceeded_yields_quota_message_without_retrieving(monkeypatch):
     class _ExplodingRetriever:
         def retrieve(self, question):
-            raise AssertionError(
-                "retrieve() should never be called once quota is exceeded"
-            )
+            raise AssertionError("retrieve() should never be called once quota is exceeded")
 
     pipeline = RAGPipeline.__new__(RAGPipeline)
     pipeline.retriever = _ExplodingRetriever()

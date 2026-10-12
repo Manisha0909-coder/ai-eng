@@ -37,9 +37,7 @@ def get(model: str, question: str, repeat_index: int = 0) -> Optional[Dict[str, 
     return load().get(_key(model, question, repeat_index))
 
 
-def put(
-    model: str, question: str, result: Dict[str, Any], repeat_index: int = 0
-) -> None:
+def put(model: str, question: str, result: Dict[str, Any], repeat_index: int = 0) -> None:
     CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
     cache = load()
     cache[_key(model, question, repeat_index)] = result

@@ -106,9 +106,7 @@ def _git_sha() -> str:
 def _dataset_hash(dataset: List[Dict[str, Any]]) -> str:
     import hashlib
 
-    return hashlib.sha256(
-        json.dumps(dataset, sort_keys=True).encode("utf-8")
-    ).hexdigest()[:16]
+    return hashlib.sha256(json.dumps(dataset, sort_keys=True).encode("utf-8")).hexdigest()[:16]
 
 
 def _filter_split(dataset: List[Dict[str, Any]], split: str) -> List[Dict[str, Any]]:
@@ -241,9 +239,7 @@ def _apply_judge(
 
         try:
             context = result.get("retrieved_context", "")
-            verdict = judge_answer(
-                judge_llm, result["question"], context, result["answer"]
-            )
+            verdict = judge_answer(judge_llm, result["question"], context, result["answer"])
         except Exception as exc:  # pragma: no cover - network/rate-limit errors
             print(f"WARNING: judge call for {result['id']} failed: {exc!r}")
             if _is_rate_limit_error(exc):
@@ -284,9 +280,7 @@ def run(
         # key so a cached "before" (bare question) result is never served
         # back for an "after" (rewrite=True) run of the same item, or vice
         # versa.
-        cache_key = item["question"] + (
-            "::rewrite" if rewrite and item.get("history") else ""
-        )
+        cache_key = item["question"] + ("::rewrite" if rewrite and item.get("history") else "")
 
         for repeat_index in range(repeats):
             cached = cache.get(config.LLM_MODEL, cache_key, repeat_index)
@@ -317,9 +311,7 @@ def run(
             except Exception as exc:  # pragma: no cover - network/rate-limit errors
                 print(f"WARNING: {item['id']} (repeat {repeat_index}) failed: {exc!r}")
                 if _is_rate_limit_error(exc):
-                    print(
-                        "Rate-limited (429) -- stopping further live calls for this run."
-                    )
+                    print("Rate-limited (429) -- stopping further live calls for this run.")
                     stopped_on_rate_limit = True
                 result = {
                     "id": item["id"],
@@ -351,9 +343,7 @@ def run(
     if judge:
         calls_made = _apply_judge(results, calls_made, max_calls, stopped_on_rate_limit)
 
-    return summarize(
-        results, skipped_due_to_max_calls, calls_made, stopped_on_rate_limit
-    )
+    return summarize(results, skipped_due_to_max_calls, calls_made, stopped_on_rate_limit)
 
 
 def summarize(
@@ -369,29 +359,19 @@ def summarize(
     unanswerable = [r for r in evaluated if not r["answerable"]]
 
     retrieval_hit_rate = (
-        sum(1 for r in answerable if r["retrieval_hit"]) / len(answerable)
-        if answerable
-        else None
+        sum(1 for r in answerable if r["retrieval_hit"]) / len(answerable) if answerable else None
     )
     answer_accuracy = (
-        sum(1 for r in answerable if r["correct"]) / len(answerable)
-        if answerable
-        else None
+        sum(1 for r in answerable if r["correct"]) / len(answerable) if answerable else None
     )
     abstention_accuracy = (
-        sum(1 for r in unanswerable if r["correct"]) / len(unanswerable)
-        if unanswerable
-        else None
+        sum(1 for r in unanswerable if r["correct"]) / len(unanswerable) if unanswerable else None
     )
     overall_accuracy = (
-        sum(1 for r in evaluated if r["correct"]) / len(evaluated)
-        if evaluated
-        else None
+        sum(1 for r in evaluated if r["correct"]) / len(evaluated) if evaluated else None
     )
     grounded_rate = (
-        sum(1 for r in evaluated if r["grounded"]) / len(evaluated)
-        if evaluated
-        else None
+        sum(1 for r in evaluated if r["grounded"]) / len(evaluated) if evaluated else None
     )
 
     judged = [r for r in evaluated if r.get("judge_faithful") is not None]
@@ -411,9 +391,7 @@ def summarize(
     by_category: Dict[str, List[bool]] = {}
     for r in evaluated:
         by_category.setdefault(r["category"], []).append(r["correct"])
-    category_accuracy = {
-        cat: sum(flags) / len(flags) for cat, flags in by_category.items()
-    }
+    category_accuracy = {cat: sum(flags) / len(flags) for cat, flags in by_category.items()}
 
     return {
         "n_examples": len(results),
@@ -429,9 +407,7 @@ def summarize(
         "grounded_rate": grounded_rate,
         "n_judged": len(judged),
         "judge_human_agreement": judge_human_agreement,
-        "avg_latency_ms": round(statistics.mean(total_latencies), 1)
-        if total_latencies
-        else None,
+        "avg_latency_ms": round(statistics.mean(total_latencies), 1) if total_latencies else None,
         "p95_latency_ms": round(
             statistics.quantiles(total_latencies, n=20)[18]
             if len(total_latencies) >= 20
@@ -484,9 +460,7 @@ def print_report(summary: Dict[str, Any]) -> None:
             f"Judge/deterministic agreement: {_fmt_pct(summary['judge_human_agreement'])} "
             f"({summary['n_judged']} judged)"
         )
-    print(
-        f"Avg / p95 latency    : {summary['avg_latency_ms']} ms / {summary['p95_latency_ms']} ms"
-    )
+    print(f"Avg / p95 latency    : {summary['avg_latency_ms']} ms / {summary['p95_latency_ms']} ms")
     print(f"Live LLM calls made  : {summary['calls_made']}")
     print("\nBy category:")
     for cat, acc in sorted(summary["category_accuracy"].items()):

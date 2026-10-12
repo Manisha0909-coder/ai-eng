@@ -32,9 +32,7 @@ def main() -> None:
 
     for question in EXAMPLE_QUESTIONS:
         print(f"Precomputing: {question}")
-        result = agent.invoke(
-            {"messages": [HumanMessage(content=question)], "steps": 0}
-        )
+        result = agent.invoke({"messages": [HumanMessage(content=question)], "steps": 0})
         answer = result["messages"][-1].content
         cache[question] = answer
         print(f"  -> {answer}\n")

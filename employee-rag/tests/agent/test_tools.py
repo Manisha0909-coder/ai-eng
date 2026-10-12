@@ -21,9 +21,7 @@ def test_formats_answer_with_sources(monkeypatch):
     }
     monkeypatch.setattr(tools, "get_pipeline", lambda: _FakePipeline(fake_result))
 
-    output = tools.search_employee_policies.invoke(
-        {"question": "How many annual leave days?"}
-    )
+    output = tools.search_employee_policies.invoke({"question": "How many annual leave days?"})
 
     assert "20 days of annual leave" in output
     assert "<summary>Sources</summary>" in output

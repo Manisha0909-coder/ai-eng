@@ -1,5 +1,7 @@
 # employee-rag
 
+[![CI](https://github.com/Manisha0909-coder/ai-eng/actions/workflows/ci.yml/badge.svg)](https://github.com/Manisha0909-coder/ai-eng/actions/workflows/ci.yml)
+
 **Live demo:** https://employee-rag-gradio-322697991162.us-central1.run.app
 (Cloud Run, scales to zero — first request after idling takes ~15-20s to
 cold-start; click an example question for an instant cached answer instead.)

@@ -68,7 +68,5 @@ def rewrite_query(llm, question: str, history: List[Dict[str, Any]]) -> str:
         rewritten = response.content.strip()
         return rewritten if rewritten else question
     except Exception as exc:  # pragma: no cover - network/rate-limit errors
-        print(
-            f"WARNING: query rewrite failed, falling back to the raw question: {exc!r}"
-        )
+        print(f"WARNING: query rewrite failed, falling back to the raw question: {exc!r}")
         return question

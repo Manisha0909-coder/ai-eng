@@ -14,9 +14,7 @@ def _state(message, steps=1):
 def test_tool_call_routes_to_tools():
     message = AIMessage(
         content="",
-        tool_calls=[
-            {"name": "search_employee_policies", "args": {"question": "x"}, "id": "1"}
-        ],
+        tool_calls=[{"name": "search_employee_policies", "args": {"question": "x"}, "id": "1"}],
     )
     assert should_continue(_state(message)) == "tools"
 
@@ -29,8 +27,6 @@ def test_no_tool_call_ends():
 def test_step_limit_ends_even_with_tool_call():
     message = AIMessage(
         content="",
-        tool_calls=[
-            {"name": "search_employee_policies", "args": {"question": "x"}, "id": "1"}
-        ],
+        tool_calls=[{"name": "search_employee_policies", "args": {"question": "x"}, "id": "1"}],
     )
     assert should_continue(_state(message, steps=MAX_STEPS + 1)) == END

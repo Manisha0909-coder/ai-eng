@@ -33,9 +33,7 @@ def test_rewrites_using_history_when_llm_succeeds():
     ]
     llm = _FakeLLM(content="How many sick days does an employee get per year?")
 
-    result = rewrite_query(
-        llm, "And how many sick days do I get on top of that?", history
-    )
+    result = rewrite_query(llm, "And how many sick days do I get on top of that?", history)
 
     assert result == "How many sick days does an employee get per year?"
 

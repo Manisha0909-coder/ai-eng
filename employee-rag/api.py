@@ -23,9 +23,7 @@ app = FastAPI(
 
 
 class AskRequest(BaseModel):
-    question: str = Field(
-        ..., min_length=1, examples=["How many days of annual leave do I get?"]
-    )
+    question: str = Field(..., min_length=1, examples=["How many days of annual leave do I get?"])
 
 
 class Source(BaseModel):
@@ -82,9 +80,7 @@ def ask_stream(request: AskRequest) -> StreamingResponse:
     then a final `data: {"done": true}` event. Doesn't return sources
     (see RAGPipeline.answer_stream()'s docstring) -- use /ask for that."""
 
-    return StreamingResponse(
-        _stream_events(request.question), media_type="text/event-stream"
-    )
+    return StreamingResponse(_stream_events(request.question), media_type="text/event-stream")
 
 
 @app.post("/ask/structured", response_model=AnswerPayload)

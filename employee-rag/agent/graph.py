@@ -52,9 +52,7 @@ SYSTEM_PROMPT_LEAK_FALLBACK = (
     "I can't share my internal instructions, but I'm happy to help with a "
     "question about company policy."
 )
-UNGROUNDED_FALLBACK_MESSAGE = (
-    "I don't have enough information to answer that confidently."
-)
+UNGROUNDED_FALLBACK_MESSAGE = "I don't have enough information to answer that confidently."
 
 _tools = [search_employee_policies]
 _tool_node = ToolNode(_tools)
@@ -127,9 +125,7 @@ def input_guard_node(state: AgentState) -> AgentState:
 
     last_message = state["messages"][-1]
     text = (
-        last_message.content
-        if isinstance(last_message.content, str)
-        else str(last_message.content)
+        last_message.content if isinstance(last_message.content, str) else str(last_message.content)
     )
     redacted_text, _ = redact_pii(text)
 
@@ -227,28 +223,20 @@ def output_guard_node(state: AgentState) -> AgentState:
 
     last_message = state["messages"][-1]
 
-    if not isinstance(last_message, AIMessage) or getattr(
-        last_message, "tool_calls", None
-    ):
+    if not isinstance(last_message, AIMessage) or getattr(last_message, "tool_calls", None):
         return {}
 
     text = last_message.content
 
     if leaks_system_prompt(text):
-        return {
-            "messages": [
-                AIMessage(content=SYSTEM_PROMPT_LEAK_FALLBACK, id=last_message.id)
-            ]
-        }
+        return {"messages": [AIMessage(content=SYSTEM_PROMPT_LEAK_FALLBACK, id=last_message.id)]}
 
     tool_messages = [m for m in state["messages"] if isinstance(m, ToolMessage)]
     if tool_messages:
         context = "\n\n".join(str(m.content) for m in tool_messages)
         if not is_grounded(text, context):
             return {
-                "messages": [
-                    AIMessage(content=UNGROUNDED_FALLBACK_MESSAGE, id=last_message.id)
-                ]
+                "messages": [AIMessage(content=UNGROUNDED_FALLBACK_MESSAGE, id=last_message.id)]
             }
 
     return {}
@@ -278,9 +266,7 @@ def build_graph():
         "input_guard", _input_guard_routing, {"continue": "rewrite", END: END}
     )
     graph.add_edge("rewrite", "router")
-    graph.add_conditional_edges(
-        "router", should_continue, {"tools": "tools", END: "output_guard"}
-    )
+    graph.add_conditional_edges("router", should_continue, {"tools": "tools", END: "output_guard"})
     graph.add_edge("tools", "router")
     graph.add_edge("output_guard", END)
 

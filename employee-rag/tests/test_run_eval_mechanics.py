@@ -19,9 +19,7 @@ class _FakePipeline:
             raise self.raise_on_call[call_index]
         return {
             "answer": "Employees receive 20 days of annual leave.",
-            "sources": [
-                {"source": "employee_policy.txt", "text": "20 days of annual leave"}
-            ],
+            "sources": [{"source": "employee_policy.txt", "text": "20 days of annual leave"}],
             "timings_ms": {
                 "retrieval": 1.0,
                 "rerank": 1.0,
@@ -89,9 +87,7 @@ def test_summarize_excludes_errored_from_accuracy():
         },
     ]
 
-    summary = run_eval.summarize(
-        results, skipped_ids=[], calls_made=2, stopped_on_rate_limit=False
-    )
+    summary = run_eval.summarize(results, skipped_ids=[], calls_made=2, stopped_on_rate_limit=False)
 
     assert summary["n_errors"] == 1
     assert summary["errored_ids"] == ["b"]
@@ -161,9 +157,7 @@ def test_rate_limit_stops_remaining_items(isolated_cache, fake_sleep, monkeypatc
     assert "q2" in summary["skipped_due_to_max_calls"]
 
 
-def test_repeats_makes_independent_calls_per_item(
-    isolated_cache, fake_sleep, monkeypatch
-):
+def test_repeats_makes_independent_calls_per_item(isolated_cache, fake_sleep, monkeypatch):
     pipeline = _FakePipeline()
     monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
     monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-4")
@@ -182,9 +176,7 @@ def test_rewrite_flag_rewrites_multi_turn_items_and_counts_two_calls(
     pipeline = _FakePipeline()
     monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
     monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-5")
-    monkeypatch.setattr(
-        rewrite_module, "rewrite_query", lambda llm, q, h: "standalone question"
-    )
+    monkeypatch.setattr(rewrite_module, "rewrite_query", lambda llm, q, h: "standalone question")
 
     multi_turn_item = {
         "id": "mt1",
@@ -205,9 +197,7 @@ def test_rewrite_flag_rewrites_multi_turn_items_and_counts_two_calls(
     assert summary["results"][0]["question"] == "standalone question"
 
 
-def test_rewrite_flag_is_noop_for_items_without_history(
-    isolated_cache, fake_sleep, monkeypatch
-):
+def test_rewrite_flag_is_noop_for_items_without_history(isolated_cache, fake_sleep, monkeypatch):
     pipeline = _FakePipeline()
     monkeypatch.setattr(run_eval, "get_pipeline", lambda: pipeline)
     monkeypatch.setattr(run_eval.config, "LLM_MODEL", "fake-model-6")

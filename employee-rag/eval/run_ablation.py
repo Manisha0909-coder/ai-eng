@@ -58,17 +58,13 @@ def _rerank_config(question: str, rrf_candidates: List[Candidate]) -> List[Candi
     return [c for c, score in reranked if score > config.RERANK_SCORE_THRESHOLD]
 
 
-def _retrieve_all_configs(
-    retriever: HybridRetriever, question: str
-) -> Dict[str, List[Candidate]]:
+def _retrieve_all_configs(retriever: HybridRetriever, question: str) -> Dict[str, List[Candidate]]:
     fused = retriever.retrieve(question)  # already sorted by fused_score, desc
 
     vector_only = sorted(
         (c for c in fused if c.vector_rank is not None), key=lambda c: c.vector_rank
     )
-    bm25_only = sorted(
-        (c for c in fused if c.bm25_rank is not None), key=lambda c: c.bm25_rank
-    )
+    bm25_only = sorted((c for c in fused if c.bm25_rank is not None), key=lambda c: c.bm25_rank)
 
     return {
         "vector_only": vector_only,
@@ -120,9 +116,7 @@ def _chunk_level_metrics(
     return hit, recall, context_precision
 
 
-def _answerable_items(
-    dataset: List[Dict[str, Any]], split: Optional[str]
-) -> List[Dict[str, Any]]:
+def _answerable_items(dataset: List[Dict[str, Any]], split: Optional[str]) -> List[Dict[str, Any]]:
     return [
         item
         for item in dataset
@@ -137,9 +131,7 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
     results = {
         name: {
             "mrr_sum": 0.0,
-            "by_k": {
-                k: {"hits": 0, "recall_sum": 0.0, "precision_sum": 0.0} for k in K_SWEEP
-            },
+            "by_k": {k: {"hits": 0, "recall_sum": 0.0, "precision_sum": 0.0} for k in K_SWEEP},
         }
         for name in CONFIGS
     }
@@ -176,9 +168,7 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
                 str(k): {
                     "hit_rate": round(bucket["hits"] / n, 3) if n else None,
                     "recall": round(bucket["recall_sum"] / n, 3) if n else None,
-                    "context_precision": round(bucket["precision_sum"] / n, 3)
-                    if n
-                    else None,
+                    "context_precision": round(bucket["precision_sum"] / n, 3) if n else None,
                 }
                 for k, bucket in results[name]["by_k"].items()
             },
@@ -264,9 +254,7 @@ def main() -> None:
     sweep = run_chunk_size_sweep(dataset, split=None)
     print("\nChunk-size sensitivity (hybrid_rerank, all answerable examples):")
     for chunk_size, metrics in sweep.items():
-        print(
-            f"  CHUNK_SIZE={chunk_size}: hit_rate={metrics['hit_rate']} mrr={metrics['mrr']}"
-        )
+        print(f"  CHUNK_SIZE={chunk_size}: hit_rate={metrics['hit_rate']} mrr={metrics['mrr']}")
     report["chunk_size_sweep"] = {str(k): v for k, v in sweep.items()}
 
     REPORT_PATH.write_text(json.dumps(report, indent=2))

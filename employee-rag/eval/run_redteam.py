@@ -144,9 +144,7 @@ def print_report(summary: Dict[str, Any]) -> None:
             print(f"         -> got: {r['answer'][:150]!r}")
     print(f"\nPass rate: {summary['pass_rate']}")
     if summary["stopped_early_due_to_max_calls"]:
-        print(
-            f"WARNING: stopped early at --max-calls={summary['calls_made']}; re-run to continue."
-        )
+        print(f"WARNING: stopped early at --max-calls={summary['calls_made']}; re-run to continue.")
     print("=" * 70)
 
 

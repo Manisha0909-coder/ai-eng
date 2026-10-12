@@ -88,9 +88,7 @@ def test_single_substring_miss_when_outside_k():
 
 def test_multi_hop_requires_all_substrings_for_hit_but_gives_partial_recall():
     candidates = [
-        _candidate(
-            "A badge replacement is issued within 1 business day.", "security.md"
-        ),
+        _candidate("A badge replacement is issued within 1 business day.", "security.md"),
         _candidate("unrelated filler", "other.txt"),
     ]
 

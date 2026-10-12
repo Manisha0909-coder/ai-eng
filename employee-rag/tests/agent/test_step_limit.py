@@ -35,9 +35,7 @@ def test_step_limit_terminates_instead_of_looping_forever(monkeypatch):
     monkeypatch.setattr(tools_module, "get_pipeline", lambda: _FakePipeline())
 
     agent = get_agent()
-    result = agent.invoke(
-        {"messages": [HumanMessage(content="loop forever")], "steps": 0}
-    )
+    result = agent.invoke({"messages": [HumanMessage(content="loop forever")], "steps": 0})
 
     assert result["messages"][-1].content == STEP_LIMIT_MESSAGE
     assert result["steps"] == MAX_STEPS + 1

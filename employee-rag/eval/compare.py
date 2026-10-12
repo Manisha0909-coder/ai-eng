@@ -27,9 +27,7 @@ def compare(report_a: Dict[str, Any], report_b: Dict[str, Any]) -> Dict[str, Any
     newly_correct = [i for i in shared if not a[i]["correct"] and b[i]["correct"]]
     newly_incorrect = [i for i in shared if a[i]["correct"] and not b[i]["correct"]]
     unchanged_correct = [i for i in shared if a[i]["correct"] and b[i]["correct"]]
-    unchanged_incorrect = [
-        i for i in shared if not a[i]["correct"] and not b[i]["correct"]
-    ]
+    unchanged_incorrect = [i for i in shared if not a[i]["correct"] and not b[i]["correct"]]
 
     return {
         "only_in_a": only_in_a,

@@ -102,9 +102,7 @@ def test_doc_found_by_both_retrievers_outranks_doc_found_by_only_one():
     )
     retriever = HybridRetriever(vs)
 
-    results = retriever.retrieve(
-        "policy remote work process", vector_top_k=2, bm25_top_k=2
-    )
+    results = retriever.retrieve("policy remote work process", vector_top_k=2, bm25_top_k=2)
 
     both = next(c for c in results if c.text == doc_both.page_content)
     vector_top = next(c for c in results if c.text == doc_vector_top.page_content)
@@ -131,9 +129,7 @@ def test_empty_corpus_does_not_crash():
 
 def test_metadata_filter_only_returns_matching_category():
     hr_doc = _doc("grievance process", category="hr")
-    it_doc = _doc(
-        "grievance shaped IT ticket", category="it"
-    )  # shares tokens on purpose
+    it_doc = _doc("grievance shaped IT ticket", category="it")  # shares tokens on purpose
 
     vs = _FakeVectorStore(documents=[hr_doc, it_doc], search_order=[hr_doc, it_doc])
     retriever = HybridRetriever(vs)

@@ -156,9 +156,7 @@ class RAGPipeline:
             timeout=config.LLM_REQUEST_TIMEOUT_SECONDS,
         )
         self.chain = _PROMPT | self.llm | StrOutputParser()
-        self._structured_chain = _STRUCTURED_PROMPT | self.llm.with_structured_output(
-            AnswerPayload
-        )
+        self._structured_chain = _STRUCTURED_PROMPT | self.llm.with_structured_output(AnswerPayload)
         self._langfuse_handler = CallbackHandler()
 
     @staticmethod
@@ -192,9 +190,7 @@ class RAGPipeline:
             if attempt < config.GENERATION_MAX_RETRIES - 1:
                 time.sleep(config.GENERATION_RETRY_BACKOFF_SECONDS)
 
-        print(
-            f"WARNING: generation kept returning invalid responses; last one: {last_response!r}"
-        )
+        print(f"WARNING: generation kept returning invalid responses; last one: {last_response!r}")
         return GENERATION_ERROR
 
     @observe(name="answer-question", as_type="chain")
@@ -408,9 +404,7 @@ class RAGPipeline:
 
         if not relevant:
             _langfuse.update_current_span(output=NO_ANSWER)
-            return AnswerPayload(
-                answer=NO_ANSWER, citations=[], confidence="low", abstained=True
-            )
+            return AnswerPayload(answer=NO_ANSWER, citations=[], confidence="low", abstained=True)
 
         context = _labeled_context(relevant)
 
@@ -420,12 +414,8 @@ class RAGPipeline:
                     {"context": context, "question": question},
                     config={"callbacks": [self._langfuse_handler]},
                 )
-            except (
-                Exception
-            ) as exc:  # pragma: no cover - network/rate-limit/parse errors
-                print(
-                    f"WARNING: structured generation attempt {attempt} failed: {exc!r}"
-                )
+            except Exception as exc:  # pragma: no cover - network/rate-limit/parse errors
+                print(f"WARNING: structured generation attempt {attempt} failed: {exc!r}")
             else:
                 if isinstance(payload, AnswerPayload):
                     _langfuse.update_current_span(output=payload.model_dump())
@@ -434,9 +424,7 @@ class RAGPipeline:
             if attempt < config.GENERATION_MAX_RETRIES - 1:
                 time.sleep(config.GENERATION_RETRY_BACKOFF_SECONDS)
 
-        print(
-            "WARNING: structured generation kept failing; falling back to plain-text path"
-        )
+        print("WARNING: structured generation kept failing; falling back to plain-text path")
         plain_context = _build_context(relevant)
         generated = self._generate(plain_context, question)
         fallback = AnswerPayload(

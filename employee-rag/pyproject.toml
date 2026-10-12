@@ -1,0 +1,19 @@
+[tool.ruff]
+# NOT py311 despite the Docker image targeting 3.11: the local dev venv
+# (and CI's actual test run) is 3.9, and selecting pyupgrade (UP) rules
+# at py311 would push toward 3.10+-only syntax (`list[str]`, `X | None`)
+# that breaks on 3.9 -- deliberately not selecting UP below for the same
+# reason.
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = [
+    "E501",  # line length -- this codebase favors long, readable prose
+             # comments/docstrings over hard wrapping; the formatter still
+             # normalizes code lines, this only exempts prose from it.
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

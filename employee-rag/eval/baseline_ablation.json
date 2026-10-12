@@ -1,0 +1,6 @@
+{
+  "hybrid_rerank_dev_hit_at_3": 0.74,
+  "captured_from": "eval/ablation_report.json, dev split, hybrid_rerank, k=3",
+  "captured_at_stage": "gap-closing Stage 5 (CI regression gate introduction)",
+  "note": "Update this value deliberately (with a comment explaining why) whenever a retrieval change intentionally shifts this number -- it's the CI regression gate's reference point, not a historical log."
+}

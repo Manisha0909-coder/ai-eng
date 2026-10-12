@@ -359,8 +359,7 @@ def _build_v2() -> List[Dict[str, Any]]:
     cross_document_conflict = [
         _entry(
             "cc-01",
-            "What is the home-office equipment stipend under the CURRENT policy, "
-            "not the old one?",
+            "What is the home-office equipment stipend under the CURRENT policy, not the old one?",
             "cross_document_conflict",
             "extended/it/remote_work_equipment_policy.md",
             [["15,000", "15000"]],
@@ -379,8 +378,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "cc-03",
-            "Is the current monthly connectivity allowance 1,500 rupees or the old "
-            "1,000 rupees?",
+            "Is the current monthly connectivity allowance 1,500 rupees or the old 1,000 rupees?",
             "cross_document_conflict",
             "extended/it/remote_work_equipment_policy.md",
             [["1,500", "1500"]],
@@ -389,8 +387,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "cc-04",
-            "What was the monthly connectivity allowance under the superseded 2023 "
-            "policy?",
+            "What was the monthly connectivity allowance under the superseded 2023 policy?",
             "cross_document_conflict",
             "extended/archive/remote_work_equipment_policy_2023_superseded.md",
             [["1,000", "1000"]],
@@ -419,8 +416,7 @@ def _build_v2() -> List[Dict[str, Any]]:
     paraphrase_no_overlap = [
         _entry(
             "po-01",
-            "Who do I talk to if a colleague keeps making uncomfortable comments "
-            "toward me?",
+            "Who do I talk to if a colleague keeps making uncomfortable comments toward me?",
             "paraphrase_no_overlap",
             "code_of_conduct.txt",
             [["HR", "ethics hotline"]],
@@ -428,8 +424,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "po-02",
-            "What should I do before accepting a side gig at a company we do "
-            "business with?",
+            "What should I do before accepting a side gig at a company we do business with?",
             "paraphrase_no_overlap",
             "code_of_conduct.txt",
             ["disclose"],
@@ -454,8 +449,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "po-05",
-            "I can't find the card that gets me into the building anymore -- what "
-            "happens now?",
+            "I can't find the card that gets me into the building anymore -- what happens now?",
             "paraphrase_no_overlap",
             "extended/security/physical_safety_policy.md",
             [["replace", "replacement"]],
@@ -608,8 +602,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "mh-03",
-            "If I'm on a Performance Improvement Plan, can I also request leave "
-            "without pay?",
+            "If I'm on a Performance Improvement Plan, can I also request leave without pay?",
             "multi_hop",
             [
                 "extended/hr/performance_review_policy.md",
@@ -629,8 +622,7 @@ def _build_v2() -> List[Dict[str, Any]]:
         ),
         _entry(
             "mh-05",
-            "If my expense report is both late and for 30,000 rupees, whose "
-            "approval do I need?",
+            "If my expense report is both late and for 30,000 rupees, whose approval do I need?",
             "multi_hop",
             ["expense_policy.txt", "extended/finance/expense_approval_matrix.md"],
             [["manager"], ["Finance"]],
@@ -847,9 +839,7 @@ def _assign_splits(entries: List[Dict[str, Any]]) -> None:
 
     for category_entries in by_category.values():
         rng.shuffle(category_entries)
-        midpoint = (
-            len(category_entries) + 1
-        ) // 2  # odd counts: extra item goes to dev
+        midpoint = (len(category_entries) + 1) // 2  # odd counts: extra item goes to dev
         for i, entry in enumerate(category_entries):
             entry["split"] = "dev" if i < midpoint else "test"
 

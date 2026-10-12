@@ -85,15 +85,11 @@ class HybridRetriever:
             return []
 
         scores = self._bm25.get_scores(_tokenize(query))
-        ranked_indices = sorted(
-            range(len(scores)), key=lambda i: scores[i], reverse=True
-        )
+        ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
         ranked_docs = [self._documents[i] for i in ranked_indices]
 
         if metadata_filter:
-            ranked_docs = [
-                d for d in ranked_docs if _matches_filter(d, metadata_filter)
-            ]
+            ranked_docs = [d for d in ranked_docs if _matches_filter(d, metadata_filter)]
 
         return [(doc, rank) for rank, doc in enumerate(ranked_docs[:top_k])]
 

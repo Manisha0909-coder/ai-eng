@@ -35,9 +35,7 @@ def test_resets_on_a_new_day(monkeypatch):
 
     import datetime
 
-    monkeypatch.setattr(
-        quota, "_today", lambda: quota._day + datetime.timedelta(days=1)
-    )
+    monkeypatch.setattr(quota, "_today", lambda: quota._day + datetime.timedelta(days=1))
 
     assert quota.remaining(limit=5) == 5
     quota.check_and_increment(limit=5)  # should not raise -- fresh day, fresh count

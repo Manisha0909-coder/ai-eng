@@ -43,9 +43,7 @@ class JudgeVerdict(BaseModel):
 
 
 def build_judge_prompt(question: str, context: str, answer: str) -> str:
-    return JUDGE_PROMPT_TEMPLATE.format(
-        question=question, context=context, answer=answer
-    )
+    return JUDGE_PROMPT_TEMPLATE.format(question=question, context=context, answer=answer)
 
 
 def parse_judge_response(raw: str) -> JudgeVerdict:
