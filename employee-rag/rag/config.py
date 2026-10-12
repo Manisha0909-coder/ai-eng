@@ -17,6 +17,12 @@ EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+# Optional: when set, api.py's /ask* endpoints require this value in the
+# X-API-Key header. Unset by default (the Cloud Run demo stays open,
+# matching its existing behavior) -- api.py logs a warning (once) rather
+# than silently running unauthenticated forever.
+API_KEY = os.getenv("API_KEY")
 LLM_MODEL = os.getenv("LLM_MODEL", "openrouter/free")
 LLM_BASE_URL = "https://openrouter.ai/api/v1"
 

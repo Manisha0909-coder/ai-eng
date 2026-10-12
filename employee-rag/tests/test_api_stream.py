@@ -13,16 +13,14 @@ class _FakeStreamingPipeline:
     def __init__(self, chunks):
         self._chunks = chunks
 
-    def answer_stream(self, question):
+    def answer_stream(self, question, request_id=None):
         yield from self._chunks
 
 
 @pytest.fixture
 def client(monkeypatch):
     monkeypatch.setattr(
-        api,
-        "get_pipeline",
-        lambda: _FakeStreamingPipeline(["Employees ", "receive ", "20 days."]),
+        api, "get_pipeline", lambda: _FakeStreamingPipeline(["Employees ", "receive ", "20 days."])
     )
     return TestClient(api.app)
 
@@ -55,7 +53,7 @@ def test_stream_endpoint_emits_one_event_per_chunk_then_done(client):
 
 def test_stream_endpoint_reports_error_mid_stream(monkeypatch):
     class _ExplodingPipeline:
-        def answer_stream(self, question):
+        def answer_stream(self, question, request_id=None):
             yield "partial answer "
             raise RuntimeError("boom")
 

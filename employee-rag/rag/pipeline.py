@@ -6,7 +6,7 @@ gets evaluated is exactly what gets served.
 
 import re
 import time
-from typing import Any, Dict, Iterator, List, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -35,6 +35,20 @@ GENERATION_ERROR = "The answer service is temporarily unavailable. Please try ag
 # response worth retrying rather than shown to the user as-is.
 _INVALID_RESPONSE_PATTERN = re.compile(r"^\s*user\s*safety\s*:", re.IGNORECASE)
 _MIN_VALID_RESPONSE_LENGTH = 5
+
+
+def _tag_trace(source: str, request_id: Optional[str] = None) -> None:
+    """Shared by answer()/answer_stream()/answer_structured(): tags the
+    trace by caller (api/agent/eval/...), and -- when the caller has one,
+    e.g. api.py's request-id middleware -- attaches it as trace metadata
+    so a specific HTTP request can be found in Langfuse from its
+    X-Request-ID response header."""
+
+    kwargs: Dict[str, Any] = {"tags": [source]}
+    if request_id:
+        kwargs["metadata"] = {"request_id": request_id}
+    _langfuse.update_current_trace(**kwargs)
+
 
 _PROMPT = ChatPromptTemplate.from_messages(
     [
@@ -194,12 +208,14 @@ class RAGPipeline:
         return GENERATION_ERROR
 
     @observe(name="answer-question", as_type="chain")
-    def answer(self, question: str, source: str = "api") -> Dict[str, Any]:
+    def answer(
+        self, question: str, source: str = "api", request_id: Optional[str] = None
+    ) -> Dict[str, Any]:
         # @observe captures all args (self, question, source) as this
         # observation's input by default -- override with just the question,
         # the thing a reviewer actually needs. See langfuse/skills
         # references/instrumentation.md "Common Mistakes".
-        _langfuse.update_current_trace(tags=[source])
+        _tag_trace(source, request_id)
         _langfuse.update_current_span(input=question)
 
         # The daily cap protects the shared OpenRouter free tier from live
@@ -295,7 +311,9 @@ class RAGPipeline:
         }
 
     @observe(name="answer-question-stream", as_type="chain")
-    def answer_stream(self, question: str, source: str = "api") -> Iterator[str]:
+    def answer_stream(
+        self, question: str, source: str = "api", request_id: Optional[str] = None
+    ) -> Iterator[str]:
         """Same retrieve -> rerank -> generate pipeline as answer(), but
         yields the generated answer token-by-token for a streaming UI (SSE
         endpoint, Gradio) instead of returning it whole.
@@ -316,7 +334,7 @@ class RAGPipeline:
         caller needs both at once yet.
         """
 
-        _langfuse.update_current_trace(tags=[source])
+        _tag_trace(source, request_id)
         _langfuse.update_current_span(input=question)
 
         if source != "eval":
@@ -362,7 +380,9 @@ class RAGPipeline:
         _langfuse.update_current_span(output=accumulated)
 
     @observe(name="answer-question-structured", as_type="chain")
-    def answer_structured(self, question: str, source: str = "api") -> AnswerPayload:
+    def answer_structured(
+        self, question: str, source: str = "api", request_id: Optional[str] = None
+    ) -> AnswerPayload:
         """Structured-output variant of answer(): the generation step
         returns a validated AnswerPayload (answer + citations +
         confidence + abstained) via LangChain's with_structured_output(),
@@ -378,7 +398,7 @@ class RAGPipeline:
         realistic common case on this model, not a rare edge case.
         """
 
-        _langfuse.update_current_trace(tags=[source])
+        _tag_trace(source, request_id)
         _langfuse.update_current_span(input=question)
 
         if source != "eval":

@@ -20,4 +20,6 @@ def test_fails_beyond_tolerance():
 
 
 def test_custom_tolerance_respected():
-    assert not passes_regression_check(baseline_hit_at_3=0.74, current_hit_at_3=0.72, tolerance=0.01)
+    assert not passes_regression_check(
+        baseline_hit_at_3=0.74, current_hit_at_3=0.72, tolerance=0.01
+    )

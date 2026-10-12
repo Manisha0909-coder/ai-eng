@@ -126,7 +126,7 @@ def _iter_document_paths():
         yield from sorted(config.DOCUMENTS_DIR.rglob(f"*{ext}"))
 
 
-def _config_fingerprint() -> str:
+def config_fingerprint() -> str:
     return (
         f"chunk_size={config.CHUNK_SIZE};"
         f"chunk_overlap={config.CHUNK_OVERLAP};"
@@ -144,7 +144,7 @@ def _source_hash() -> str:
         hasher.update(str(path.relative_to(config.DOCUMENTS_DIR)).encode("utf-8"))
         hasher.update(path.read_bytes())
 
-    hasher.update(_config_fingerprint().encode("utf-8"))
+    hasher.update(config_fingerprint().encode("utf-8"))
 
     return hasher.hexdigest()
 
