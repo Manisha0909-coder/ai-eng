@@ -5,6 +5,11 @@ LLM-based) faithfulness judge. A model can *sound* faithful while still
 inventing a number that was never in the context; this catches that
 specific, checkable failure mode without needing another LLM call.
 
+Lives in rag/, not eval/: agent/graph.py's output guard uses this at
+request time (replacing an ungrounded answer with a safe fallback), and
+eval/run_eval.py uses the same function offline for the grounded_rate
+metric -- one implementation, not two copies that could drift apart.
+
 Deliberately crude (substring presence, not semantic grounding) -- same
 trade-off as the project's other deterministic checks (variant-group
 string matching, the light BM25 stemmer): fast and dependency-free, at
