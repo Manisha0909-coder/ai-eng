@@ -5,7 +5,13 @@
     "category": "annual_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["20"]
+    "answer_must_contain": [
+      "20"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "20 days of annual leave",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "leave-02",
@@ -13,7 +19,14 @@
     "category": "annual_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["6", "month"]
+    "answer_must_contain": [
+      "6",
+      "month"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "completing 6 months of employment",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-07",
@@ -21,7 +34,13 @@
     "category": "annual_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["20"]
+    "answer_must_contain": [
+      "20"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "20 days of annual leave",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-08",
@@ -29,7 +48,15 @@
     "category": "annual_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["20"]
+    "answer_must_contain": [
+      "20"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "20 days of annual leave",
+    "forbidden_substrings": [
+      "25"
+    ],
+    "split": "dev"
   },
   {
     "id": "leave-09",
@@ -37,7 +64,14 @@
     "category": "annual_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["6", "month"]
+    "answer_must_contain": [
+      "6",
+      "month"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "completing 6 months of employment",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "leave-03",
@@ -45,7 +79,14 @@
     "category": "maternity_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["12", "week"]
+    "answer_must_contain": [
+      "12",
+      "week"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "12 weeks of maternity leave",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "leave-04",
@@ -53,7 +94,13 @@
     "category": "maternity_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["12"]
+    "answer_must_contain": [
+      "12"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "12 weeks of maternity leave",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "leave-10",
@@ -61,7 +108,13 @@
     "category": "maternity_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["12"]
+    "answer_must_contain": [
+      "12"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "12 weeks of maternity leave",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-11",
@@ -69,7 +122,15 @@
     "category": "maternity_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["12"]
+    "answer_must_contain": [
+      "12"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "12 weeks of maternity leave",
+    "forbidden_substrings": [
+      "10 weeks"
+    ],
+    "split": "dev"
   },
   {
     "id": "leave-05",
@@ -77,7 +138,13 @@
     "category": "sick_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["10"]
+    "answer_must_contain": [
+      "10"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "10 days of sick leave",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "leave-12",
@@ -85,7 +152,13 @@
     "category": "sick_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["10"]
+    "answer_must_contain": [
+      "10"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "10 days of sick leave",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-13",
@@ -93,7 +166,15 @@
     "category": "sick_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["10"]
+    "answer_must_contain": [
+      "10"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "10 days of sick leave",
+    "forbidden_substrings": [
+      "12 days"
+    ],
+    "split": "test"
   },
   {
     "id": "leave-14",
@@ -101,7 +182,13 @@
     "category": "sick_leave",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["10"]
+    "answer_must_contain": [
+      "10"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "10 days of sick leave",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-06",
@@ -109,7 +196,18 @@
     "category": "wfh",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": [["twice", "two days", "2 days"], "week"]
+    "answer_must_contain": [
+      [
+        "twice",
+        "two days",
+        "2 days"
+      ],
+      "week"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "twice per week",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-15",
@@ -117,7 +215,18 @@
     "category": "wfh",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": [["twice", "two days", "2 days"], "week"]
+    "answer_must_contain": [
+      [
+        "twice",
+        "two days",
+        "2 days"
+      ],
+      "week"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "twice per week",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "leave-16",
@@ -125,7 +234,13 @@
     "category": "wfh",
     "answerable": true,
     "expected_source": "employee_policy.txt",
-    "answer_must_contain": ["twice"]
+    "answer_must_contain": [
+      "twice"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "twice per week",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "it-01",
@@ -133,7 +248,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["180"]
+    "answer_must_contain": [
+      "180"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "rotated every 180 days",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "it-02",
@@ -141,7 +262,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["24"]
+    "answer_must_contain": [
+      "24"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "lost device must be reported",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "it-03",
@@ -149,7 +276,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["VPN"]
+    "answer_must_contain": [
+      "VPN"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "connect through the company VPN",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "it-04",
@@ -157,7 +290,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["encrypt"]
+    "answer_must_contain": [
+      "encrypt"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "full-disk encryption enabled",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "it-05",
@@ -165,7 +304,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["approved"]
+    "answer_must_contain": [
+      "approved"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "approved by the IT team",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "it-06",
@@ -173,7 +318,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["MDM"]
+    "answer_must_contain": [
+      "MDM"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "enrolled in mobile device management",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "it-07",
@@ -181,7 +332,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["24"]
+    "answer_must_contain": [
+      "24"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "phishing email",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "it-08",
@@ -189,7 +346,13 @@
     "category": "it_security",
     "answerable": true,
     "expected_source": "it_security_policy.txt",
-    "answer_must_contain": ["12"]
+    "answer_must_contain": [
+      "12"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "at least 12 characters",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "expense-01",
@@ -197,7 +360,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["1500"]
+    "answer_must_contain": [
+      "1500"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "1500 rupees for meals",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "expense-02",
@@ -205,7 +374,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["500"]
+    "answer_must_contain": [
+      "500"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "expense over 500 rupees",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "expense-03",
@@ -213,7 +388,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["30"]
+    "answer_must_contain": [
+      "30"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "within 30 days",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "expense-04",
@@ -221,7 +402,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["portal"]
+    "answer_must_contain": [
+      "portal"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "company travel portal",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "expense-05",
@@ -229,7 +416,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["6"]
+    "answer_must_contain": [
+      "6"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "business class requires VP approval for flights over 6 hours",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "expense-06",
@@ -237,7 +430,13 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["approval"]
+    "answer_must_contain": [
+      "approval"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "Late submissions require manager approval",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "expense-07",
@@ -245,7 +444,16 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": [["not reimbursable", "non-reimbursable"]]
+    "answer_must_contain": [
+      [
+        "not reimbursable",
+        "non-reimbursable"
+      ]
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "alcohol are not reimbursable",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "expense-08",
@@ -253,7 +461,15 @@
     "category": "expenses",
     "answerable": true,
     "expected_source": "expense_policy.txt",
-    "answer_must_contain": ["1500"]
+    "answer_must_contain": [
+      "1500"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "1500 rupees",
+    "forbidden_substrings": [
+      "2000"
+    ],
+    "split": "dev"
   },
   {
     "id": "conduct-01",
@@ -261,7 +477,13 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["HR"]
+    "answer_must_contain": [
+      "HR"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "reported to HR or through the anonymous ethics hotline",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "conduct-02",
@@ -269,7 +491,14 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["10", "4"]
+    "answer_must_contain": [
+      "10",
+      "4"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "core hours (10 AM - 4 PM",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "conduct-03",
@@ -277,7 +506,13 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["disclose"]
+    "answer_must_contain": [
+      "disclose"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "disclose any outside employment",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "conduct-04",
@@ -285,7 +520,13 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["confidential"]
+    "answer_must_contain": [
+      "confidential"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "confidential company information, including source code",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "conduct-05",
@@ -293,7 +534,13 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["retaliation"]
+    "answer_must_contain": [
+      "retaliation"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "Retaliation against anyone who reports a concern in good faith",
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "conduct-06",
@@ -301,7 +548,13 @@
     "category": "code_of_conduct",
     "answerable": true,
     "expected_source": "code_of_conduct.txt",
-    "answer_must_contain": ["camera"]
+    "answer_must_contain": [
+      "camera"
+    ],
+    "origin": "v1",
+    "expected_chunk_substring": "attend scheduled meetings on camera",
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-01",
@@ -309,7 +562,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-02",
@@ -317,7 +574,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-03",
@@ -325,7 +586,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-04",
@@ -333,7 +598,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-05",
@@ -341,7 +610,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-06",
@@ -349,7 +622,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-07",
@@ -357,7 +634,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-08",
@@ -365,7 +646,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-09",
@@ -373,7 +658,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
   },
   {
     "id": "unanswerable-10",
@@ -381,7 +670,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-11",
@@ -389,7 +682,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-12",
@@ -397,7 +694,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-13",
@@ -405,7 +706,11 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "dev"
   },
   {
     "id": "unanswerable-14",
@@ -413,6 +718,1220 @@
     "category": "out_of_scope",
     "answerable": false,
     "expected_source": null,
-    "answer_must_contain": []
+    "answer_must_contain": [],
+    "origin": "v1",
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "split": "test"
+  },
+  {
+    "id": "ext-01",
+    "question": "How long is the probation period for new hires?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/onboarding_policy.md",
+    "answer_must_contain": [
+      "6 months"
+    ],
+    "expected_chunk_substring": "probation period of",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-02",
+    "question": "How often are performance reviews conducted?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/performance_review_policy.md",
+    "answer_must_contain": [
+      "twice a year"
+    ],
+    "expected_chunk_substring": "happen",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-03",
+    "question": "How long does a Performance Improvement Plan run?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/performance_review_policy.md",
+    "answer_must_contain": [
+      "60 days"
+    ],
+    "expected_chunk_substring": "PIP) runs for",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-04",
+    "question": "Within how many days must I file a grievance after an incident?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/grievance_policy.md",
+    "answer_must_contain": [
+      "30 days"
+    ],
+    "expected_chunk_substring": "within",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-05",
+    "question": "What is the employer's PF contribution percentage in India?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/benefits_overview_india.pdf",
+    "answer_must_contain": [
+      "12%"
+    ],
+    "expected_chunk_substring": "12%",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-06",
+    "question": "How much does the company match in my 401(k)?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/benefits_overview_us.md",
+    "answer_must_contain": [
+      "50%"
+    ],
+    "expected_chunk_substring": "matches",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-07",
+    "question": "How many days in advance must I request leave without pay?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/hr/leave_without_pay_policy.md",
+    "answer_must_contain": [
+      [
+        "4 weeks",
+        "4-week"
+      ]
+    ],
+    "expected_chunk_substring": "advance",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-08",
+    "question": "How often is IT access reviewed?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/it/access_management_policy.md",
+    "answer_must_contain": [
+      "quarterly"
+    ],
+    "expected_chunk_substring": "reviews all system access",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-09",
+    "question": "Who approves access beyond my role's default template?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/it/access_management_policy.md",
+    "answer_must_contain": [
+      "manager"
+    ],
+    "expected_chunk_substring": "requires a ticket approved by",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-10",
+    "question": "How long does the DPO have to respond to a data subject request?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/it/data_privacy_policy.md",
+    "answer_must_contain": [
+      "30 days"
+    ],
+    "expected_chunk_substring": "responds within",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-11",
+    "question": "What is the current home-office equipment stipend amount?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "15,000",
+        "15000"
+      ]
+    ],
+    "expected_chunk_substring": "15,000",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-12",
+    "question": "How quickly must I report a data breach to the DPO?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/security/incident_response_policy.pdf",
+    "answer_must_contain": [
+      "2 hours"
+    ],
+    "expected_chunk_substring": "notified within",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-13",
+    "question": "How often are fire drills conducted?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/security/physical_safety_policy.md",
+    "answer_must_contain": [
+      "twice a year"
+    ],
+    "expected_chunk_substring": "conducted",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-14",
+    "question": "How far in advance must a visitor be pre-registered?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/security/visitor_access_policy.md",
+    "answer_must_contain": [
+      "4 hours"
+    ],
+    "expected_chunk_substring": "before arrival",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "ext-15",
+    "question": "What is the daily meal allowance for US business travel?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/finance/travel_policy_us.pdf",
+    "answer_must_contain": [
+      [
+        "$75"
+      ]
+    ],
+    "expected_chunk_substring": "75",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "ext-16",
+    "question": "Above what purchase amount does procurement require a receipt?",
+    "category": "extended_docs",
+    "answerable": true,
+    "expected_source": "extended/finance/procurement_policy.md",
+    "answer_must_contain": [
+      [
+        "10,000",
+        "10000"
+      ]
+    ],
+    "expected_chunk_substring": "over",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-01",
+    "question": "Is the probation period 6 months or 3 months?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/hr/onboarding_policy.md",
+    "answer_must_contain": [
+      "6 months"
+    ],
+    "expected_chunk_substring": "probation period",
+    "forbidden_substrings": [
+      "3 months"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-02",
+    "question": "Does the 401(k) match 50% or 100% of contributions?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/hr/benefits_overview_us.md",
+    "answer_must_contain": [
+      "50%"
+    ],
+    "expected_chunk_substring": "matches",
+    "forbidden_substrings": [
+      "100%"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-03",
+    "question": "Is the PF contribution 12% or 10%?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/hr/benefits_overview_india.pdf",
+    "answer_must_contain": [
+      "12%"
+    ],
+    "expected_chunk_substring": "12%",
+    "forbidden_substrings": [
+      "10%"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-04",
+    "question": "Under the current policy, is the home-office stipend 15,000 or 8,000?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "15,000",
+        "15000"
+      ]
+    ],
+    "expected_chunk_substring": "15,000",
+    "forbidden_substrings": [
+      "8,000"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-05",
+    "question": "Is the data breach notification window 2 hours or 24 hours?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/security/incident_response_policy.pdf",
+    "answer_must_contain": [
+      "2 hours"
+    ],
+    "expected_chunk_substring": "within 2 hours",
+    "forbidden_substrings": [
+      "24 hours"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "nm-06",
+    "question": "Is the procurement receipt threshold 10,000 rupees or 500 rupees?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/finance/procurement_policy.md",
+    "answer_must_contain": [
+      [
+        "10,000",
+        "10000"
+      ]
+    ],
+    "expected_chunk_substring": "over",
+    "forbidden_substrings": [
+      "500"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "nm-07",
+    "question": "Is the corporate card monthly limit 50,000 rupees or 75,000 rupees?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/finance/corporate_card_policy.md",
+    "answer_must_contain": [
+      [
+        "50,000",
+        "50000"
+      ]
+    ],
+    "expected_chunk_substring": "monthly limit",
+    "forbidden_substrings": [
+      "75,000"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "nm-08",
+    "question": "Does the Grievance Policy's Level 1 (direct manager) response window give 7 business days or 15 business days?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/hr/grievance_policy.md",
+    "answer_must_contain": [
+      "7 business days"
+    ],
+    "expected_chunk_substring": "Level 1",
+    "forbidden_substrings": [
+      "15"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "nm-09",
+    "question": "Is the visitor pre-registration window 4 hours or 24 hours?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/security/visitor_access_policy.md",
+    "answer_must_contain": [
+      "4 hours"
+    ],
+    "expected_chunk_substring": "before arrival",
+    "forbidden_substrings": [
+      "24 hours"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "nm-10",
+    "question": "Is the US business-travel per diem $75 or $150?",
+    "category": "numeric_near_miss",
+    "answerable": true,
+    "expected_source": "extended/finance/travel_policy_us.pdf",
+    "answer_must_contain": [
+      [
+        "$75"
+      ]
+    ],
+    "expected_chunk_substring": "75",
+    "forbidden_substrings": [
+      "150"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "cc-01",
+    "question": "What is the home-office equipment stipend under the CURRENT policy, not the old one?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "15,000",
+        "15000"
+      ]
+    ],
+    "expected_chunk_substring": "15,000",
+    "forbidden_substrings": [
+      "8,000"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "cc-02",
+    "question": "Under the 2023 (now superseded) remote work equipment policy, what was the equipment stipend?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/archive/remote_work_equipment_policy_2023_superseded.md",
+    "answer_must_contain": [
+      [
+        "8,000",
+        "8000"
+      ]
+    ],
+    "expected_chunk_substring": "8,000",
+    "forbidden_substrings": [
+      "15,000"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "cc-03",
+    "question": "Is the current monthly connectivity allowance 1,500 rupees or the old 1,000 rupees?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "1,500",
+        "1500"
+      ]
+    ],
+    "expected_chunk_substring": "1,500",
+    "forbidden_substrings": [
+      "1,000"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "cc-04",
+    "question": "What was the monthly connectivity allowance under the superseded 2023 policy?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/archive/remote_work_equipment_policy_2023_superseded.md",
+    "answer_must_contain": [
+      [
+        "1,000",
+        "1000"
+      ]
+    ],
+    "expected_chunk_substring": "1,000",
+    "forbidden_substrings": [
+      "1,500"
+    ],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "cc-05",
+    "question": "Which version of the Remote Work Equipment Policy is currently in effect?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      "2.0"
+    ],
+    "expected_chunk_substring": "Version",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "cc-06",
+    "question": "When did the current (v2.0) Remote Work Equipment Policy take effect?",
+    "category": "cross_document_conflict",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "2026-03-01",
+        "March 1, 2026",
+        "March 2026"
+      ]
+    ],
+    "expected_chunk_substring": "Effective Date",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "po-01",
+    "question": "Who do I talk to if a colleague keeps making uncomfortable comments toward me?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": [
+      [
+        "HR",
+        "ethics hotline"
+      ]
+    ],
+    "expected_chunk_substring": "reported to HR",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "po-02",
+    "question": "What should I do before accepting a side gig at a company we do business with?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": [
+      "disclose"
+    ],
+    "expected_chunk_substring": "disclose",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "po-03",
+    "question": "Is it fine to show a friend at a rival firm how our product actually works under the hood?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": [
+      "confidential"
+    ],
+    "expected_chunk_substring": "confidential",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "po-04",
+    "question": "I'm expecting a child soon -- what time off can I plan for?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": [
+      [
+        "12",
+        "week"
+      ]
+    ],
+    "expected_chunk_substring": "12 weeks",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "po-05",
+    "question": "I can't find the card that gets me into the building anymore -- what happens now?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/security/physical_safety_policy.md",
+    "answer_must_contain": [
+      [
+        "replace",
+        "replacement"
+      ]
+    ],
+    "expected_chunk_substring": "replacement",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "po-06",
+    "question": "If my household internet bill is high because I work from home, does the company help with that?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/it/remote_work_equipment_policy.md",
+    "answer_must_contain": [
+      [
+        "connectivity",
+        "internet"
+      ]
+    ],
+    "expected_chunk_substring": "connectivity",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "po-07",
+    "question": "Someone I don't recognize is wandering the office without anyone escorting them -- is that a problem?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/security/visitor_access_policy.md",
+    "answer_must_contain": [
+      [
+        "Security",
+        "reported"
+      ]
+    ],
+    "expected_chunk_substring": "reported to Security",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "po-08",
+    "question": "I want to buy something for my team that costs a bit over ten thousand rupees -- who signs off?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/finance/procurement_policy.md",
+    "answer_must_contain": [
+      "department head"
+    ],
+    "expected_chunk_substring": "Department head",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "po-09",
+    "question": "When can I sign up for health coverage if I'm based in the US?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/hr/benefits_overview_us.md",
+    "answer_must_contain": [
+      "November"
+    ],
+    "expected_chunk_substring": "November",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "po-10",
+    "question": "What happens if I don't bring back my equipment after my last day?",
+    "category": "paraphrase_no_overlap",
+    "answerable": true,
+    "expected_source": "extended/it/access_management_policy.md",
+    "answer_must_contain": [
+      [
+        "billed",
+        "replacement cost"
+      ]
+    ],
+    "expected_chunk_substring": "billed",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "oos-01",
+    "question": "What's the referral bonus for referring a friend as a new employee?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "oos-02",
+    "question": "Can I expense a gym membership if I'm based in India?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [
+      "$50"
+    ],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "oos-03",
+    "question": "What's the referral bonus for bringing in a new client?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "oos-04",
+    "question": "Does my performance review affect my visa sponsorship status?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "oos-05",
+    "question": "What's the espresso machine budget for the office pantry?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "oos-06",
+    "question": "Is there a different probation period for interns specifically?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "oos-07",
+    "question": "What's the procedure for sabbatical leave after 5 years of service?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "oos-08",
+    "question": "Which conference room booking system do we use?",
+    "category": "out_of_scope_near_miss",
+    "answerable": false,
+    "expected_source": null,
+    "answer_must_contain": [],
+    "expected_chunk_substring": null,
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "mh-01",
+    "question": "If I lose both my building badge and my work laptop on the same day, what's the response time for each?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/security/physical_safety_policy.md",
+      "it_security_policy.txt"
+    ],
+    "answer_must_contain": [
+      "1 business day",
+      "24 hours"
+    ],
+    "expected_chunk_substring": [
+      "replacement is issued within",
+      "lost device must be reported"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "mh-02",
+    "question": "As a new hire in my first week, what equipment do I get for my desk, and do I also get a remote-work stipend immediately?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/hr/onboarding_policy.md",
+      "extended/it/remote_work_equipment_policy.md"
+    ],
+    "answer_must_contain": [
+      [
+        "Day 1",
+        "day one"
+      ],
+      [
+        "separately",
+        "not part of"
+      ]
+    ],
+    "expected_chunk_substring": [
+      "provisions a laptop",
+      "requested separately"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "mh-03",
+    "question": "If I'm on a Performance Improvement Plan, can I also request leave without pay?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/hr/performance_review_policy.md",
+      "extended/hr/leave_without_pay_policy.md"
+    ],
+    "answer_must_contain": [
+      [
+        "not available",
+        "not eligible"
+      ]
+    ],
+    "expected_chunk_substring": [
+      "active Performance Improvement Plan"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "mh-04",
+    "question": "For India business travel, what's my daily meal allowance and my hotel budget in a Tier 1 city?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "expense_policy.txt",
+      "extended/finance/travel_policy_india.md"
+    ],
+    "answer_must_contain": [
+      "1,500",
+      "8,000"
+    ],
+    "expected_chunk_substring": [
+      "daily allowance",
+      "Tier 1"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "mh-05",
+    "question": "If my expense report is both late and for 30,000 rupees, whose approval do I need?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "expense_policy.txt",
+      "extended/finance/expense_approval_matrix.md"
+    ],
+    "answer_must_contain": [
+      [
+        "manager"
+      ],
+      [
+        "Finance"
+      ]
+    ],
+    "expected_chunk_substring": [
+      "requires manager approval",
+      "Department head + Finance"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "mh-06",
+    "question": "Does my probation period length match how long I have to wait before I'm eligible for annual leave?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/hr/onboarding_policy.md",
+      "employee_policy.txt"
+    ],
+    "answer_must_contain": [
+      "6 months"
+    ],
+    "expected_chunk_substring": [
+      "probation period of",
+      "completing 6 months of employment"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "mh-07",
+    "question": "I need to buy something for my team that costs 60,000 rupees -- does the corporate card policy or the procurement policy's approval apply?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/finance/corporate_card_policy.md",
+      "extended/finance/procurement_policy.md"
+    ],
+    "answer_must_contain": [
+      "department head"
+    ],
+    "expected_chunk_substring": [
+      "Department head"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "dev"
+  },
+  {
+    "id": "mh-08",
+    "question": "I want to install a $40/user/year SaaS tool that also connects to our email -- what approvals do I need?",
+    "category": "multi_hop",
+    "answerable": true,
+    "expected_source": [
+      "extended/it/software_asset_management_policy.md"
+    ],
+    "answer_must_contain": [
+      [
+        "manager"
+      ],
+      [
+        "IT security",
+        "security review"
+      ]
+    ],
+    "expected_chunk_substring": [
+      "approved by the requester's manager alone",
+      "security review before use"
+    ],
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "split": "test"
+  },
+  {
+    "id": "mt-01",
+    "question": "And how many sick days do I get on top of that?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "employee_policy.txt",
+    "answer_must_contain": [
+      "10"
+    ],
+    "expected_chunk_substring": "10 days of sick leave",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "How long is maternity leave?"
+      },
+      {
+        "role": "assistant",
+        "content": "Employees receive 12 weeks of maternity leave."
+      }
+    ],
+    "split": "dev"
+  },
+  {
+    "id": "mt-02",
+    "question": "What was it before this update?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/archive/remote_work_equipment_policy_2023_superseded.md",
+    "answer_must_contain": [
+      [
+        "8,000",
+        "8000"
+      ]
+    ],
+    "expected_chunk_substring": "8,000",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "What's the current home-office equipment stipend?"
+      },
+      {
+        "role": "assistant",
+        "content": "15,000 rupees (or $200 for US-based employees)."
+      }
+    ],
+    "split": "dev"
+  },
+  {
+    "id": "mt-03",
+    "question": "Which of those two actually affects my pay?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/hr/performance_review_policy.md",
+    "answer_must_contain": [
+      "annual"
+    ],
+    "expected_chunk_substring": "annual review",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "How often are performance reviews?"
+      },
+      {
+        "role": "assistant",
+        "content": "Twice a year: a mid-year check-in and an annual review."
+      }
+    ],
+    "split": "dev"
+  },
+  {
+    "id": "mt-04",
+    "question": "And what hours do I need to be reachable on those days?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "code_of_conduct.txt",
+    "answer_must_contain": [
+      [
+        "10 AM",
+        "4 PM"
+      ]
+    ],
+    "expected_chunk_substring": "core hours",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "Can I work from home?"
+      },
+      {
+        "role": "assistant",
+        "content": "Yes, up to twice per week."
+      }
+    ],
+    "split": "test"
+  },
+  {
+    "id": "mt-05",
+    "question": "How does that compare to the threshold for my own expense reimbursements?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": [
+      "extended/finance/procurement_policy.md",
+      "expense_policy.txt"
+    ],
+    "answer_must_contain": [
+      "500"
+    ],
+    "expected_chunk_substring": "expense over 500 rupees",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "What's the receipt threshold for procurement purchases?"
+      },
+      {
+        "role": "assistant",
+        "content": "10,000 rupees."
+      }
+    ],
+    "split": "dev"
+  },
+  {
+    "id": "mt-06",
+    "question": "Can it be extended if needed?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/hr/onboarding_policy.md",
+    "answer_must_contain": [
+      [
+        "3",
+        "month"
+      ]
+    ],
+    "expected_chunk_substring": "extension",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "How long is my probation period?"
+      },
+      {
+        "role": "assistant",
+        "content": "6 months."
+      }
+    ],
+    "split": "test"
+  },
+  {
+    "id": "mt-07",
+    "question": "What if they don't respond in time?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/hr/grievance_policy.md",
+    "answer_must_contain": [
+      [
+        "escalat"
+      ]
+    ],
+    "expected_chunk_substring": "escalates",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "What's the grievance Level 1 response time?"
+      },
+      {
+        "role": "assistant",
+        "content": "7 business days, reviewed by your direct manager."
+      }
+    ],
+    "split": "dev"
+  },
+  {
+    "id": "mt-08",
+    "question": "What's the monthly limit on it?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/finance/corporate_card_policy.md",
+    "answer_must_contain": [
+      [
+        "50,000",
+        "50000"
+      ]
+    ],
+    "expected_chunk_substring": "monthly limit",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "Do I get a corporate card?"
+      },
+      {
+        "role": "assistant",
+        "content": "If you travel quarterly or manage a team budget, yes."
+      }
+    ],
+    "split": "test"
+  },
+  {
+    "id": "mt-09",
+    "question": "Is there a cap on how long I can take?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": "extended/hr/leave_without_pay_policy.md",
+    "answer_must_contain": [
+      "180"
+    ],
+    "expected_chunk_substring": "cannot exceed",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "How much notice do I need to give for leave without pay?"
+      },
+      {
+        "role": "assistant",
+        "content": "At least 4 weeks in advance, except emergencies."
+      }
+    ],
+    "split": "test"
+  },
+  {
+    "id": "mt-10",
+    "question": "How does that compare to the general phishing-email reporting window?",
+    "category": "multi_turn",
+    "answerable": true,
+    "expected_source": [
+      "extended/it/data_privacy_policy.md",
+      "it_security_policy.txt"
+    ],
+    "answer_must_contain": [
+      "24 hours"
+    ],
+    "expected_chunk_substring": "phishing email",
+    "forbidden_substrings": [],
+    "origin": "v2",
+    "history": [
+      {
+        "role": "user",
+        "content": "What's the data breach notification window?"
+      },
+      {
+        "role": "assistant",
+        "content": "2 hours, to the DPO."
+      }
+    ],
+    "split": "test"
   }
 ]
