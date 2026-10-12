@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars (gitignored) and fill in real values before
+# ever running `terraform plan` or `terraform apply` -- neither of which
+# this project has run. See docs/IAC.md.
+
+project_id         = "your-gcp-project-id"
+region             = "us-central1"
+image              = "us-central1-docker.pkg.dev/your-gcp-project-id/employee-rag/employee-rag-gradio:latest"
+billing_account_id = "XXXXXX-XXXXXX-XXXXXX"
