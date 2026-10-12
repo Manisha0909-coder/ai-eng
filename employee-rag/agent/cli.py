@@ -29,16 +29,17 @@ def main() -> None:
         if not question:
             continue
 
-        with langfuse.start_as_current_observation(
-            as_type="agent", name="run-agent", input=question
-        ) as obs:
+        with langfuse.start_as_current_observation(as_type="agent", name="run-agent") as obs:
             langfuse.update_current_trace(tags=["cli"], session_id=session_id)
 
             result = agent.invoke(
                 {"messages": [HumanMessage(content=question)], "steps": 0},
                 config={"callbacks": [langfuse_handler]},
             )
-            obs.update(output=result["messages"][-1].content)
+            obs.update(
+                input=result.get("redacted_input", question),
+                output=result["messages"][-1].content,
+            )
 
         result["messages"][-1].pretty_print()
 

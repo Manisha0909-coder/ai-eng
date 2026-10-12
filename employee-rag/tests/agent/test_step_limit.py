@@ -16,7 +16,11 @@ class _AlwaysCallsToolLLM:
         return AIMessage(
             content="",
             tool_calls=[
-                {"name": "search_employee_policies", "args": {"question": "loop"}, "id": "call-1"}
+                {
+                    "name": "search_employee_policies",
+                    "args": {"question": "loop"},
+                    "id": "call-1",
+                }
             ],
         )
 

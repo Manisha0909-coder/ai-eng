@@ -13,10 +13,27 @@ DOCUMENTS_DIR = BASE_DIR / "documents"
 CHROMA_DIR = BASE_DIR / "chroma_db"
 COLLECTION_NAME = "employee_policy"
 
+# "chroma" (default, used by the deployed demo) or "pgvector" (local-only,
+# docker-compose.pgvector.yml -- see rag/pgvector_store.py). Both
+# implement the same minimal VectorStore protocol
+# (rag/vectorstore_protocol.py), so HybridRetriever's Python-side BM25 +
+# RRF logic works identically regardless of which one build_vectorstore()
+# returns.
+VECTOR_BACKEND = os.getenv("VECTOR_BACKEND", "chroma")
+PGVECTOR_DSN = os.getenv(
+    "PGVECTOR_DSN", "postgresql://postgres:postgres@localhost:5433/employee_rag"
+)
+
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
+# Optional: when set, api.py's /ask* endpoints require this value in the
+# X-API-Key header. Unset by default (the Cloud Run demo stays open,
+# matching its existing behavior) -- api.py logs a warning (once) rather
+# than silently running unauthenticated forever.
+API_KEY = os.getenv("API_KEY")
 LLM_MODEL = os.getenv("LLM_MODEL", "openrouter/free")
 LLM_BASE_URL = "https://openrouter.ai/api/v1"
 

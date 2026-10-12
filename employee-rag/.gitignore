@@ -3,3 +3,8 @@ __pycache__/
 .venv/
 .env
 chroma_db/
+
+# Eval response cache: pure performance optimization (skip re-spending LLM
+# budget on a question already answered), not meaningful provenance --
+# eval/reports/ is the committed audit trail, this isn't.
+eval/.cache/

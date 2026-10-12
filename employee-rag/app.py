@@ -27,10 +27,14 @@ _agent_handler = None
 # directly -- zero LLM calls, so the free-tier demo quota (rag/quota.py)
 # isn't spent on the same six questions over and over.
 _EXAMPLES_PATH = Path(__file__).resolve().parent / "examples_cache.json"
-_EXAMPLES_CACHE: Dict[str, str] = {
-    question: answer.strip()
-    for question, answer in json.loads(_EXAMPLES_PATH.read_text()).items()
-} if _EXAMPLES_PATH.exists() else {}
+_EXAMPLES_CACHE: Dict[str, str] = (
+    {
+        question: answer.strip()
+        for question, answer in json.loads(_EXAMPLES_PATH.read_text()).items()
+    }
+    if _EXAMPLES_PATH.exists()
+    else {}
+)
 EXAMPLES = list(_EXAMPLES_CACHE.keys())
 
 FOOTER = """
@@ -49,6 +53,7 @@ def _get_agent_handler():
     if _agent_handler is None:
         _agent_handler = CallbackHandler()
     return _agent_handler
+
 
 DESCRIPTION = """
 Ask about company leave, IT/security, expenses, or code-of-conduct policy.
@@ -79,27 +84,65 @@ def _history_to_messages(history: List[Dict[str, Any]], message: str) -> List[Ba
     return messages
 
 
-def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Request] = None) -> str:
+# Characters revealed per step in the Gradio chat's typewriter effect --
+# see _reveal_in_chunks()'s docstring for why this is a simulated reveal,
+# not true token-level streaming, for this specific (agent-routed) path.
+_STREAM_CHUNK_SIZE = 8
+
+
+def _reveal_in_chunks(text: str):
+    """Yields increasingly-complete prefixes of `text` a few characters at
+    a time -- a readable typewriter effect for Gradio's streaming
+    ChatInterface, used for both the cached-example path and the live
+    agent path below.
+
+    This is deliberately NOT true token-level LLM streaming. The agent's
+    router decides tool-use-vs-direct-answer via a single .invoke() call
+    (agent/graph.py); getting real token streaming through that would mean
+    restructuring the router node around LangGraph's "messages" stream
+    mode, with real risk of subtly changing its tool-routing behavior --
+    a regression this project's free-LLM-budget rule makes hard to verify
+    live before shipping. rag/pipeline.answer_stream() (used by api.py's
+    /ask/stream) *is* true token streaming; this simulated reveal is a
+    deliberate, lower-risk choice for the agent-routed Gradio demo only.
+    """
+
+    if not text:
+        yield ""
+        return
+    for i in range(0, len(text), _STREAM_CHUNK_SIZE):
+        yield text[: i + _STREAM_CHUNK_SIZE]
+
+
+def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Request] = None):
     # request.session_hash is stable for one browser tab's whole visit, so it
     # groups every turn of a conversation into one Langfuse session -- see
     # "Group related traces with session IDs" in the best-practices guide.
     cached = _EXAMPLES_CACHE.get(message.strip())
     if cached is not None:
-        return cached
+        yield from _reveal_in_chunks(cached)
+        return
 
     session_id = request.session_hash if request else None
 
-    with _langfuse.start_as_current_observation(
-        as_type="agent", name="run-agent", input=message
-    ) as obs:
+    # input= is set after invoke(), not here -- agent/graph.py's
+    # input_guard_node computes a PII-redacted version of the message
+    # (redacted_input) specifically for what gets logged to Langfuse.
+    with _langfuse.start_as_current_observation(as_type="agent", name="run-agent") as obs:
         _langfuse.update_current_trace(tags=["gradio-demo"], session_id=session_id)
 
-        result = get_agent().invoke(
-            {"messages": _history_to_messages(history, message), "steps": 0},
-            config={"callbacks": [_get_agent_handler()]},
-        )
-        answer = result["messages"][-1].content
-        obs.update(output=answer)
+        result = {}
+        try:
+            result = get_agent().invoke(
+                {"messages": _history_to_messages(history, message), "steps": 0},
+                config={"callbacks": [_get_agent_handler()]},
+            )
+            answer = result["messages"][-1].content
+        except Exception as exc:  # pragma: no cover - defensive, mirrors agent/graph.py
+            print(f"WARNING: agent run failed: {exc!r}")
+            answer = "The assistant is temporarily unavailable. Please try again."
+
+        obs.update(input=result.get("redacted_input", message), output=answer)
 
     # Cloud Run throttles CPU once a request finishes, which can starve
     # Langfuse's background flush thread before it ever sends this trace.
@@ -107,7 +150,7 @@ def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Re
     # allocation) is still active -- guarantees it ships. Same reasoning as
     # eval/run_eval.py's flush() before exit.
     _langfuse.flush()
-    return answer
+    yield from _reveal_in_chunks(answer)
 
 
 with gr.Blocks(title="Employee Policy Assistant") as demo:

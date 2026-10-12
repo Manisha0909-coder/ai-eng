@@ -1,0 +1,5 @@
+# Only needed for VECTOR_BACKEND=pgvector (rag/pgvector_store.py), a
+# local-only alternative backend -- not installed in the deployed demo's
+# image (Dockerfile.gradio), which stays on the default Chroma backend.
+psycopg[binary]==3.2.13
+pgvector==0.4.2

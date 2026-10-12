@@ -1,0 +1,58 @@
+name: employee-rag CI
+
+# Runs on every push and PR touching employee-rag/, not just pushes to
+# main -- employee-rag-deploy.yml already covers build+push+smoke-test on
+# merge to main; this is the broader, PR-time quality gate that was
+# missing (lint, format, offline tests, and a retrieval regression check,
+# none of which need an LLM call or any secret).
+on:
+  push:
+    paths:
+      - "employee-rag/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "employee-rag/**"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: employee-rag
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+          cache: "pip"
+          cache-dependency-path: |
+            employee-rag/requirements.txt
+            employee-rag/requirements-dev.txt
+
+      # Embedding/reranker model weights (rag/ingest.py, rag/reranker.py)
+      # -- cached by model name so a fresh runner doesn't re-download them
+      # every run; the models themselves don't change unless config.py's
+      # EMBEDDING_MODEL/RERANKER_MODEL do.
+      - name: Cache HuggingFace models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-hf-models-v1
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint (ruff check)
+        run: ruff check .
+
+      - name: Format check (ruff format --check)
+        run: ruff format --check .
+
+      - name: Run offline tests
+        run: pytest -q
+
+      - name: Retrieval regression gate (dev split, no LLM calls)
+        run: python -m eval.ci_ablation_gate

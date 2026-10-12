@@ -21,4 +21,13 @@ def search_employee_policies(question: str) -> str:
     if not sources:
         return result["answer"]
 
-    return f"{result['answer']}\n\nSources: {', '.join(sources)}"
+    # <details>/<summary> renders as a collapsible "Sources" accordion in
+    # both the Gradio demo and anywhere else markdown-with-raw-HTML is
+    # rendered -- cheaper and more portable than a Gradio-specific rich-
+    # message API, and (per app.py's own streaming trade-off note) safer
+    # to ship without live verification of a less-common Gradio feature.
+    sources_list = "\n".join(f"- {s}" for s in sources)
+    return (
+        f"{result['answer']}\n\n"
+        f"<details>\n<summary>Sources</summary>\n\n{sources_list}\n\n</details>"
+    )
