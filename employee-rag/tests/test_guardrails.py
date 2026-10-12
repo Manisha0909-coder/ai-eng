@@ -64,11 +64,15 @@ def test_looks_like_injection_false_for_normal_questions():
 
 
 def test_leaks_system_prompt_detects_marker():
-    assert leaks_system_prompt("You are an employee policy assistant. Here are my rules...")
+    assert leaks_system_prompt(
+        "You are an employee policy assistant. Here are my rules..."
+    )
 
 
 def test_leaks_system_prompt_false_for_paraphrase():
-    assert not leaks_system_prompt("I answer questions using only the policy documents provided.")
+    assert not leaks_system_prompt(
+        "I answer questions using only the policy documents provided."
+    )
 
 
 def test_strip_injection_like_lines_removes_only_matching_lines():

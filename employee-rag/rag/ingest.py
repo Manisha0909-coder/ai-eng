@@ -208,7 +208,9 @@ def build_vectorstore(force: bool = False) -> Chroma:
         persist_directory=str(config.CHROMA_DIR),
     )
 
-    needs_rebuild = force or current_hash != previous_hash or vectorstore._collection.count() == 0
+    needs_rebuild = (
+        force or current_hash != previous_hash or vectorstore._collection.count() == 0
+    )
 
     if needs_rebuild:
         existing_ids = vectorstore.get()["ids"]
@@ -222,7 +224,9 @@ def build_vectorstore(force: bool = False) -> Chroma:
 
         print(f"Ingested {len(chunks)} chunks from {config.DOCUMENTS_DIR}")
     else:
-        print(f"Reusing existing index ({vectorstore._collection.count()} chunks, unchanged)")
+        print(
+            f"Reusing existing index ({vectorstore._collection.count()} chunks, unchanged)"
+        )
 
     return vectorstore
 

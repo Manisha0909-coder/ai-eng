@@ -70,14 +70,20 @@ def patch_rerank_and_backoff(monkeypatch):
     import rag.config as config_module
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist]
+    )
     monkeypatch.setattr(config_module, "GENERATION_RETRY_BACKOFF_SECONDS", 0)
 
 
 def test_returns_structured_payload_on_success():
-    payload = AnswerPayload(answer="You get 20 days.", citations=[], confidence="high", abstained=False)
+    payload = AnswerPayload(
+        answer="You get 20 days.", citations=[], confidence="high", abstained=False
+    )
     pipeline = _make_pipeline(
-        _FakeStructuredChain(payload=payload), _FakePlainChain("unused"), [_relevant_candidate()]
+        _FakeStructuredChain(payload=payload),
+        _FakePlainChain("unused"),
+        [_relevant_candidate()],
     )
 
     result = pipeline.answer_structured("How many days?", source="eval")
@@ -116,9 +122,13 @@ def test_falls_back_with_abstained_true_when_plain_text_abstains():
 def test_no_relevant_context_abstains_without_calling_any_chain(monkeypatch):
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, -20.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, -20.0) for c in shortlist]
+    )
 
-    pipeline = _make_pipeline(_FakeStructuredChain(), _FakePlainChain("unused"), [_relevant_candidate()])
+    pipeline = _make_pipeline(
+        _FakeStructuredChain(), _FakePlainChain("unused"), [_relevant_candidate()]
+    )
 
     result = pipeline.answer_structured("unrelated question", source="eval")
 

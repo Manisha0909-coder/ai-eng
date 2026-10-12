@@ -23,11 +23,16 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
 
+from agent.tools import search_employee_policies
 from rag import config, quota
 from rag.groundedness import is_grounded
-from rag.guardrails import exceeds_length_cap, leaks_system_prompt, looks_like_injection, redact_pii
+from rag.guardrails import (
+    exceeds_length_cap,
+    leaks_system_prompt,
+    looks_like_injection,
+    redact_pii,
+)
 from rag.rewrite import rewrite_query
-from agent.tools import search_employee_policies
 
 MAX_STEPS = 4
 
@@ -35,9 +40,7 @@ STEP_LIMIT_MESSAGE = (
     "I've made several attempts to answer this but haven't converged on a "
     "response. Please try rephrasing your question."
 )
-LLM_ERROR_MESSAGE = (
-    "The assistant is temporarily unavailable. Please try again."
-)
+LLM_ERROR_MESSAGE = "The assistant is temporarily unavailable. Please try again."
 INPUT_TOO_LONG_MESSAGE = (
     "That question is too long for me to process. Please ask something shorter."
 )
@@ -123,7 +126,11 @@ def input_guard_node(state: AgentState) -> AgentState:
     privacy-hygiene one."""
 
     last_message = state["messages"][-1]
-    text = last_message.content if isinstance(last_message.content, str) else str(last_message.content)
+    text = (
+        last_message.content
+        if isinstance(last_message.content, str)
+        else str(last_message.content)
+    )
     redacted_text, _ = redact_pii(text)
 
     if exceeds_length_cap(text):
@@ -162,7 +169,10 @@ def rewrite_node(state: AgentState) -> AgentState:
         return {}
 
     history = [
-        {"role": "user" if isinstance(m, HumanMessage) else "assistant", "content": m.content}
+        {
+            "role": "user" if isinstance(m, HumanMessage) else "assistant",
+            "content": m.content,
+        }
         for m in messages[:-1]
         if isinstance(m, (HumanMessage, AIMessage)) and isinstance(m.content, str)
     ]
@@ -217,19 +227,29 @@ def output_guard_node(state: AgentState) -> AgentState:
 
     last_message = state["messages"][-1]
 
-    if not isinstance(last_message, AIMessage) or getattr(last_message, "tool_calls", None):
+    if not isinstance(last_message, AIMessage) or getattr(
+        last_message, "tool_calls", None
+    ):
         return {}
 
     text = last_message.content
 
     if leaks_system_prompt(text):
-        return {"messages": [AIMessage(content=SYSTEM_PROMPT_LEAK_FALLBACK, id=last_message.id)]}
+        return {
+            "messages": [
+                AIMessage(content=SYSTEM_PROMPT_LEAK_FALLBACK, id=last_message.id)
+            ]
+        }
 
     tool_messages = [m for m in state["messages"] if isinstance(m, ToolMessage)]
     if tool_messages:
         context = "\n\n".join(str(m.content) for m in tool_messages)
         if not is_grounded(text, context):
-            return {"messages": [AIMessage(content=UNGROUNDED_FALLBACK_MESSAGE, id=last_message.id)]}
+            return {
+                "messages": [
+                    AIMessage(content=UNGROUNDED_FALLBACK_MESSAGE, id=last_message.id)
+                ]
+            }
 
     return {}
 
@@ -254,9 +274,13 @@ def build_graph():
     graph.add_node("output_guard", output_guard_node)
 
     graph.add_edge(START, "input_guard")
-    graph.add_conditional_edges("input_guard", _input_guard_routing, {"continue": "rewrite", END: END})
+    graph.add_conditional_edges(
+        "input_guard", _input_guard_routing, {"continue": "rewrite", END: END}
+    )
     graph.add_edge("rewrite", "router")
-    graph.add_conditional_edges("router", should_continue, {"tools": "tools", END: "output_guard"})
+    graph.add_conditional_edges(
+        "router", should_continue, {"tools": "tools", END: "output_guard"}
+    )
     graph.add_edge("tools", "router")
     graph.add_edge("output_guard", END)
 

@@ -27,10 +27,14 @@ _agent_handler = None
 # directly -- zero LLM calls, so the free-tier demo quota (rag/quota.py)
 # isn't spent on the same six questions over and over.
 _EXAMPLES_PATH = Path(__file__).resolve().parent / "examples_cache.json"
-_EXAMPLES_CACHE: Dict[str, str] = {
-    question: answer.strip()
-    for question, answer in json.loads(_EXAMPLES_PATH.read_text()).items()
-} if _EXAMPLES_PATH.exists() else {}
+_EXAMPLES_CACHE: Dict[str, str] = (
+    {
+        question: answer.strip()
+        for question, answer in json.loads(_EXAMPLES_PATH.read_text()).items()
+    }
+    if _EXAMPLES_PATH.exists()
+    else {}
+)
 EXAMPLES = list(_EXAMPLES_CACHE.keys())
 
 FOOTER = """
@@ -50,6 +54,7 @@ def _get_agent_handler():
         _agent_handler = CallbackHandler()
     return _agent_handler
 
+
 DESCRIPTION = """
 Ask about company leave, IT/security, expenses, or code-of-conduct policy.
 A LangGraph agent decides whether to search the policy documents or answer
@@ -61,7 +66,9 @@ Click an example below for an instant, pre-recorded answer.
 """
 
 
-def _history_to_messages(history: List[Dict[str, Any]], message: str) -> List[BaseMessage]:
+def _history_to_messages(
+    history: List[Dict[str, Any]], message: str
+) -> List[BaseMessage]:
     """Converts Gradio's type="messages" history into LangChain messages and
     appends the new user message. Pure function -- no Gradio or agent
     dependency -- so it's unit-testable on its own.
@@ -109,7 +116,9 @@ def _reveal_in_chunks(text: str):
         yield text[: i + _STREAM_CHUNK_SIZE]
 
 
-def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Request] = None):
+def respond(
+    message: str, history: List[Dict[str, Any]], request: Optional[gr.Request] = None
+):
     # request.session_hash is stable for one browser tab's whole visit, so it
     # groups every turn of a conversation into one Langfuse session -- see
     # "Group related traces with session IDs" in the best-practices guide.
@@ -123,7 +132,9 @@ def respond(message: str, history: List[Dict[str, Any]], request: Optional[gr.Re
     # input= is set after invoke(), not here -- agent/graph.py's
     # input_guard_node computes a PII-redacted version of the message
     # (redacted_input) specifically for what gets logged to Langfuse.
-    with _langfuse.start_as_current_observation(as_type="agent", name="run-agent") as obs:
+    with _langfuse.start_as_current_observation(
+        as_type="agent", name="run-agent"
+    ) as obs:
         _langfuse.update_current_trace(tags=["gradio-demo"], session_id=session_id)
 
         result = {}

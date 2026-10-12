@@ -18,7 +18,7 @@ Usage:
 import argparse
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from rag import config
 from rag.ingest import build_vectorstore
@@ -58,7 +58,9 @@ def _rerank_config(question: str, rrf_candidates: List[Candidate]) -> List[Candi
     return [c for c, score in reranked if score > config.RERANK_SCORE_THRESHOLD]
 
 
-def _retrieve_all_configs(retriever: HybridRetriever, question: str) -> Dict[str, List[Candidate]]:
+def _retrieve_all_configs(
+    retriever: HybridRetriever, question: str
+) -> Dict[str, List[Candidate]]:
     fused = retriever.retrieve(question)  # already sorted by fused_score, desc
 
     vector_only = sorted(
@@ -118,7 +120,9 @@ def _chunk_level_metrics(
     return hit, recall, context_precision
 
 
-def _answerable_items(dataset: List[Dict[str, Any]], split: Optional[str]) -> List[Dict[str, Any]]:
+def _answerable_items(
+    dataset: List[Dict[str, Any]], split: Optional[str]
+) -> List[Dict[str, Any]]:
     return [
         item
         for item in dataset
@@ -131,7 +135,12 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
     retriever = HybridRetriever(build_vectorstore())
 
     results = {
-        name: {"mrr_sum": 0.0, "by_k": {k: {"hits": 0, "recall_sum": 0.0, "precision_sum": 0.0} for k in K_SWEEP}}
+        name: {
+            "mrr_sum": 0.0,
+            "by_k": {
+                k: {"hits": 0, "recall_sum": 0.0, "precision_sum": 0.0} for k in K_SWEEP
+            },
+        }
         for name in CONFIGS
     }
 
@@ -154,7 +163,11 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
                 bucket["precision_sum"] += precision
 
     n = len(items)
-    summary: Dict[str, Any] = {"n_answerable": n, "split": split or "all", "results": {}}
+    summary: Dict[str, Any] = {
+        "n_answerable": n,
+        "split": split or "all",
+        "results": {},
+    }
 
     for name in CONFIGS:
         summary["results"][name] = {
@@ -163,7 +176,9 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
                 str(k): {
                     "hit_rate": round(bucket["hits"] / n, 3) if n else None,
                     "recall": round(bucket["recall_sum"] / n, 3) if n else None,
-                    "context_precision": round(bucket["precision_sum"] / n, 3) if n else None,
+                    "context_precision": round(bucket["precision_sum"] / n, 3)
+                    if n
+                    else None,
                 }
                 for k, bucket in results[name]["by_k"].items()
             },
@@ -172,7 +187,9 @@ def run(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[str,
     return summary
 
 
-def run_chunk_size_sweep(dataset: List[Dict[str, Any]], split: Optional[str] = None) -> Dict[int, Dict[str, Any]]:
+def run_chunk_size_sweep(
+    dataset: List[Dict[str, Any]], split: Optional[str] = None
+) -> Dict[int, Dict[str, Any]]:
     """hybrid_rerank only, at FINAL_TOP_K, across CHUNK_SIZE_SWEEP. Always
     restores the real CHUNK_SIZE and rebuilds the production index before
     returning, even if something raises partway through."""
@@ -195,7 +212,10 @@ def run_chunk_size_sweep(dataset: List[Dict[str, Any]], split: Optional[str] = N
                 expected_substrings = _expected_substrings(item)
 
                 hit, _, _ = _chunk_level_metrics(
-                    candidates, config.FINAL_TOP_K, expected_sources, expected_substrings
+                    candidates,
+                    config.FINAL_TOP_K,
+                    expected_sources,
+                    expected_substrings,
                 )
                 hits += int(hit)
                 rr_sum += _reciprocal_rank(candidates, expected_sources)
@@ -213,7 +233,9 @@ def run_chunk_size_sweep(dataset: List[Dict[str, Any]], split: Optional[str] = N
 
 
 def print_report(title: str, summary: Dict[str, Any]) -> None:
-    print(f"\n{'='*70}\n{title} ({summary['n_answerable']} answerable, split={summary['split']})\n{'='*70}")
+    print(
+        f"\n{'=' * 70}\n{title} ({summary['n_answerable']} answerable, split={summary['split']})\n{'=' * 70}"
+    )
     for name, metrics in summary["results"].items():
         print(f"{name} -- MRR: {metrics['mrr']}")
         for k, by_k in metrics["by_k"].items():
@@ -242,7 +264,9 @@ def main() -> None:
     sweep = run_chunk_size_sweep(dataset, split=None)
     print("\nChunk-size sensitivity (hybrid_rerank, all answerable examples):")
     for chunk_size, metrics in sweep.items():
-        print(f"  CHUNK_SIZE={chunk_size}: hit_rate={metrics['hit_rate']} mrr={metrics['mrr']}")
+        print(
+            f"  CHUNK_SIZE={chunk_size}: hit_rate={metrics['hit_rate']} mrr={metrics['mrr']}"
+        )
     report["chunk_size_sweep"] = {str(k): v for k, v in sweep.items()}
 
     REPORT_PATH.write_text(json.dumps(report, indent=2))

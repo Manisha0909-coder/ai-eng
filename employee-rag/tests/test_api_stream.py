@@ -19,7 +19,11 @@ class _FakeStreamingPipeline:
 
 @pytest.fixture
 def client(monkeypatch):
-    monkeypatch.setattr(api, "get_pipeline", lambda: _FakeStreamingPipeline(["Employees ", "receive ", "20 days."]))
+    monkeypatch.setattr(
+        api,
+        "get_pipeline",
+        lambda: _FakeStreamingPipeline(["Employees ", "receive ", "20 days."]),
+    )
     return TestClient(api.app)
 
 
@@ -29,7 +33,7 @@ def _parse_sse_events(raw_text: str):
         if not block.strip():
             continue
         assert block.startswith("data: "), f"not a valid SSE data line: {block!r}"
-        events.append(json.loads(block[len("data: "):]))
+        events.append(json.loads(block[len("data: ") :]))
     return events
 
 

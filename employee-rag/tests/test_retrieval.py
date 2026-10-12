@@ -131,7 +131,9 @@ def test_empty_corpus_does_not_crash():
 
 def test_metadata_filter_only_returns_matching_category():
     hr_doc = _doc("grievance process", category="hr")
-    it_doc = _doc("grievance shaped IT ticket", category="it")  # shares tokens on purpose
+    it_doc = _doc(
+        "grievance shaped IT ticket", category="it"
+    )  # shares tokens on purpose
 
     vs = _FakeVectorStore(documents=[hr_doc, it_doc], search_order=[hr_doc, it_doc])
     retriever = HybridRetriever(vs)

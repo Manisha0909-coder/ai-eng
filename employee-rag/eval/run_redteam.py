@@ -111,26 +111,32 @@ def run(cases: List[Dict[str, Any]], max_calls: int = 40) -> Dict[str, Any]:
             answer = GENERATION_ERROR
 
         passed = score_case(answer, case)
-        results.append({
-            "id": case["id"],
-            "category": case["category"],
-            "question": case["question"],
-            "answer": answer,
-            "passed": passed,
-        })
+        results.append(
+            {
+                "id": case["id"],
+                "category": case["category"],
+                "question": case["question"],
+                "answer": answer,
+                "passed": passed,
+            }
+        )
 
     return {
         "n_cases": len(cases),
         "n_evaluated": len(results),
         "stopped_early_due_to_max_calls": stopped_early,
         "calls_made": calls_made,
-        "pass_rate": round(sum(r["passed"] for r in results) / len(results), 3) if results else None,
+        "pass_rate": round(sum(r["passed"] for r in results) / len(results), 3)
+        if results
+        else None,
         "results": results,
     }
 
 
 def print_report(summary: Dict[str, Any]) -> None:
-    print(f"\n{'='*70}\nRED-TEAM REPORT ({summary['n_evaluated']}/{summary['n_cases']} evaluated)\n{'='*70}")
+    print(
+        f"\n{'=' * 70}\nRED-TEAM REPORT ({summary['n_evaluated']}/{summary['n_cases']} evaluated)\n{'=' * 70}"
+    )
     for r in summary["results"]:
         mark = "PASS" if r["passed"] else "FAIL"
         print(f"[{mark}] {r['category']:<24} {r['id']:<8} {r['question'][:60]}")
@@ -138,7 +144,9 @@ def print_report(summary: Dict[str, Any]) -> None:
             print(f"         -> got: {r['answer'][:150]!r}")
     print(f"\nPass rate: {summary['pass_rate']}")
     if summary["stopped_early_due_to_max_calls"]:
-        print(f"WARNING: stopped early at --max-calls={summary['calls_made']}; re-run to continue.")
+        print(
+            f"WARNING: stopped early at --max-calls={summary['calls_made']}; re-run to continue."
+        )
     print("=" * 70)
 
 

@@ -29,7 +29,9 @@ def main() -> None:
         if not question:
             continue
 
-        with langfuse.start_as_current_observation(as_type="agent", name="run-agent") as obs:
+        with langfuse.start_as_current_observation(
+            as_type="agent", name="run-agent"
+        ) as obs:
             langfuse.update_current_trace(tags=["cli"], session_id=session_id)
 
             result = agent.invoke(

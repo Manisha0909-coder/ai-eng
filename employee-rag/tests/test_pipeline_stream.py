@@ -10,7 +10,7 @@ self.retriever, self.chain, self._langfuse_handler.
 import pytest
 from langchain_core.documents import Document
 
-from rag import config, quota
+from rag import quota
 from rag.pipeline import GENERATION_ERROR, NO_ANSWER, RAGPipeline
 from rag.retrieval import Candidate
 
@@ -44,7 +44,9 @@ def _make_pipeline(chain, candidates):
 
 
 def _relevant_candidate(text="Employees receive 20 days of annual leave."):
-    return Candidate(document=Document(page_content=text, metadata={"source": "employee_policy.txt"}))
+    return Candidate(
+        document=Document(page_content=text, metadata={"source": "employee_policy.txt"})
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -56,7 +58,9 @@ def reset_quota(monkeypatch):
 def test_tokens_arrive_in_order_and_concatenate_to_full_answer(monkeypatch):
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist]
+    )
 
     chain = _FakeChain(chunks=["Employees ", "receive ", "20 days."])
     pipeline = _make_pipeline(chain, [_relevant_candidate()])
@@ -70,9 +74,13 @@ def test_tokens_arrive_in_order_and_concatenate_to_full_answer(monkeypatch):
 def test_mid_stream_error_yields_partial_plus_friendly_message(monkeypatch):
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist]
+    )
 
-    chain = _FakeChain(chunks=["Employees ", "receive ", "this should never arrive"], raise_after=2)
+    chain = _FakeChain(
+        chunks=["Employees ", "receive ", "this should never arrive"], raise_after=2
+    )
     pipeline = _make_pipeline(chain, [_relevant_candidate()])
 
     chunks = list(pipeline.answer_stream("How many days of leave?", source="eval"))
@@ -85,7 +93,9 @@ def test_mid_stream_error_yields_partial_plus_friendly_message(monkeypatch):
 def test_no_relevant_context_yields_no_answer_without_calling_chain(monkeypatch):
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, -20.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, -20.0) for c in shortlist]
+    )
 
     chain = _FakeChain()
     pipeline = _make_pipeline(chain, [_relevant_candidate()])
@@ -98,7 +108,9 @@ def test_no_relevant_context_yields_no_answer_without_calling_chain(monkeypatch)
 def test_quota_exceeded_yields_quota_message_without_retrieving(monkeypatch):
     class _ExplodingRetriever:
         def retrieve(self, question):
-            raise AssertionError("retrieve() should never be called once quota is exceeded")
+            raise AssertionError(
+                "retrieve() should never be called once quota is exceeded"
+            )
 
     pipeline = RAGPipeline.__new__(RAGPipeline)
     pipeline.retriever = _ExplodingRetriever()
@@ -116,7 +128,9 @@ def test_quota_exceeded_yields_quota_message_without_retrieving(monkeypatch):
 def test_eval_source_bypasses_quota(monkeypatch):
     import rag.pipeline as pipeline_module
 
-    monkeypatch.setattr(pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist])
+    monkeypatch.setattr(
+        pipeline_module, "rerank", lambda q, shortlist: [(c, 10.0) for c in shortlist]
+    )
     monkeypatch.setattr(quota, "_count", quota.DAILY_LIMIT)
     monkeypatch.setattr(quota, "_day", quota._today())
 

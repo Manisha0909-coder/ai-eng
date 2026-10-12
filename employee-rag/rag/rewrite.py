@@ -14,10 +14,11 @@ from typing import Any, Dict, List
 
 from langchain_core.prompts import ChatPromptTemplate
 
-_REWRITE_PROMPT = ChatPromptTemplate.from_messages([
-    (
-        "system",
-        """Given a conversation history and a follow-up question, rewrite the
+_REWRITE_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """Given a conversation history and a follow-up question, rewrite the
 follow-up into a standalone question that makes sense without the
 history. Preserve the user's intent exactly -- do not answer the
 question, do not add information, just make it self-contained.
@@ -25,16 +26,17 @@ question, do not add information, just make it self-contained.
 If the follow-up is already standalone, return it unchanged.
 
 Respond with ONLY the rewritten question, no other text.""",
-    ),
-    (
-        "human",
-        """Conversation history:
+        ),
+        (
+            "human",
+            """Conversation history:
 {history}
 
 Follow-up question:
 {question}""",
-    ),
-])
+        ),
+    ]
+)
 
 
 def _format_history(history: List[Dict[str, Any]]) -> str:
@@ -59,10 +61,14 @@ def rewrite_query(llm, question: str, history: List[Dict[str, Any]]) -> str:
         return question
 
     try:
-        prompt_value = _REWRITE_PROMPT.invoke({"history": _format_history(history), "question": question})
+        prompt_value = _REWRITE_PROMPT.invoke(
+            {"history": _format_history(history), "question": question}
+        )
         response = llm.invoke(prompt_value)
         rewritten = response.content.strip()
         return rewritten if rewritten else question
     except Exception as exc:  # pragma: no cover - network/rate-limit errors
-        print(f"WARNING: query rewrite failed, falling back to the raw question: {exc!r}")
+        print(
+            f"WARNING: query rewrite failed, falling back to the raw question: {exc!r}"
+        )
         return question

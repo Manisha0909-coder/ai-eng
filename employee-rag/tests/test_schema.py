@@ -29,7 +29,13 @@ def test_confidence_must_be_one_of_the_allowed_values():
 def test_answer_payload_round_trips_through_dict():
     payload = AnswerPayload(
         answer="You get 20 days.",
-        citations=[Citation(source="employee_policy.txt", section_heading="Annual Leave", chunk_id="x::1")],
+        citations=[
+            Citation(
+                source="employee_policy.txt",
+                section_heading="Annual Leave",
+                chunk_id="x::1",
+            )
+        ],
         confidence="high",
         abstained=False,
     )

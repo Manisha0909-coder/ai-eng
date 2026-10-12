@@ -1,7 +1,12 @@
 """Offline: judge prompt building and response parsing, with a fake LLM
 standing in for the real judge call."""
 
-from eval.judge import JudgeVerdict, build_judge_prompt, judge_answer, parse_judge_response
+from eval.judge import (
+    JudgeVerdict,
+    build_judge_prompt,
+    judge_answer,
+    parse_judge_response,
+)
 
 
 class _FakeLLM:
@@ -16,7 +21,9 @@ class _FakeLLM:
 
 
 def test_parses_valid_judge_json():
-    verdict = parse_judge_response('{"faithful": true, "relevant": false, "reason": "partial match"}')
+    verdict = parse_judge_response(
+        '{"faithful": true, "relevant": false, "reason": "partial match"}'
+    )
 
     assert verdict.faithful is True
     assert verdict.relevant is False
@@ -42,7 +49,9 @@ def test_json_missing_fields_defaults_to_null():
 
 
 def test_build_judge_prompt_includes_all_inputs():
-    prompt = build_judge_prompt("How many days?", "20 days of leave.", "You get 20 days.")
+    prompt = build_judge_prompt(
+        "How many days?", "20 days of leave.", "You get 20 days."
+    )
 
     assert "How many days?" in prompt
     assert "20 days of leave." in prompt
@@ -50,7 +59,9 @@ def test_build_judge_prompt_includes_all_inputs():
 
 
 def test_judge_answer_uses_fake_llm_end_to_end():
-    fake_llm = _FakeLLM('{"faithful": true, "relevant": true, "reason": "matches context"}')
+    fake_llm = _FakeLLM(
+        '{"faithful": true, "relevant": true, "reason": "matches context"}'
+    )
 
     verdict = judge_answer(fake_llm, "question", "context", "answer")
 

@@ -27,7 +27,9 @@ def compare(report_a: Dict[str, Any], report_b: Dict[str, Any]) -> Dict[str, Any
     newly_correct = [i for i in shared if not a[i]["correct"] and b[i]["correct"]]
     newly_incorrect = [i for i in shared if a[i]["correct"] and not b[i]["correct"]]
     unchanged_correct = [i for i in shared if a[i]["correct"] and b[i]["correct"]]
-    unchanged_incorrect = [i for i in shared if not a[i]["correct"] and not b[i]["correct"]]
+    unchanged_incorrect = [
+        i for i in shared if not a[i]["correct"] and not b[i]["correct"]
+    ]
 
     return {
         "only_in_a": only_in_a,
@@ -40,9 +42,13 @@ def compare(report_a: Dict[str, Any], report_b: Dict[str, Any]) -> Dict[str, Any
 
 
 def print_comparison(diff: Dict[str, Any]) -> None:
-    print(f"\n{'='*60}\nREPORT COMPARISON\n{'='*60}")
-    print(f"Newly correct ({len(diff['newly_correct'])}): {', '.join(diff['newly_correct']) or '(none)'}")
-    print(f"Newly incorrect ({len(diff['newly_incorrect'])}): {', '.join(diff['newly_incorrect']) or '(none)'}")
+    print(f"\n{'=' * 60}\nREPORT COMPARISON\n{'=' * 60}")
+    print(
+        f"Newly correct ({len(diff['newly_correct'])}): {', '.join(diff['newly_correct']) or '(none)'}"
+    )
+    print(
+        f"Newly incorrect ({len(diff['newly_incorrect'])}): {', '.join(diff['newly_incorrect']) or '(none)'}"
+    )
     print(f"Unchanged correct: {diff['unchanged_correct_count']}")
     print(f"Unchanged incorrect: {diff['unchanged_incorrect_count']}")
     if diff["only_in_a"]:

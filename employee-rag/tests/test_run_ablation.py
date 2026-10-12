@@ -4,7 +4,12 @@ against fake Candidate objects."""
 
 from langchain_core.documents import Document
 
-from eval.run_ablation import _chunk_level_metrics, _expected_sources, _expected_substrings, _reciprocal_rank
+from eval.run_ablation import (
+    _chunk_level_metrics,
+    _expected_sources,
+    _expected_substrings,
+    _reciprocal_rank,
+)
 from rag.retrieval import Candidate
 
 
@@ -14,7 +19,10 @@ def _candidate(text, source):
 
 def test_expected_sources_normalizes_string_and_list():
     assert _expected_sources({"expected_source": "a.txt"}) == ["a.txt"]
-    assert _expected_sources({"expected_source": ["a.txt", "b.txt"]}) == ["a.txt", "b.txt"]
+    assert _expected_sources({"expected_source": ["a.txt", "b.txt"]}) == [
+        "a.txt",
+        "b.txt",
+    ]
 
 
 def test_expected_substrings_normalizes_none_string_and_list():
@@ -25,7 +33,11 @@ def test_expected_substrings_normalizes_none_string_and_list():
 
 
 def test_reciprocal_rank_hand_computed():
-    candidates = [_candidate("x", "wrong.txt"), _candidate("y", "right.txt"), _candidate("z", "other.txt")]
+    candidates = [
+        _candidate("x", "wrong.txt"),
+        _candidate("y", "right.txt"),
+        _candidate("z", "other.txt"),
+    ]
 
     rr = _reciprocal_rank(candidates, ["right.txt"])
 
@@ -45,7 +57,10 @@ def test_single_substring_hit_at_k():
     ]
 
     hit, recall, precision = _chunk_level_metrics(
-        candidates, k=1, expected_sources=["employee_policy.txt"], expected_substrings=["20 days"]
+        candidates,
+        k=1,
+        expected_sources=["employee_policy.txt"],
+        expected_substrings=["20 days"],
     )
 
     assert hit is True
@@ -60,7 +75,10 @@ def test_single_substring_miss_when_outside_k():
     ]
 
     hit, recall, precision = _chunk_level_metrics(
-        candidates, k=1, expected_sources=["employee_policy.txt"], expected_substrings=["20 days"]
+        candidates,
+        k=1,
+        expected_sources=["employee_policy.txt"],
+        expected_substrings=["20 days"],
     )
 
     assert hit is False
@@ -70,7 +88,9 @@ def test_single_substring_miss_when_outside_k():
 
 def test_multi_hop_requires_all_substrings_for_hit_but_gives_partial_recall():
     candidates = [
-        _candidate("A badge replacement is issued within 1 business day.", "security.md"),
+        _candidate(
+            "A badge replacement is issued within 1 business day.", "security.md"
+        ),
         _candidate("unrelated filler", "other.txt"),
     ]
 
@@ -78,7 +98,10 @@ def test_multi_hop_requires_all_substrings_for_hit_but_gives_partial_recall():
         candidates,
         k=2,
         expected_sources=["security.md", "it_security_policy.txt"],
-        expected_substrings=["replacement is issued within", "lost device must be reported"],
+        expected_substrings=[
+            "replacement is issued within",
+            "lost device must be reported",
+        ],
     )
 
     assert hit is False  # only one of the two required substrings is present
@@ -90,7 +113,10 @@ def test_no_substring_falls_back_to_document_level_hit():
     candidates = [_candidate("some text", "employee_policy.txt")]
 
     hit, recall, precision = _chunk_level_metrics(
-        candidates, k=1, expected_sources=["employee_policy.txt"], expected_substrings=[]
+        candidates,
+        k=1,
+        expected_sources=["employee_policy.txt"],
+        expected_substrings=[],
     )
 
     assert hit is True

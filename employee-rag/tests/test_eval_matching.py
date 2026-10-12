@@ -1,6 +1,6 @@
 """Offline: pure string matching, no pipeline/LLM involved."""
 
-from eval.run_eval import _abstained, _contains_all, _is_rate_limit_error, _dataset_hash
+from eval.run_eval import _abstained, _contains_all, _dataset_hash, _is_rate_limit_error
 
 
 def test_plain_string_terms_all_required():

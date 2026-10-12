@@ -8,14 +8,18 @@ def _report(results):
 
 
 def test_detects_newly_correct_and_newly_incorrect():
-    report_a = _report([
-        {"id": "x", "correct": False},
-        {"id": "y", "correct": True},
-    ])
-    report_b = _report([
-        {"id": "x", "correct": True},
-        {"id": "y", "correct": False},
-    ])
+    report_a = _report(
+        [
+            {"id": "x", "correct": False},
+            {"id": "y", "correct": True},
+        ]
+    )
+    report_b = _report(
+        [
+            {"id": "x", "correct": True},
+            {"id": "y", "correct": False},
+        ]
+    )
 
     diff = compare(report_a, report_b)
 

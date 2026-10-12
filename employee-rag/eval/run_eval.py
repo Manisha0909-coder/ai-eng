@@ -56,7 +56,7 @@ from langfuse import get_client
 from eval import cache
 from rag import config
 from rag.groundedness import is_grounded
-from rag.pipeline import NO_ANSWER, get_pipeline
+from rag.pipeline import get_pipeline
 
 EVAL_DIR = Path(__file__).resolve().parent
 DATASET_PATH = EVAL_DIR / "golden_dataset.json"
@@ -106,7 +106,9 @@ def _git_sha() -> str:
 def _dataset_hash(dataset: List[Dict[str, Any]]) -> str:
     import hashlib
 
-    return hashlib.sha256(json.dumps(dataset, sort_keys=True).encode("utf-8")).hexdigest()[:16]
+    return hashlib.sha256(
+        json.dumps(dataset, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:16]
 
 
 def _filter_split(dataset: List[Dict[str, Any]], split: str) -> List[Dict[str, Any]]:
@@ -135,7 +137,9 @@ def _get_rewrite_llm():
     return _rewrite_llm
 
 
-def _run_one(pipeline, item: Dict[str, Any], repeat_index: int, rewrite: bool = False) -> Dict[str, Any]:
+def _run_one(
+    pipeline, item: Dict[str, Any], repeat_index: int, rewrite: bool = False
+) -> Dict[str, Any]:
     # "multi_turn" items carry a `history` field. rag/pipeline.py's answer()
     # takes a single question with no conversation context, so by default
     # (rewrite=False) these are scored against the bare follow-up question
@@ -207,8 +211,9 @@ def _apply_judge(
     if stopped_on_rate_limit:
         return calls_made
 
-    from eval.judge import judge_answer  # local import: only needed with --judge
     from langchain_openai import ChatOpenAI
+
+    from eval.judge import judge_answer  # local import: only needed with --judge
 
     judge_llm = ChatOpenAI(
         model=config.LLM_MODEL,
@@ -236,7 +241,9 @@ def _apply_judge(
 
         try:
             context = result.get("retrieved_context", "")
-            verdict = judge_answer(judge_llm, result["question"], context, result["answer"])
+            verdict = judge_answer(
+                judge_llm, result["question"], context, result["answer"]
+            )
         except Exception as exc:  # pragma: no cover - network/rate-limit errors
             print(f"WARNING: judge call for {result['id']} failed: {exc!r}")
             if _is_rate_limit_error(exc):
@@ -277,7 +284,9 @@ def run(
         # key so a cached "before" (bare question) result is never served
         # back for an "after" (rewrite=True) run of the same item, or vice
         # versa.
-        cache_key = item["question"] + ("::rewrite" if rewrite and item.get("history") else "")
+        cache_key = item["question"] + (
+            "::rewrite" if rewrite and item.get("history") else ""
+        )
 
         for repeat_index in range(repeats):
             cached = cache.get(config.LLM_MODEL, cache_key, repeat_index)
@@ -308,7 +317,9 @@ def run(
             except Exception as exc:  # pragma: no cover - network/rate-limit errors
                 print(f"WARNING: {item['id']} (repeat {repeat_index}) failed: {exc!r}")
                 if _is_rate_limit_error(exc):
-                    print("Rate-limited (429) -- stopping further live calls for this run.")
+                    print(
+                        "Rate-limited (429) -- stopping further live calls for this run."
+                    )
                     stopped_on_rate_limit = True
                 result = {
                     "id": item["id"],
@@ -323,7 +334,12 @@ def run(
                     "correct": False,
                     "grounded": True,
                     "errored": True,
-                    "timings_ms": {"retrieval": 0.0, "rerank": 0.0, "generation": 0.0, "total": 0.0},
+                    "timings_ms": {
+                        "retrieval": 0.0,
+                        "rerank": 0.0,
+                        "generation": 0.0,
+                        "total": 0.0,
+                    },
                     "repeat_index": repeat_index,
                     "rewrite_call_made": False,
                 }
@@ -335,7 +351,9 @@ def run(
     if judge:
         calls_made = _apply_judge(results, calls_made, max_calls, stopped_on_rate_limit)
 
-    return summarize(results, skipped_due_to_max_calls, calls_made, stopped_on_rate_limit)
+    return summarize(
+        results, skipped_due_to_max_calls, calls_made, stopped_on_rate_limit
+    )
 
 
 def summarize(
@@ -351,19 +369,29 @@ def summarize(
     unanswerable = [r for r in evaluated if not r["answerable"]]
 
     retrieval_hit_rate = (
-        sum(1 for r in answerable if r["retrieval_hit"]) / len(answerable) if answerable else None
+        sum(1 for r in answerable if r["retrieval_hit"]) / len(answerable)
+        if answerable
+        else None
     )
     answer_accuracy = (
-        sum(1 for r in answerable if r["correct"]) / len(answerable) if answerable else None
+        sum(1 for r in answerable if r["correct"]) / len(answerable)
+        if answerable
+        else None
     )
     abstention_accuracy = (
-        sum(1 for r in unanswerable if r["correct"]) / len(unanswerable) if unanswerable else None
+        sum(1 for r in unanswerable if r["correct"]) / len(unanswerable)
+        if unanswerable
+        else None
     )
     overall_accuracy = (
-        sum(1 for r in evaluated if r["correct"]) / len(evaluated) if evaluated else None
+        sum(1 for r in evaluated if r["correct"]) / len(evaluated)
+        if evaluated
+        else None
     )
     grounded_rate = (
-        sum(1 for r in evaluated if r["grounded"]) / len(evaluated) if evaluated else None
+        sum(1 for r in evaluated if r["grounded"]) / len(evaluated)
+        if evaluated
+        else None
     )
 
     judged = [r for r in evaluated if r.get("judge_faithful") is not None]
@@ -374,7 +402,8 @@ def summarize(
         # needs judge_calibration.json hand-labeled first), just how often
         # the two scoring methods land on the same verdict.
         judge_human_agreement = round(
-            sum(1 for r in judged if r["correct"] == r["judge_faithful"]) / len(judged), 3
+            sum(1 for r in judged if r["correct"] == r["judge_faithful"]) / len(judged),
+            3,
         )
 
     total_latencies = [r["timings_ms"]["total"] for r in evaluated]
@@ -382,7 +411,9 @@ def summarize(
     by_category: Dict[str, List[bool]] = {}
     for r in evaluated:
         by_category.setdefault(r["category"], []).append(r["correct"])
-    category_accuracy = {cat: sum(flags) / len(flags) for cat, flags in by_category.items()}
+    category_accuracy = {
+        cat: sum(flags) / len(flags) for cat, flags in by_category.items()
+    }
 
     return {
         "n_examples": len(results),
@@ -398,12 +429,17 @@ def summarize(
         "grounded_rate": grounded_rate,
         "n_judged": len(judged),
         "judge_human_agreement": judge_human_agreement,
-        "avg_latency_ms": round(statistics.mean(total_latencies), 1) if total_latencies else None,
+        "avg_latency_ms": round(statistics.mean(total_latencies), 1)
+        if total_latencies
+        else None,
         "p95_latency_ms": round(
             statistics.quantiles(total_latencies, n=20)[18]
-            if len(total_latencies) >= 20 else max(total_latencies),
+            if len(total_latencies) >= 20
+            else max(total_latencies),
             1,
-        ) if total_latencies else None,
+        )
+        if total_latencies
+        else None,
         "category_accuracy": category_accuracy,
         "results": results,
     }
@@ -414,36 +450,48 @@ def _fmt_pct(value: Optional[float]) -> str:
 
 
 def print_report(summary: Dict[str, Any]) -> None:
-    print(f"\n{'='*70}\nEVAL REPORT ({summary['n_examples']} examples)\n{'='*70}")
+    print(f"\n{'=' * 70}\nEVAL REPORT ({summary['n_examples']} examples)\n{'=' * 70}")
 
     for r in summary["results"]:
         mark = "PASS" if r["correct"] else "FAIL"
-        hit = "" if r["retrieval_hit"] is None else (" [retrieval-hit]" if r["retrieval_hit"] else " [retrieval-miss]")
+        hit = (
+            ""
+            if r["retrieval_hit"] is None
+            else (" [retrieval-hit]" if r["retrieval_hit"] else " [retrieval-miss]")
+        )
         print(f"[{mark}]{hit} {r['id']:16s} {r['question']}")
         if not r["correct"]:
             print(f"         -> got: {r['answer']!r}")
 
-    print(f"\n{'-'*70}")
+    print(f"\n{'-' * 70}")
     if summary["n_errors"]:
-        print(f"WARNING: {summary['n_errors']} question(s) errored out (excluded from metrics): "
-              f"{', '.join(summary['errored_ids'])}")
+        print(
+            f"WARNING: {summary['n_errors']} question(s) errored out (excluded from metrics): "
+            f"{', '.join(summary['errored_ids'])}"
+        )
     if summary["skipped_due_to_max_calls"]:
-        print(f"WARNING: {len(summary['skipped_due_to_max_calls'])} question(s) skipped "
-              f"(--max-calls reached or stopped on rate limit): {', '.join(summary['skipped_due_to_max_calls'])}")
+        print(
+            f"WARNING: {len(summary['skipped_due_to_max_calls'])} question(s) skipped "
+            f"(--max-calls reached or stopped on rate limit): {', '.join(summary['skipped_due_to_max_calls'])}"
+        )
     print(f"Retrieval hit rate   : {_fmt_pct(summary['retrieval_hit_rate'])}")
     print(f"Answer accuracy      : {_fmt_pct(summary['answer_accuracy'])}")
     print(f"Abstention accuracy  : {_fmt_pct(summary['abstention_accuracy'])}")
     print(f"Overall accuracy     : {_fmt_pct(summary['overall_accuracy'])}")
     print(f"Grounded rate        : {_fmt_pct(summary['grounded_rate'])}")
     if summary["n_judged"]:
-        print(f"Judge/deterministic agreement: {_fmt_pct(summary['judge_human_agreement'])} "
-              f"({summary['n_judged']} judged)")
-    print(f"Avg / p95 latency    : {summary['avg_latency_ms']} ms / {summary['p95_latency_ms']} ms")
+        print(
+            f"Judge/deterministic agreement: {_fmt_pct(summary['judge_human_agreement'])} "
+            f"({summary['n_judged']} judged)"
+        )
+    print(
+        f"Avg / p95 latency    : {summary['avg_latency_ms']} ms / {summary['p95_latency_ms']} ms"
+    )
     print(f"Live LLM calls made  : {summary['calls_made']}")
     print("\nBy category:")
     for cat, acc in sorted(summary["category_accuracy"].items()):
         print(f"  {cat:24s} {_fmt_pct(acc)}")
-    print(f"{'='*70}\n")
+    print(f"{'=' * 70}\n")
 
 
 def main() -> int:
@@ -451,25 +499,42 @@ def main() -> int:
     parser.add_argument("--split", choices=["dev", "test", "all"], default="all")
     parser.add_argument("--max-calls", type=int, default=40)
     parser.add_argument("--repeats", type=int, default=1)
-    parser.add_argument("--resume", action="store_true", help="No-op beyond documentation -- "
-                         "resuming is automatic via the on-disk cache; this flag exists so the "
-                         "intent is explicit in a command line.")
-    parser.add_argument("--judge", action="store_true", help="Also run the LLM-judge pass "
-                         "(extra live calls, off by default).")
-    parser.add_argument("--rewrite", action="store_true", help="Apply query rewriting "
-                         "(rag/rewrite.py) to multi_turn items before answering -- one extra "
-                         "live call per such item, off by default. Compare a --rewrite run's "
-                         "multi_turn category accuracy against a plain run's to measure its effect.")
     parser.add_argument(
-        "--fail-under", type=float, default=None,
+        "--resume",
+        action="store_true",
+        help="No-op beyond documentation -- "
+        "resuming is automatic via the on-disk cache; this flag exists so the "
+        "intent is explicit in a command line.",
+    )
+    parser.add_argument(
+        "--judge",
+        action="store_true",
+        help="Also run the LLM-judge pass (extra live calls, off by default).",
+    )
+    parser.add_argument(
+        "--rewrite",
+        action="store_true",
+        help="Apply query rewriting "
+        "(rag/rewrite.py) to multi_turn items before answering -- one extra "
+        "live call per such item, off by default. Compare a --rewrite run's "
+        "multi_turn category accuracy against a plain run's to measure its effect.",
+    )
+    parser.add_argument(
+        "--fail-under",
+        type=float,
+        default=None,
         help="Exit with status 1 if overall_accuracy is below this threshold (e.g. 0.9).",
     )
     args = parser.parse_args()
 
     dataset = json.loads(DATASET_PATH.read_text())
     summary = run(
-        dataset, split=args.split, max_calls=args.max_calls, repeats=args.repeats,
-        judge=args.judge, rewrite=args.rewrite,
+        dataset,
+        split=args.split,
+        max_calls=args.max_calls,
+        repeats=args.repeats,
+        judge=args.judge,
+        rewrite=args.rewrite,
     )
 
     summary["meta"] = {
@@ -488,7 +553,9 @@ def main() -> int:
 
     REPORT_PATH.write_text(json.dumps(summary, indent=2))
     REPORTS_DIR.mkdir(exist_ok=True)
-    timestamped_path = REPORTS_DIR / f"{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}_{args.split}.json"
+    timestamped_path = (
+        REPORTS_DIR / f"{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}_{args.split}.json"
+    )
     timestamped_path.write_text(json.dumps(summary, indent=2))
     print(f"Full report written to {REPORT_PATH} and {timestamped_path}")
 
@@ -499,7 +566,9 @@ def main() -> int:
         and summary["overall_accuracy"] is not None
         and summary["overall_accuracy"] < args.fail_under
     ):
-        print(f"FAIL: overall_accuracy {summary['overall_accuracy']:.3f} < --fail-under {args.fail_under}")
+        print(
+            f"FAIL: overall_accuracy {summary['overall_accuracy']:.3f} < --fail-under {args.fail_under}"
+        )
         return 1
 
     return 0
